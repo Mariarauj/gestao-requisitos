@@ -55,3 +55,4 @@ O projeto usa Kanban. O quadro, o propósito das colunas e os cartões estão em
 ## Tecnologias
 
 A definir (será registrado no architecture notebook).
+teste
