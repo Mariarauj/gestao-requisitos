@@ -4,13 +4,13 @@ O quadro fica no [GitHub Projects](https://github.com/Mariarauj/gestao-requisito
 
 ## Colunas
 
-| Coluna | Propósito | Limite de WIP |
+| Coluna | Propósito |
 |---|---|---|
-| Backlog | Todas as tarefas identificadas, ainda não priorizadas. | – |
-| A Fazer | Tarefas priorizadas e prontas para começar. | 5 |
-| Em Andamento | Tarefas em execução. | 3 por pessoa |
-| Em Revisão | Prontas, aguardando revisão do outro membro (ortografia, conteúdo, código). | 3 |
-| Concluído | Revisadas, aprovadas e salvas no repositório. | – |
+| Backlog | Todas as tarefas identificadas, ainda não priorizadas. |
+| A Fazer | Tarefas priorizadas e prontas para começar. |
+| Em Andamento | Tarefas em execução. |
+| Em Revisão | Prontas, aguardando revisão do outro membro (ortografia, conteúdo, código). |
+| Concluído | Revisadas, aprovadas e salvas no repositório. |
 
 ## Regras
 
