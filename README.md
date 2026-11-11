@@ -37,13 +37,13 @@ Sistema de software que dá suporte à gestão de requisitos em projetos que usa
 ```
 ├── docs/      artefatos, uma pasta por artefato
 ├── src/       código do protótipo
-├── KANBAN.md  quadro Kanban (atualizado a cada movimentação de cartão)
+├── KANBAN.md  processo Kanban (colunas e regras de uso)
 └── README.md
 ```
 
 ## Gerenciamento
 
-O projeto usa Kanban. O quadro, o propósito das colunas e os cartões estão em [`KANBAN.md`](KANBAN.md).
+O projeto usa Kanban. O quadro fica no [GitHub Projects](https://github.com/Mariarauj/gestao-requisitos/projects); o propósito das colunas e as regras de uso estão em [`KANBAN.md`](KANBAN.md).
 
 ## Equipe
 
@@ -55,4 +55,3 @@ O projeto usa Kanban. O quadro, o propósito das colunas e os cartões estão em
 ## Tecnologias
 
 A definir (será registrado no architecture notebook).
-teste
