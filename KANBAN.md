@@ -5,7 +5,7 @@ O quadro fica no [GitHub Projects](https://github.com/Mariarauj/gestao-requisito
 ## Colunas
 
 | Coluna | Propósito |
-|---|---|---|
+|---|---|
 | Backlog | Todas as tarefas identificadas, ainda não priorizadas. |
 | A Fazer | Tarefas priorizadas e prontas para começar. |
 | Em Andamento | Tarefas em execução. |
