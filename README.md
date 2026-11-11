@@ -54,4 +54,14 @@ O projeto usa Kanban. O quadro fica no [GitHub Projects](https://github.com/Mari
 
 ## Tecnologias
 
-A definir (será registrado no architecture notebook).
+Detalhes, justificativas e impacto das ferramentas no [architecture notebook](docs/05-arquitetura/architecture-notebook.docx).
+
+| Item | Escolha |
+|---|---|
+| Interface | Gráfica (web) |
+| Linguagem | Ruby |
+| Framework | Ruby on Rails (ERB + Hotwire/Turbo) |
+| Banco de dados | PostgreSQL |
+| Autenticação | Devise |
+| Estilo | Bootstrap |
+| Implantação | Docker |
