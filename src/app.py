@@ -7,6 +7,7 @@ import streamlit as st
 
 from sgr.ui.pagina_acesso import pagina_acesso
 from sgr.ui.pagina_inicio import pagina_inicio
+from sgr.ui.pagina_projetos import pagina_projetos
 from sgr.ui.sessao import encerrar_sessao, usuario_logado
 
 st.set_page_config(page_title="SGR", page_icon="📋")
@@ -22,5 +23,8 @@ with st.sidebar:
         encerrar_sessao()
         st.rerun()
 
-paginas = [st.Page(pagina_inicio, title="Início", icon="🏠", default=True)]
+paginas = [
+    st.Page(pagina_inicio, title="Início", icon="🏠", default=True),
+    st.Page(pagina_projetos, title="Projetos", icon="📁", url_path="projetos"),
+]
 st.navigation(paginas).run()
