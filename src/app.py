@@ -6,6 +6,7 @@ páginas do sistema entram na navegação; novas páginas devem ser adicionadas 
 import streamlit as st
 
 from sgr.ui.pagina_acesso import pagina_acesso
+from sgr.ui.pagina_backlogs import pagina_backlogs
 from sgr.ui.pagina_inicio import pagina_inicio
 from sgr.ui.pagina_projetos import pagina_projetos
 from sgr.ui.sessao import encerrar_sessao, usuario_logado
@@ -26,5 +27,6 @@ with st.sidebar:
 paginas = [
     st.Page(pagina_inicio, title="Início", icon="🏠", default=True),
     st.Page(pagina_projetos, title="Projetos", icon="📁", url_path="projetos"),
+    st.Page(pagina_backlogs, title="Backlogs", icon="🗂️", url_path="backlogs"),
 ]
 st.navigation(paginas).run()

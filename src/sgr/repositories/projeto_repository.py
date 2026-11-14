@@ -23,7 +23,7 @@ class Contagens:
         return self.product_backlogs + self.sprint_backlogs
 
 
-def _filtro_acesso(usuario_id: int):
+def filtro_acesso(usuario_id: int):
     """O usuário vê projetos que possui ou dos quais é membro."""
     membro = select(ProjetoMembro.projeto_id).where(ProjetoMembro.usuario_id == usuario_id)
     return or_(Projeto.proprietario_id == usuario_id, Projeto.id.in_(membro))
@@ -39,7 +39,7 @@ def listar(
 ) -> list[Projeto]:
     consulta = select(Projeto).where(Projeto.arquivado.is_(arquivados))
     consulta = consulta.where(
-        Projeto.proprietario_id == usuario_id if apenas_meus else _filtro_acesso(usuario_id)
+        Projeto.proprietario_id == usuario_id if apenas_meus else filtro_acesso(usuario_id)
     )
     termo = busca.strip()
     if termo:
@@ -50,7 +50,7 @@ def listar(
 
 def buscar_acessivel(session: Session, usuario_id: int, projeto_id: int) -> Projeto | None:
     return session.scalar(
-        select(Projeto).where(Projeto.id == projeto_id, _filtro_acesso(usuario_id))
+        select(Projeto).where(Projeto.id == projeto_id, filtro_acesso(usuario_id))
     )
 
 
