@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storyboard 3 — Product e sprint backlogs e movimentação de histórias (RF-05, 06, 08)</title>
+<style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+/* Preflight's rule too: without it a component class that sets display
+   (.alert, .card, .btn…) beats the hidden attribute and shows the element. */
+[hidden]:where(:not([hidden="until-found"])) { display: none !important; }
+.hidden { display: none !important; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: clamp(22px, 2.3vw, 28px); font-weight: 650; line-height: 1.1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart-legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge, .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+/* A pill keeps its content width inside flex and grid columns, which would
+   otherwise stretch it across the card; a centred parent still centres it. */
+.shell-badge, .eyebrow, .badge { width: fit-content; max-width: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4, .cols-5 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); },
+    compact: function (v) { return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v); },
+    brlCompact: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisLabels formats the five y-axis ticks in the unit the chart declared
+  // (percent, BRL or plain numbers), compact so long values never clip, with
+  // the fewest decimals that still print every tick exactly (1,5 mi, not 2 mi).
+  function axisLabels(format, ticks) {
+    function at(digits) {
+      var opts = { notation: "compact", maximumFractionDigits: digits };
+      if (format === "pct") opts = { style: "percent", maximumFractionDigits: digits };
+      else if (format === "brl") opts = { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: digits };
+      var nf = new Intl.NumberFormat("pt-BR", opts);
+      return ticks.map(function (t) { return nf.format(t); });
+    }
+    for (var digits = 0; digits < 2; digits++) {
+      if (at(digits).join("|") === at(digits + 1).join("|")) return at(digits);
+    }
+    return at(2);
+  }
+
+  // yAxisPad formats the ticks and measures the left padding they need from
+  // the longest one; drawYAxis then draws the grid and the labels.
+  function yAxisPad(format, max) {
+    var labels = axisLabels(format, [0, max / 4, max / 2, (max * 3) / 4, max]);
+    var longest = labels.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+    return { labels: labels, padL: Math.max(40, Math.round(longest * 6.2) + 14) };
+  }
+  function drawYAxis(svg, axis, W, padR, padT, plotH) {
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: axis.padL, y1: gy, x2: W - padR, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: axis.padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axis.labels[g];
+      svg.appendChild(lbl);
+    }
+  }
+
+  // xLabelStep: show every k-th category label so labels never overlap, and
+  // always the last one (counted back from the end).
+  function xLabelStep(labels, step) {
+    var longest = labels.reduce(function (m, l) { return Math.max(m, String(l).length); }, 0);
+    return Math.max(1, Math.ceil((longest * 6.4 + 8) / Math.max(step, 1)));
+  }
+  function drawXLabel(svg, text, x, y, W, edgeGuard) {
+    var anchor = "middle";
+    var half = String(text).length * 3.2;
+    if (edgeGuard && x - half < 4) anchor = "start";
+    if (edgeGuard && x + half > W - 4) anchor = "end";
+    var tx = svgEl("text", { x: x, y: y, "text-anchor": anchor, "font-size": 11, fill: mutedColor() });
+    tx.textContent = text;
+    svg.appendChild(tx);
+  }
+  // categoryLines fits a bar's category name in its slot: one line, two lines
+  // split at a space, or cut with "…". A bar without its name can't be read, so
+  // categories are never skipped; null when the slot is too narrow for that.
+  function categoryLines(text, slot) {
+    var fit = Math.floor((slot - 6) / 6.4);
+    var s = String(text);
+    if (fit < 4) return null;
+    if (s.length <= fit) return [s];
+    var cut = function (t) { return t.length <= fit ? t : t.slice(0, fit - 1).trimEnd() + "…"; };
+    var best = -1;
+    for (var i = 0; i < s.length; i++) {
+      if (s[i] === " " && (best < 0 || Math.abs(s.length / 2 - i) < Math.abs(s.length / 2 - best))) best = i;
+    }
+    if (best < 0) return [cut(s)];
+    return [cut(s.slice(0, best)), cut(s.slice(best + 1))];
+  }
+  function legend(el, items) {
+    var box = document.createElement("div");
+    box.className = "chart-legend";
+    items.forEach(function (it) {
+      var row = document.createElement("span");
+      var dot = document.createElement("i");
+      dot.style.background = it.color;
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode((it.label || "") + (it.value ? " " : "")));
+      if (it.value) {
+        var v = document.createElement("b");
+        v.textContent = it.value;
+        row.appendChild(v);
+      }
+      box.appendChild(row);
+    });
+    resolve(el).appendChild(box);
+  }
+  var seriesPalette = ["#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4", "#0ea5b7"];
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  // A page's function may return nothing or throw: the chart prints its
+  // number instead of taking the rest of the page script down with it.
+  function coerceFormat(spec) {
+    if (typeof spec === "function") {
+      return function (v) {
+        try {
+          var out = spec(v);
+          return out == null ? "" : String(out);
+        } catch (e) {
+          return fmt.num(v);
+        }
+      };
+    }
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  // finite reads a chart value as a number, 0 when it is not one (NaN,
+  // Infinity, a stray string), so one bad value cannot blank the axis.
+  function finite(v) {
+    var n = +v;
+    return isFinite(n) ? n : 0;
+  }
+
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values.map(finite)) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // labelsFor pads or trims the category names to the n points drawn: pages
+  // pass labels and values of different lengths, and one throw here loses
+  // every section the page renders after the chart.
+  function labelsFor(cfg, n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(cfg.labels && cfg.labels[i] != null ? String(cfg.labels[i]) : "");
+    return out;
+  }
+
+  // niceMax rounds the scale up so the four grid steps land on round values
+  // (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 × 10^k) and the tick labels read exactly.
+  function niceMax(max) {
+    var raw = max / 4;
+    var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    var res = raw / mag;
+    var steps = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    var nice = steps.filter(function (s) { return s >= res - 1e-9; })[0];
+    return nice * mag * 4;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 12;
+    var max = niceMax(maxOf(cfg.values));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = cfg.values.length;
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var names = labels.map(function (l) { return categoryLines(l, step); });
+    var named = names.every(Boolean);
+    if (named && names.some(function (l) { return l.length > 1; })) padB = 42;
+    var plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    var every = xLabelStep(labels, step);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (finite(v) / max) * plotH);
+      var x = axis.padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: (cfg.colors && cfg.colors[i]) || color });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      if (named) {
+        names[i].forEach(function (text, li) {
+          drawXLabel(svg, text, x + bw / 2, padT + plotH + 18 + li * 13, W, false);
+        });
+      } else if ((n - 1 - i) % every === 0) {
+        drawXLabel(svg, labels[i], x + bw / 2, H - 10, W, false);
+      }
+    });
+  }
+
+  // line(el, {labels:[], values:[] | series:[{label, values, color?}], color?, format?})
+  // — one line, or several series on one scale with a legend under the chart.
+  function line(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 16;
+    var series = cfg.series && cfg.series.length
+      ? cfg.series
+      : [{ label: "", values: cfg.values || [], color: cfg.color }];
+    var all = [];
+    series.forEach(function (s) { all = all.concat(s.values || []); });
+    var max = niceMax(maxOf(all));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = series.reduce(function (m, s) { return Math.max(m, (s.values || []).length); }, 0);
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR, plotH = H - padT - padB;
+    var f = coerceFormat(cfg.format);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    var xs = labels.map(function (_, i) { return axis.padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); });
+    var every = xLabelStep(labels, n > 1 ? plotW / (n - 1) : plotW);
+    labels.forEach(function (label, i) {
+      if ((n - 1 - i) % every === 0) drawXLabel(svg, label, xs[i], H - 10, W, true);
+    });
+    var colors = series.map(function (s, si) {
+      return s.color || (si === 0 ? (cfg.color || accent()) : seriesPalette[(si - 1) % seriesPalette.length]);
+    });
+    series.forEach(function (s, si) {
+      var color = colors[si];
+      var pts = (s.values || []).map(function (v, i) { return [xs[i], padT + plotH - (finite(v) / max) * plotH]; });
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+      svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+      pts.forEach(function (p, i) {
+        var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+        var t = svgEl("title", {});
+        t.textContent = (s.label ? s.label + " · " : "") + labels[i] + ": " + f(s.values[i]);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+    });
+    if (series.length > 1) {
+      legend(el, series.map(function (s, si) { return { label: s.label, color: colors[si] }; }));
+    }
+  }
+
+  // donut(el, {labels:[], values:[], colors?, format?, center?, centerLabel?, legend?})
+  // — donut with a short total in the centre (compact, in the declared unit)
+  // and, with legend: true, the labels and shares listed under it.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var values = cfg.values.map(finite);
+    var labels = labelsFor(cfg, values.length);
+    var sum = values.reduce(function (a, b) { return a + b; }, 0);
+    var total = sum || 1;
+    var palette = cfg.colors || [accent()].concat(seriesPalette);
+    // The hover keeps the full value; the centre has room for a short one.
+    var full = coerceFormat(cfg.format);
+    var short = typeof cfg.format === "function" ? full : cfg.format === "brl" ? fmt.brlCompact : fmt.compact;
+    var a0 = -Math.PI / 2;
+    values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + full(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    // A share chart has no total worth printing: without its own centre text
+    // the caption alone takes the middle.
+    var text = cfg.center != null ? String(cfg.center) : (cfg.format === "pct" ? "" : short(sum));
+    if (text) {
+      var size = text.length > 9 ? 14 : text.length > 7 ? 17 : 20;
+      var center = svgEl("text", { x: cx, y: cfg.centerLabel ? cy + 1 : cy + 6, "text-anchor": "middle", "font-size": size, "font-weight": 650, fill: "currentColor" });
+      center.textContent = text;
+      svg.appendChild(center);
+    }
+    if (cfg.centerLabel) {
+      var cap = svgEl("text", { x: cx, y: text ? cy + 19 : cy + 5, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      cap.textContent = cfg.centerLabel;
+      svg.appendChild(cap);
+    }
+    if (cfg.legend) {
+      legend(el, labels.map(function (label, i) {
+        return { label: label, color: palette[i % palette.length], value: fmt.pct(values[i] / total) };
+      }));
+    }
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      // Large money values go compact ("R$ 27,5 mi"): the full amount does
+      // not fit a KPI card at four per row.
+      var kpiFormat = item.format === "brl" && Math.abs(item.value) >= 1e6 ? fmt.brlCompact : (item.format ? coerceFormat(item.format) : null);
+      card.appendChild(node("span", "kpi-value", kpiFormat ? kpiFormat(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var INITIALS = "ABCDEFGHIJLMNOPRSTV".split("");
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    var names = 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; names = 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      // There are 360 first/last pairs. A page that draws until the name is
+      // new (do { … } while (used.has(name))) froze the tab past them, so
+      // later draws widen the space: a second surname after 200 (6,480), a
+      // middle initial after 4,000.
+      name: function () {
+        names++;
+        var middle = names > 4000 ? pick(INITIALS) + ". " : "";
+        return pick(FIRST) + " " + middle + (names > 200 ? pick(LAST) + " " : "") + pick(LAST);
+      },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+<style>
+:root {
+--accent: #555555;
+--accent-text: #333333;
+--accent-contrast: #ffffff;
+--wf-bg: #f5f5f5;
+--wf-white: #ffffff;
+--wf-border: #b0b0b0;
+--wf-border-dark: #999999;
+--wf-text: #333333;
+--wf-fill: #e0e0e0;
+--wf-danger: #c97a7a;
+--wf-danger-bg: #f6e3e3;
+}
+html, body { background: #ffffff; }
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--wf-text); }
+.wf-page { max-width: 1040px; margin: 0 auto; padding: 32px 20px 56px; }
+.eyebrow-pill { display: inline-block; border: 1px solid var(--wf-border-dark); border-radius: 999px; padding: 2px 12px; font-size: 12px; color: var(--wf-text); background: var(--wf-bg); }
+.wf-title { font-size: 30px; font-weight: 700; margin: 12px 0 6px; color: var(--wf-text); }
+.wf-sub { color: #555; font-size: 15px; margin: 0; }
+.id-table { width: 100%; border-collapse: collapse; margin-top: 18px; border: 1px solid var(--wf-border); border-radius: 2px; }
+.id-table td { border-bottom: 1px solid var(--wf-border); padding: 8px 12px; font-size: 14px; vertical-align: top; }
+.id-table td:first-child { width: 220px; background: var(--wf-bg); font-weight: 600; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 22px 0; }
+.flow a { border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 6px 10px; font-size: 13px; color: var(--wf-text); text-decoration: none; background: var(--wf-white); }
+.flow a:hover { background: var(--wf-fill); }
+.flow a:focus-visible { outline: 2px solid #333; outline-offset: 2px; }
+.flow .arrow { color: #777; font-size: 14px; }
+.legend { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 14px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 20px; font-size: 13px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.sw { display: inline-block; width: 26px; height: 14px; border: 1px solid var(--wf-border-dark); border-radius: 2px; flex-shrink: 0; background: var(--wf-white); }
+.sw-fill { background: var(--wf-fill); }
+.sw-line { height: 4px; border: none; background: #bbb; width: 26px; }
+.sw-hatch { background: repeating-linear-gradient(45deg, #ddd 0 2px, #fff 2px 6px); }
+.sw-dash { border-style: dashed; }
+.sw-red { border-color: var(--wf-danger); background: var(--wf-danger-bg); }
+.card-frame { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 20px; margin: 22px 0; scroll-margin-top: 16px; }
+.card-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+.card-num { font-size: 40px; font-weight: 700; line-height: 1; color: #333; min-width: 52px; }
+.card-title { font-size: 19px; font-weight: 700; margin: 0; }
+.card-meta { font-size: 13px; color: #666; margin: 2px 0 0; }
+.screen { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-bg); overflow: hidden; margin-bottom: 14px; }
+.screen-bar { display: flex; align-items: center; gap: 5px; padding: 6px 10px; background: var(--wf-fill); border-bottom: 1px solid var(--wf-border); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #aaa; display: inline-block; }
+.screen-body { padding: 14px; background: var(--wf-bg); }
+.wf-btn { display: inline-block; border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 6px 12px; font-size: 13px; background: var(--wf-white); color: var(--wf-text); white-space: nowrap; }
+.wf-btn.fill { background: #888; color: #fff; border-color: #777; }
+.wf-btn.ghost { border-style: dashed; }
+.wf-btn.disabled { color: #aaa; border-color: #ccc; background: #f0f0f0; }
+.wf-btn.danger { background: var(--wf-danger-bg); border-color: var(--wf-danger); color: #7a3a3a; }
+.wf-chip { display: inline-block; border: 1px solid var(--wf-border); border-radius: 10px; padding: 1px 8px; font-size: 12px; background: var(--wf-white); color: var(--wf-text); white-space: nowrap; }
+.wf-chip.fill { background: #888; color: #fff; border-color: #777; }
+.wf-chip.dashed { border-style: dashed; }
+.wf-label { font-size: 12px; color: #444; margin-bottom: 3px; font-weight: 600; }
+.wf-input { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-white); padding: 6px 8px; font-size: 13px; color: var(--wf-text); min-height: 30px; display: flex; align-items: center; justify-content: space-between; }
+.wf-input.area { min-height: 60px; align-items: flex-start; }
+.wf-input.error { border-color: var(--wf-danger); }
+.wf-note { font-size: 12px; color: #666; margin-top: 3px; }
+.wf-note.err { color: #8a4a4a; }
+.line { height: 8px; background: var(--wf-fill); border-radius: 2px; margin: 6px 0; }
+.line.short { width: 60%; }
+.line.mid { width: 80%; }
+.hatch { background: repeating-linear-gradient(45deg, #ddd 0 2px, #f7f7f7 2px 8px); border: 1px solid var(--wf-border); border-radius: 2px; }
+.dashed-box { border: 1px dashed #888; border-radius: 2px; padding: 10px 12px; background: var(--wf-white); font-size: 13px; }
+.bar { height: 6px; background: var(--wf-fill); border-radius: 3px; overflow: hidden; border: 1px solid #ccc; }
+.bar > span { display: block; height: 100%; background: #888; }
+.cols { display: grid; gap: 14px; }
+.cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.cols-3 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.box { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 10px; }
+.box-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.box-title.upper { text-transform: uppercase; letter-spacing: 0.04em; font-size: 12px; color: #555; }
+.sidebar { width: 150px; background: var(--wf-fill); border-right: 1px solid var(--wf-border); padding: 10px 0; flex-shrink: 0; font-size: 13px; }
+.sidebar .it { padding: 6px 12px; color: var(--wf-text); }
+.sidebar .it.active { background: #c8c8c8; font-weight: 700; }
+.sidebar .sep { border-top: 1px solid var(--wf-border); margin: 8px 0; }
+.app { display: flex; min-height: 300px; }
+.app-main { flex: 1; padding: 12px 14px; min-width: 0; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--wf-border); background: var(--wf-white); }
+.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #888; background: var(--wf-fill); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.search { border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 4px 8px; font-size: 12px; color: #777; background: var(--wf-white); width: 200px; }
+.crumb { font-size: 13px; color: #555; }
+.pb-card { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-white); padding: 12px; }
+.sp-card { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 10px 12px; margin-top: 8px; }
+.empty-dash { border: 1px dashed #888; border-radius: 2px; padding: 16px; text-align: center; background: repeating-linear-gradient(45deg, #efefef 0 6px, #fafafa 6px 12px); font-size: 13px; }
+.modal-wrap { position: relative; background: #d6d6d6; padding: 18px; border-radius: 2px; }
+.modal-wrap .dim { position: absolute; inset: 0; background: rgba(60,60,60,0.25); }
+.modal { position: relative; max-width: 420px; margin: 0 auto; background: var(--wf-white); border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 16px; box-shadow: none; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; font-size: 16px; }
+.modal-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.field { margin-bottom: 12px; }
+.ann-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.kcol { border: 1px solid var(--wf-border); border-radius: 2px; background: #ececec; padding: 8px; min-height: 180px; }
+.kcol h4 { margin: 0 0 8px; font-size: 13px; }
+.kcard { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; padding: 6px 8px; margin-bottom: 6px; font-size: 12px; }
+.ctx-menu { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; font-size: 13px; min-width: 170px; }
+.ctx-menu div { padding: 6px 10px; border-bottom: 1px solid #eee; }
+.ctx-menu div.sel { background: #e0e0e0; font-weight: 700; }
+.ctx-menu hr { border: none; border-top: 1px solid #ccc; margin: 0; }
+.toast-ghost { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; padding: 8px 12px; font-size: 13px; display: inline-block; }
+.tip { border: 1px solid #777; border-radius: 2px; background: #fff; padding: 6px 8px; font-size: 12px; max-width: 280px; }
+.warn-icon { width: 38px; height: 38px; border: 2px solid #777; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #555; }
+.lock-icon { width: 38px; height: 38px; border: 2px solid #777; border-radius: 50%; position: relative; display: inline-block; }
+.lock-icon::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 3px; background: #777; transform: translate(-50%,-50%) rotate(-45deg); }
+.drag-item { transform: rotate(-2deg); border: 2px dashed #555; background: #fff; }
+.insert-line { height: 3px; background: #444; border-radius: 2px; margin: 4px 0; }
+.foot-note { font-size: 13px; color: #555; margin-top: 16px; }
+.pill-line { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 12px; }
+.wf-section-title { font-size: 14px; font-weight: 700; margin: 0 0 2px; }
+.wf-section-sub { font-size: 12px; color: #666; margin: 0 0 10px; }
+.ann-box { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 12px; }
+.ann-box h5 { margin: 0 0 6px; font-size: 13px; }
+.ann-box p { margin: 0; font-size: 13px; line-height: 1.5; color: #333; }
+.bullets { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; }
+.quad-note { font-size: 12px; color: #555; }
+.obs { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 16px 18px; margin-top: 26px; }
+.obs h2 { font-size: 17px; margin: 0 0 8px; }
+.obs ol { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+.toolbar-chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+.story-row { display: flex; align-items: center; gap: 8px; border: 1px solid var(--wf-border); background: #fff; border-radius: 2px; padding: 6px 8px; margin-bottom: 6px; font-size: 13px; }
+.grip { color: #888; letter-spacing: -2px; font-size: 13px; }
+.sprint-mini { border: 1px solid var(--wf-border); border-radius: 2px; background: #fff; padding: 8px; margin-bottom: 8px; }
+.sprint-mini.target { border: 1px dashed #555; }
+.mini-row { font-size: 12px; border-bottom: 1px dotted #ccc; padding: 3px 0; }
+.drop-zone { border: 1px dashed #666; border-radius: 2px; padding: 8px; text-align: center; font-size: 12px; margin-top: 8px; background: repeating-linear-gradient(45deg, #f1f1f1 0 6px, #fafafa 6px 12px); }
+.check-row { font-size: 13px; display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; }
+.radio { display: inline-block; width: 12px; height: 12px; border: 1px solid #555; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.radio.on { background: radial-gradient(circle, #444 0 4px, #fff 5px); }
+.radio-list div { font-size: 13px; padding: 6px 0; display: flex; gap: 8px; align-items: center; border-bottom: 1px dotted #ccc; }
+.radio-list div.dis { color: #999; }
+.checkbox { display: inline-block; width: 12px; height: 12px; border: 1px solid #555; flex-shrink: 0; position: relative; }
+.checkbox.on::after { content: "✓"; position: absolute; left: 1px; top: -4px; font-size: 12px; }
+.tab-hint { font-size: 12px; color: #555; margin-top: 8px; }
+@media (max-width: 760px) {
+.cols-4, .kanban { grid-template-columns: repeat(2, 1fr); }
+.ann-wrap { grid-template-columns: 1fr; }
+.app { flex-direction: column; }
+.sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--wf-border); }
+.search { width: 120px; }
+}
+@media print {
+@page { size: A4 portrait; margin: 14mm; }
+body { print-color-adjust: exact; -webkit-print-color-adjust: exact; background: #fff; }
+.wf-page { max-width: none; padding: 0; }
+.flow, .no-print { display: none !important; }
+.card-frame { break-inside: avoid; page-break-inside: avoid; page-break-after: always; margin: 0 0 8px; }
+.card-frame:last-of-type { page-break-after: auto; }
+.obs { break-inside: avoid; }
+.kanban { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="wf-page">
+
+<header>
+<span class="eyebrow-pill">Storyboard 3 · Projeto de Interface</span>
+<h1 class="wf-title">Projeto de Interface — Storyboard 3</h1>
+<p class="wf-sub">Cenário de uso: gerenciar product e sprint backlogs e mover histórias entre eles (Requisitos Funcionais 5, 6 e 8)</p>
+
+<table class="id-table">
+<tr><td>Cenário</td><td>Gestão de product backlog e de sprint backlogs, com movimentação de histórias entre backlogs</td></tr>
+<tr><td>Histórias de usuário relacionadas</td><td>US-05, US-06 e US-08</td></tr>
+<tr><td>Ator principal</td><td>Product Owner / Membro da equipe</td></tr>
+<tr><td>Pré-condição</td><td>Usuário autenticado dentro de um projeto, com product backlog criado e histórias já cadastradas</td></tr>
+</table>
+</header>
+
+<nav class="flow" aria-label="Sequência dos quadros">
+<a href="#quadro-1">(1) Backlogs do projeto</a><span class="arrow">→</span>
+<a href="#quadro-2">(2) Criar product backlog</a><span class="arrow">→</span>
+<a href="#quadro-3">(3) Bloqueio do segundo product backlog</a><span class="arrow">→</span>
+<a href="#quadro-4">(4) Criar sprint backlog</a><span class="arrow">→</span>
+<a href="#quadro-5">(5) Product backlog com painel de sprints</a><span class="arrow">→</span>
+<a href="#quadro-6">(6) Mover história</a><span class="arrow">→</span>
+<a href="#quadro-7">(7) Sprint backlog (Kanban)</a><span class="arrow">→</span>
+<a href="#quadro-8">(8) Editar sprint backlog</a><span class="arrow">→</span>
+<a href="#quadro-9">(9) Excluir backlog</a>
+</nav>
+
+<section aria-labelledby="legenda-titulo">
+<h2 id="legenda-titulo" class="wf-section-title">Legenda de convenções</h2>
+<p class="wf-section-sub">Como ler os desenhos de baixa fidelidade deste storyboard.</p>
+<div class="legend">
+<div class="legend-item"><span class="sw"></span> Retângulo com borda = container ou região</div>
+<div class="legend-item"><span class="sw sw-fill"></span> Retângulo preenchido cinza = botão</div>
+<div class="legend-item"><span class="sw sw-line"></span> Linha cinza longa = texto ou parágrafo</div>
+<div class="legend-item"><span class="sw sw-hatch"></span> Hachura diagonal = imagem ou ilustração</div>
+<div class="legend-item"><span class="sw sw-dash"></span> Contorno tracejado = opcional, alternativo ou em arraste</div>
+<div class="legend-item"><span class="sw sw-red"></span> Vermelho suave = exclusão destrutiva ou erro</div>
+<div class="legend-item"><span>★</span> Campo obrigatório</div>
+<div class="legend-item"><span>⋯</span> Menu de mais ações</div>
+<div class="legend-item"><span>⇄</span> Indicador de movimentação entre backlogs</div>
+</div>
+</section>
+
+<!-- QUADRO 1 -->
+<article class="card-frame" id="quadro-1" aria-labelledby="q1-title">
+<div class="card-head">
+<div class="card-num">1</div>
+<div>
+<h2 class="card-title" id="q1-title">Backlogs do projeto — visão de entrada</h2>
+<p class="card-meta">Tela de entrada do cenário, com product backlog e sprint backlogs</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body" style="padding:0;">
+<div class="topbar">
+<strong>SGR</strong>
+<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+</div>
+<div class="app">
+<aside class="sidebar">
+<div class="it">Projetos</div>
+<div class="it active">Backlogs</div>
+<div class="it">Épicos</div>
+<div class="it">Histórias</div>
+<div class="sep"></div>
+<div class="it">Administração</div>
+</aside>
+<div class="app-main">
+<div class="row between" style="margin-bottom:12px;">
+<div>
+<div class="crumb">Portal do Cliente › Backlogs</div>
+</div>
+<div class="row">
+<span class="wf-btn">+ Novo sprint backlog</span>
+<span class="wf-btn">⋯</span>
+</div>
+</div>
+
+<div class="wf-section-title">Product backlog <span class="wf-chip dashed">no máximo 1 por projeto</span></div>
+<div class="wf-section-sub">Backlog principal do produto; reúne todas as histórias do projeto.</div>
+<div class="pb-card">
+<div class="row between">
+<div style="flex:1;min-width:0;">
+<strong>Product Backlog</strong>
+<div class="line mid" style="margin-top:6px;"></div>
+</div>
+<div class="row">
+<span class="wf-btn fill">Abrir</span>
+<span class="wf-btn">✎</span>
+<span class="wf-btn">⋯</span>
+</div>
+</div>
+<div class="row" style="margin-top:8px;">
+<span class="wf-chip">18 histórias</span>
+<span class="wf-chip">89 pontos</span>
+<span class="wf-chip">RICE médio 24</span>
+</div>
+</div>
+
+<div class="row between" style="margin-top:18px;">
+<div>
+<div class="wf-section-title">Sprint backlogs <span class="wf-chip">3</span></div>
+<div class="wf-section-sub">Ciclos de trabalho do projeto, do mais recente ao mais antigo.</div>
+</div>
+</div>
+
+<div class="sp-card">
+<div class="row between">
+<div style="flex:1;min-width:0;">
+<div class="row"><strong>Sprint 12 · 01/10 a 14/10</strong><span class="wf-chip fill">Em andamento</span></div>
+<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
+<div class="bar" style="margin-top:8px;"><span style="width:45%;"></span></div>
+</div>
+<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
+</div>
+</div>
+
+<div class="sp-card">
+<div class="row between">
+<div style="flex:1;min-width:0;">
+<div class="row"><strong>Sprint 11 · 17/09 a 30/09</strong><span class="wf-chip">Encerrado</span></div>
+<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
+<div class="bar" style="margin-top:8px;"><span style="width:100%;"></span></div>
+</div>
+<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
+</div>
+</div>
+
+<div class="sp-card">
+<div class="row between">
+<div style="flex:1;min-width:0;">
+<div class="row"><strong>Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip">Planejado</span></div>
+<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
+<div class="bar" style="margin-top:8px;"><span style="width:0%;"></span></div>
+</div>
+<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
+</div>
+</div>
+
+<div class="dashed-box" style="margin-top:10px;text-align:center;">+ Adicionar sprint backlog</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Abre o projeto e vê, de um lado, o product backlog e, de outro, a lista de sprints, podendo entrar em qualquer um.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>A tela separa visualmente os dois níveis de backlog e usa a etiqueta textual "no máximo 1 por projeto" para tornar a regra de cardinalidade legível na própria interface, em vez de deixá-la como surpresa na tentativa de erro; o padrão de lista com estado e barra de progresso é o mesmo do painel de sprints do Taiga e da separação de níveis de backlog do Aha!.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 2 -->
+<article class="card-frame" id="quadro-2" aria-labelledby="q2-title">
+<div class="card-head">
+<div class="card-num">2</div>
+<div>
+<h2 class="card-title" id="q2-title">Criar product backlog</h2>
+<p class="card-meta">Modal sobre a tela de backlogs, com recorte do estado vazio</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="modal-wrap">
+<div class="dim"></div>
+<div class="modal" style="position:relative;">
+<div class="modal-head"><span>Novo product backlog</span><span>×</span></div>
+<div class="wf-note" style="margin-bottom:10px;">Projeto: Portal do Cliente (somente leitura)</div>
+<div class="field">
+<div class="wf-label">Nome ★</div>
+<div class="wf-input"><span>Product Backlog</span></div>
+<div class="wf-note">Sugestão preenchida automaticamente; pode ser alterada.</div>
+</div>
+<div class="field">
+<div class="wf-label">Descrição</div>
+<div class="wf-input area"><span style="color:#888;">O que este backlog reúne?</span></div>
+<div class="wf-note" style="text-align:right;">0/280</div>
+</div>
+<div class="dashed-box"><strong>i</strong> Cada projeto tem um único product backlog. Ele reúne todas as histórias do produto e é o ponto de partida de todo sprint.</div>
+<div class="modal-foot">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn fill">Criar product backlog</span>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:14px;">
+<div class="wf-label">Recorte: estado de lista vazia</div>
+<div class="pb-card" style="background:#fff;">
+<div class="wf-section-title">Product backlog</div>
+<div class="empty-dash" style="margin-top:8px;">
+<div>Este projeto ainda não tem product backlog</div>
+<div style="margin-top:8px;"><span class="wf-btn fill">Criar product backlog</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Cria o product backlog do projeto, normalmente uma única vez, logo após criar o projeto.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>O campo Nome vem pré-preenchido e o texto explicativo antecipa que existe apenas um, o que evita o usuário criar expectativa de múltiplos backlogs de produto; o estado vazio é explícito e oferece a ação, em vez de deixar a área em branco.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 3 -->
+<article class="card-frame" id="quadro-3" aria-labelledby="q3-title">
+<div class="card-head">
+<div class="card-num">3</div>
+<div>
+<h2 class="card-title" id="q3-title">Bloqueio do segundo product backlog — regra de cardinalidade</h2>
+<p class="card-meta">Recorte da seção Product backlog e tentativa de acesso por URL direta</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="cols cols-2">
+<div>
+<div class="row between">
+<div class="wf-section-title">Product backlog <span class="wf-chip dashed">no máximo 1 por projeto</span></div>
+</div>
+<div class="row" style="justify-content:flex-end;margin-bottom:6px;">
+<span class="wf-btn disabled" aria-disabled="true">+ Novo product backlog</span>
+</div>
+<div class="tip" style="margin-left:auto;">Este projeto já tem um product backlog. Para outro, crie um novo projeto.</div>
+<div class="pb-card" style="margin-top:10px;">
+<div class="row between">
+<div><strong>Product Backlog</strong><div class="line mid" style="margin-top:6px;"></div></div>
+<div class="row"><span class="wf-btn fill">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
+</div>
+<div class="row" style="margin-top:8px;"><span class="wf-chip">18 histórias</span><span class="wf-chip">89 pontos</span></div>
+</div>
+</div>
+<div>
+<div class="wf-label">Acesso direto por URL</div>
+<div class="box" style="text-align:center;padding:18px;">
+<div><span class="lock-icon"></span></div>
+<div style="font-weight:700;margin-top:10px;">Não é possível criar outro product backlog</div>
+<div class="wf-note" style="margin-top:6px;color:#444;">O projeto Portal do Cliente já possui o Product Backlog. Cada projeto admite apenas um.</div>
+<div style="margin-top:12px;"><span class="wf-btn">Voltar aos backlogs</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Percebe que não pode criar um segundo product backlog e entende o motivo, com um caminho alternativo sugerido.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>A regra é aplicada em três camadas visíveis: o botão desabilitado com explicação, a mensagem no tooltip e a tela de aviso quando o acesso ocorre por URL direta. Desabilitar sem explicar seria pior que permitir e falhar; o texto sempre indica a saída, que é criar um novo projeto. A regra também é imposta no servidor, mas a interface a antecipa.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 4 -->
+<article class="card-frame" id="quadro-4" aria-labelledby="q4-title">
+<div class="card-head">
+<div class="card-num">4</div>
+<div>
+<h2 class="card-title" id="q4-title">Criar sprint backlog</h2>
+<p class="card-meta">Modal com datas, duração calculada e estado de erro</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="modal-wrap">
+<div class="dim"></div>
+<div class="modal" style="position:relative;">
+<div class="modal-head"><span>Novo sprint backlog</span><span>×</span></div>
+<div class="wf-note" style="margin-bottom:10px;">Projeto: Portal do Cliente (somente leitura)</div>
+<div class="field">
+<div class="wf-label">Nome ★</div>
+<div class="wf-input"><span>Sprint 13</span></div>
+</div>
+<div class="cols cols-2" style="gap:10px;">
+<div class="field">
+<div class="wf-label">Início ★</div>
+<div class="wf-input"><span>15/10/2026</span><span>📅</span></div>
+</div>
+<div class="field">
+<div class="wf-label">Fim ★</div>
+<div class="wf-input"><span>28/10/2026</span><span>📅</span></div>
+</div>
+</div>
+<div class="wf-note" style="margin-bottom:10px;">Duração: 14 dias</div>
+<div class="field">
+<div class="wf-label">Meta do sprint</div>
+<div class="wf-input area" style="min-height:44px;"><span style="color:#888;">O que queremos entregar neste ciclo?</span></div>
+</div>
+<div class="modal-foot">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn fill">Criar sprint</span>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:14px;">
+<div class="wf-label">Recorte: estado de erro</div>
+<div class="dashed-box" style="max-width:420px;">
+<div class="wf-label">Fim ★</div>
+<div class="wf-input error"><span>27/10/2026</span><span>📅</span></div>
+<div class="wf-note err">A data de fim deve ser posterior à data de início.</div>
+<div style="margin-top:10px;"><span class="wf-btn disabled">Criar sprint</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Nomeia o sprint, define o período e, opcionalmente, a meta, e cria quantos sprints quiser.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>Datas em formato brasileiro com seletor, e a duração calculada automaticamente serve de conferência rápida; a validação de ordem das datas acontece no campo, não em alerta genérico no topo. Diferentemente do product backlog, nada aqui restringe a quantidade, porque a regra do sistema é de vários sprint backlogs por projeto.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 5 -->
+<article class="card-frame" id="quadro-5" aria-labelledby="q5-title">
+<div class="card-head">
+<div class="card-num">5</div>
+<div>
+<h2 class="card-title" id="q5-title">Product backlog com painel de sprints — visão de movimentação</h2>
+<p class="card-meta">Tela em duas colunas: backlog à esquerda, sprints à direita</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body" style="padding:0;">
+<div class="topbar">
+<strong>SGR</strong>
+<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+</div>
+<div class="app">
+<aside class="sidebar">
+<div class="it">Projetos</div>
+<div class="it active">Backlogs</div>
+<div class="it">Épicos</div>
+<div class="it">Histórias</div>
+<div class="sep"></div>
+<div class="it">Administração</div>
+</aside>
+<div class="app-main" style="display:grid;grid-template-columns:1.6fr 1fr;gap:0;padding:0;">
+<div style="padding:12px 14px;border-right:1px solid #b0b0b0;">
+<div class="wf-section-title">Product Backlog</div>
+<div class="wf-section-sub">18 histórias · 89 pontos</div>
+<div class="toolbar-chips">
+<span class="wf-chip">Épico: Todos ▾</span>
+<span class="wf-chip">MoSCoW: Todas ▾</span>
+<span class="wf-chip">Ordenar por: Posição ▾</span>
+<span class="wf-chip dashed">Limpar filtros</span>
+</div>
+<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line short"></span><span class="wf-chip">5 pts</span><span class="wf-chip">M</span><span class="wf-chip">RICE 32</span><span>⋯</span></div>
+<div class="story-row" style="border:2px dashed #444;"><span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line mid"></span><span class="wf-chip">3 pts</span><span class="wf-chip">S</span><span class="wf-chip">RICE 28</span><span>⋯</span><span style="font-weight:700;">⇄</span></div>
+<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico B</span><span style="flex:1;" class="line"></span><span class="wf-chip">8 pts</span><span class="wf-chip">M</span><span class="wf-chip">RICE 24</span><span>⋯</span></div>
+<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico B</span><span style="flex:1;" class="line short"></span><span class="wf-chip">2 pts</span><span class="wf-chip">C</span><span class="wf-chip">RICE 19</span><span>⋯</span></div>
+<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico C</span><span style="flex:1;" class="line mid"></span><span class="wf-chip">5 pts</span><span class="wf-chip">S</span><span class="wf-chip">RICE 15</span><span>⋯</span></div>
+</div>
+<div style="padding:12px 14px;background:#fafafa;">
+<div class="row between"><div class="wf-section-title">Sprints</div><span class="wf-btn" style="padding:2px 8px;">+</span></div>
+<div class="wf-section-sub">Arraste histórias para um sprint para planejar.</div>
+<div class="sprint-mini">
+<div class="row between"><strong style="font-size:13px;">Sprint 12 · 01/10 a 14/10</strong><span class="wf-chip fill">Em andamento</span></div>
+<div class="bar" style="margin:6px 0;"><span style="width:45%;"></span></div>
+<div class="mini-row">SGR-131 · Cadastro de cliente</div>
+<div class="mini-row">SGR-134 · Filtro por status</div>
+<div class="mini-row">SGR-138 · Exportar relatório</div>
+</div>
+<div class="sprint-mini target">
+<div class="row between"><strong style="font-size:13px;">Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip dashed">Planejado</span></div>
+<div class="mini-row">SGR-139 · Login com e-mail</div>
+<div class="mini-row">SGR-140 · Painel de métricas</div>
+<div class="dashed-box" style="margin-top:6px;font-size:12px;text-align:center;">Destino do arraste</div>
+</div>
+<div class="drop-zone">Solte aqui para mover</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Vê o product backlog e os sprints lado a lado e reorganiza o trabalho, arrastando histórias do produto para o sprint.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>Esta é a tela central do cenário, porque resolve o requisito de movimentação sem exigir abrir a história: dois containers visíveis ao mesmo tempo, com o destino sempre à vista. O layout em duas colunas com backlog à esquerda e sprints à direita é o mesmo padrão de Jira e Taiga, e foi adotado por reduzir o custo de mover histórias em lote no planejamento; as linhas compactas no painel de sprint evitam duplicar toda a informação do backlog.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 6 -->
+<article class="card-frame" id="quadro-6" aria-labelledby="q6-title">
+<div class="card-head">
+<div class="card-num">6</div>
+<div>
+<h2 class="card-title" id="q6-title">Mover história — arraste e alternativa acessível</h2>
+<p class="card-meta">Duas formas de executar a mesma ação: arraste e menu com teclado</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="cols cols-2">
+<div>
+<div class="wf-label">Recorte A · Arraste</div>
+<div class="box" style="background:#fafafa;">
+<div class="story-row drag-item" style="transform:rotate(-2deg);">
+<span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line short"></span><span class="wf-chip">5 pts</span><span class="wf-chip">M</span>
+</div>
+<div style="position:relative;">
+<span class="wf-chip" style="position:absolute;top:-30px;left:10px;background:#fff;">SGR-142</span>
+<span style="position:absolute;top:-20px;left:120px;font-size:18px;">↖</span>
+<span class="wf-chip" style="position:absolute;top:-38px;right:4px;background:#fff;">3 histórias</span>
+</div>
+<div class="sprint-mini target" style="margin-top:14px;">
+<div class="row between"><strong style="font-size:13px;">Sprint 13</strong><span class="wf-chip dashed">Planejado</span></div>
+<div class="mini-row">SGR-139 · Login com e-mail</div>
+<div class="insert-line"></div>
+<div class="mini-row">SGR-140 · Painel de métricas</div>
+</div>
+</div>
+</div>
+<div>
+<div class="wf-label">Recorte B · Menu e teclado</div>
+<div class="row" style="align-items:flex-start;gap:10px;">
+<div class="ctx-menu">
+<div>Abrir</div>
+<div>Editar</div>
+<div class="sel">Mover para...</div>
+<div>Duplicar</div>
+<hr>
+<div style="color:#8a4a4a;">Excluir</div>
+</div>
+<div class="modal" style="max-width:260px;margin:0;">
+<div class="modal-head" style="font-size:14px;"><span>Mover SGR-142</span><span>×</span></div>
+<div class="radio-list">
+<div><span class="radio"></span> Product Backlog</div>
+<div><span class="radio"></span> Sprint 12 · Em andamento</div>
+<div><span class="radio on"></span> Sprint 13 · Planejado</div>
+<div class="dis"><span class="radio"></span> Sprint 11 · Encerrado (somente leitura)</div>
+</div>
+<div class="check-row"><span class="checkbox on"></span><span>Mover mais 2 histórias selecionadas</span></div>
+<div class="modal-foot" style="margin-top:8px;">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn fill">Mover</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="dashed-box" style="margin-top:14px;font-size:13px;">Também é possível mover sem arrastar: selecione a história, use o menu ⋯ → Mover para..., ou pressione a tecla M com a linha em foco.</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Move uma história ou várias, por arraste ou por menu e teclado.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>O arraste é rápido, mas não é o único caminho: o menu "Mover para..." e o atalho de teclado garantem que a operação exista sem mouse, conforme o requisito de navegação completa por teclado e de acessibilidade WCAG 2.1 AA. O modal mostra claramente o destino atual e desabilita sprint encerrado, impedindo movimentação para um ciclo já fechado.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 7 -->
+<article class="card-frame" id="quadro-7" aria-labelledby="q7-title">
+<div class="card-head">
+<div class="card-num">7</div>
+<div>
+<h2 class="card-title" id="q7-title">Sprint backlog — quadro Kanban</h2>
+<p class="card-meta">Visão de execução do sprint com colunas de status</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body" style="padding:0;">
+<div class="topbar">
+<strong>SGR</strong>
+<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+</div>
+<div class="app">
+<aside class="sidebar">
+<div class="it">Projetos</div>
+<div class="it active">Backlogs</div>
+<div class="it">Épicos</div>
+<div class="it">Histórias</div>
+<div class="sep"></div>
+<div class="it">Administração</div>
+</aside>
+<div class="app-main">
+<div class="row between" style="margin-bottom:10px;">
+<div>
+<div class="row"><strong style="font-size:17px;">Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip">Planejado</span></div>
+<div class="wf-note">Meta do sprint: entregar o login e o painel inicial</div>
+</div>
+<div class="row"><span class="wf-btn">Editar sprint</span><span class="wf-btn">Iniciar sprint</span><span class="wf-btn">⋯</span></div>
+</div>
+<div class="cols cols-3" style="grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+<div class="box"><div class="wf-label">8 histórias</div><div class="line short"></div></div>
+<div class="box"><div class="wf-label">34 pontos</div><div class="line short"></div></div>
+<div class="box"><div class="wf-label">12 critérios de aceitação</div><div class="line short"></div></div>
+</div>
+<div class="kanban">
+<div class="kcol">
+<h4>A fazer (4)</h4>
+<div class="kcard"><strong>SGR-141</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">5 pts</span> <span class="wf-chip">M</span> <span class="avatar" style="width:18px;height:18px;font-size:9px;">AL</span></div>
+<div class="kcard"><strong>SGR-143</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico B</span> <span class="wf-chip">3 pts</span></div>
+<div class="kcard"><strong>SGR-145</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico C</span> <span class="wf-chip">2 pts</span></div>
+</div>
+<div class="kcol">
+<h4>Em andamento (2)</h4>
+<div class="kcard"><strong>SGR-139</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">8 pts</span> <span class="wf-chip">M</span> <span class="avatar" style="width:18px;height:18px;font-size:9px;">RS</span></div>
+<div class="kcard"><strong>SGR-140</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico B</span> <span class="wf-chip">5 pts</span></div>
+</div>
+<div class="kcol">
+<h4>Em revisão (1)</h4>
+<div class="kcard"><strong>SGR-144</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico C</span> <span class="wf-chip">3 pts</span> <span class="wf-chip">S</span></div>
+</div>
+<div class="kcol">
+<h4>Concluído (1)</h4>
+<div class="kcard"><strong>SGR-138</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">2 pts</span> <span class="wf-chip">C</span></div>
+<div class="drop-zone" style="margin-top:10px;">Solte aqui para mover<div class="insert-line" style="margin-top:6px;"></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Abre o sprint backlog e acompanha o andamento das suas histórias por coluna de status.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>O sprint backlog tem duas leituras possíveis — lista ordenada, para planejamento, e quadro Kanban, para execução — e o sistema oferece as duas sobre o mesmo dado, sem duplicar registros. Isso evita o problema de times que mantêm planilha paralela para acompanhar o dia a dia, que é justamente o problema descrito no documento de visão.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 8 -->
+<article class="card-frame" id="quadro-8" aria-labelledby="q8-title">
+<div class="card-head">
+<div class="card-num">8</div>
+<div>
+<h2 class="card-title" id="q8-title">Editar sprint backlog</h2>
+<p class="card-meta">Modal de metadados, estado somente leitura e recorte do toast</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="modal-wrap">
+<div class="dim"></div>
+<div class="modal" style="position:relative;">
+<div class="modal-head"><span>Editar sprint backlog</span><span>×</span></div>
+<div class="field">
+<div class="wf-label">Nome</div>
+<div class="wf-input"><span>Sprint 13</span></div>
+</div>
+<div class="cols cols-2" style="gap:10px;">
+<div class="field">
+<div class="wf-label">Início</div>
+<div class="wf-input"><span>15/10/2026</span><span>📅</span></div>
+</div>
+<div class="field">
+<div class="wf-label">Fim</div>
+<div class="wf-input"><span>28/10/2026</span><span>📅</span></div>
+</div>
+</div>
+<div class="field">
+<div class="wf-label">Meta do sprint <span class="wf-note" style="float:right;">84/280</span></div>
+<div class="wf-input area" style="min-height:44px;"><span>Entregar o login com e-mail e o painel inicial</span></div>
+</div>
+<div class="field">
+<div class="wf-label">Estado</div>
+<div class="wf-input" style="background:#f0f0f0;"><span><span class="wf-chip">Planejado</span></span><span>▾</span></div>
+<div class="wf-note">Para alterar o estado use Iniciar sprint ou Encerrar sprint.</div>
+</div>
+<div class="dashed-box" style="margin-bottom:8px;"><strong>i</strong> As histórias deste sprint não são afetadas pela alteração do nome ou do período.</div>
+<div class="dashed-box">
+<strong>i</strong> Ao encerrar o sprint, as histórias que não estiverem concluídas voltam para o product backlog.
+<div style="margin-top:8px;"><span class="wf-btn ghost">Encerrar sprint</span></div>
+</div>
+<div class="modal-foot">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn fill">Salvar alterações</span>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:14px;">
+<div class="wf-label">Recorte: toast após salvar</div>
+<div class="box" style="background:#fafafa;">
+<div class="line mid"></div>
+<div class="line short"></div>
+<div style="margin-top:10px;"><span class="toast-ghost">Sprint atualizado.</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Ajusta nome, período e meta do sprint, e encerra o ciclo quando termina.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>A alteração de metadados é separada da mudança de estado, que é uma transição de ciclo de vida com consequência sobre as histórias; explicitar que histórias não concluídas voltam ao product backlog evita a perda silenciosa de trabalho e preserva a integridade do modelo. O padrão de formulário reutilizado, com dois avisos de impacto, é o mesmo do storyboard de projetos.</p>
+</div>
+</div>
+</article>
+
+<!-- QUADRO 9 -->
+<article class="card-frame" id="quadro-9" aria-labelledby="q9-title">
+<div class="card-head">
+<div class="card-num">9</div>
+<div>
+<h2 class="card-title" id="q9-title">Excluir backlog — regras de integridade por tipo</h2>
+<p class="card-meta">Comparação entre exclusão de sprint backlog e de product backlog</p>
+</div>
+</div>
+<div class="screen">
+<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-body">
+<div class="cols cols-2">
+<div>
+<div class="wf-label">Coluna A · Excluir sprint backlog</div>
+<div class="modal" style="max-width:none;margin:0;">
+<div style="text-align:center;margin-bottom:8px;"><span class="warn-icon">!</span></div>
+<div class="modal-head" style="justify-content:center;"><span>Excluir o Sprint 13?</span></div>
+<ul class="bullets">
+<li>8 histórias serão movidas de volta ao Product Backlog</li>
+<li>os critérios de aceitação, pontos, etiqueta MoSCoW e vínculos com épicos serão mantidos</li>
+<li>nenhuma história será apagada</li>
+</ul>
+<div class="check-row"><span class="checkbox"></span><span>Entendo que as histórias voltam para o product backlog.</span></div>
+<div class="modal-foot">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn danger disabled" style="opacity:0.7;">Excluir sprint</span>
+</div>
+</div>
+</div>
+<div>
+<div class="wf-label">Coluna B · Excluir product backlog</div>
+<div class="modal" style="max-width:none;margin:0;">
+<div style="text-align:center;margin-bottom:8px;"><span class="lock-icon"></span></div>
+<div class="modal-head" style="justify-content:center;"><span>Não é possível excluir o Product Backlog</span></div>
+<ul class="bullets">
+<li>ele é obrigatório em todo projeto</li>
+<li>18 histórias dependem dele</li>
+<li>todo projeto precisa de um product backlog para receber histórias</li>
+</ul>
+<div class="modal-foot"><span class="wf-btn fill">Entendi</span></div>
+</div>
+<div style="margin-top:12px;">
+<div class="wf-label">Alternativa permitida: backlog vazio</div>
+<div class="modal" style="max-width:none;margin:0;">
+<div class="modal-head" style="font-size:14px;"><span>Excluir este product backlog?</span></div>
+<div class="wf-note" style="color:#444;">Este backlog não tem histórias e pode ser excluído.</div>
+<div class="modal-foot">
+<span class="wf-btn">Cancelar</span>
+<span class="wf-btn danger">Excluir backlog</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ann-wrap">
+<div class="ann-box">
+<h5>O que o usuário faz</h5>
+<p>Exclui um sprint, sabendo que as histórias voltam ao product backlog, e descobre que o product backlog só pode ser excluído quando está vazio.</p>
+</div>
+<div class="ann-box">
+<h5>Decisão de design</h5>
+<p>A exclusão tem comportamento diferente por tipo, e o storyboard explicita os dois: o sprint backlog nunca destrói trabalho, apenas devolve; o product backlog, por ser obrigatório e concentrar todas as histórias, tem exclusão condicionada ao estado vazio. A cor destrutiva aparece apenas na operação que realmente apaga algo, sinalizando a diferença de risco entre os dois casos.</p>
+</div>
+</div>
+</article>
+
+<section class="obs" aria-labelledby="obs-title">
+<h2 id="obs-title">Observações do storyboard</h2>
+<ol>
+<li>Os nove quadros cobrem o requisito funcional 5 (CRUD de product backlog, com a regra de um por projeto nos quadros 2 e 3), o requisito 6 (CRUD de sprint backlogs, nos quadros 4, 7, 8 e 9) e o requisito 8 (movimentação de histórias entre backlogs, nos quadros 5 e 6).</li>
+<li>A preservação de critérios de aceitação, pontos, etiqueta, nota RICE e vínculos com épicos ao mover a história é o critério de aceitação central de US-08 e está representada no quadro 6 e reforçada no quadro 9.</li>
+<li>O identificador da história não muda ao ser movida entre backlogs, o que mantém rastreabilidade entre sprints.</li>
+<li>Mover histórias em lote deve ser possível pela seleção múltipla do quadro 6, porque o planejamento de sprint é feito com várias histórias de uma vez.</li>
+<li>Os wireframes são esboços de baixa fidelidade e não definem cores, tipografia ou identidade visual finais.</li>
+</ol>
+</section>
+
+<footer class="shell-footer" style="margin-top:24px;font-size:13px;color:#666;">
+SGR — Sistema de Gestão de Requisitos · Storyboard 3 · Projeto de Interface (esboço de baixa fidelidade)
+</footer>
+
+</div>
+</body>
+</html>
