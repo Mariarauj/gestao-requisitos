@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storyboard 1 — Criar, ver, editar e excluir projetos (RF-04)</title>
+<title>Storyboard 1 — Conta e autenticação (Q-01 a Q-07)</title>
 <style>
 /* Skip artifact shell — fixed styles served beside every artifact.
    Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
@@ -1029,1121 +1029,537 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
 </script>
 <style>
 :root {
---accent: #b91c1c;
---accent-text: #991b1b;
---accent-contrast: #ffffff;
---wf-bg: #f5f5f5;
---wf-white: #ffffff;
---wf-border: #b0b0b0;
---wf-border-dark: #999999;
---wf-text: #333333;
---wf-fill: #e0e0e0;
---wf-hatch: repeating-linear-gradient(45deg, #ececec 0 2px, #ffffff 2px 8px);
---wf-error: #c0504d;
-}
-body {
-background: #fafafa;
-color: var(--wf-text);
-font-family: system-ui, sans-serif;
-}
-.wf-screen {
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-background: var(--wf-white);
-overflow: hidden;
-position: relative;
-}
-.wf-chrome {
-background: var(--wf-bg);
-border-bottom: 1px solid var(--wf-border);
-padding: 4px 10px;
-display: flex;
-align-items: center;
-gap: 6px;
-font-size: 11px;
-color: #666;
-}
-.wf-dot {
-width: 6px;
-height: 6px;
-border-radius: 50%;
-background: #999;
-display: inline-block;
-}
-.wf-body {
-position: relative;
-min-height: 380px;
-}
-.wf-topbar {
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 10px;
-padding: 8px 12px;
-border-bottom: 1px solid var(--wf-border);
-background: var(--wf-white);
-}
-.wf-logo {
-font-weight: 700;
-letter-spacing: 1px;
-color: var(--wf-text);
-font-size: 14px;
-}
-.wf-search {
-flex: 1;
-max-width: 260px;
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-padding: 4px 8px;
-font-size: 12px;
-color: #777;
-background: #fff;
-}
-.wf-avatar {
-width: 26px;
-height: 26px;
-border-radius: 50%;
-border: 1px solid var(--wf-border-dark);
-display: inline-flex;
-align-items: center;
-justify-content: center;
-font-size: 10px;
-font-weight: 600;
-background: #fff;
-}
-.wf-layout {
-display: grid;
-grid-template-columns: 150px 1fr;
-min-height: 360px;
-}
-.wf-sidebar {
-border-right: 1px solid var(--wf-border);
-background: var(--wf-bg);
-padding: 8px 0;
-font-size: 12px;
-}
-.wf-nav-item {
-padding: 6px 12px;
-color: var(--wf-text);
-}
-.wf-nav-item.active {
-background: #d6d6d6;
-font-weight: 600;
-}
-.wf-nav-sep {
-border-top: 1px solid var(--wf-border);
-margin: 6px 0;
-}
-.wf-main {
-padding: 12px 14px;
-position: relative;
-}
-.wf-row-head {
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 8px;
-margin-bottom: 8px;
-}
-.wf-title {
-font-size: 16px;
-font-weight: 700;
-color: var(--wf-text);
-}
-.wf-btn {
-display: inline-block;
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-padding: 4px 10px;
-font-size: 12px;
-color: var(--wf-text);
-background: var(--wf-fill);
-white-space: nowrap;
-}
-.wf-btn.outline {
-background: #fff;
-}
-.wf-btn.ghost-danger {
-background: #fff;
-border-color: var(--wf-error);
-color: var(--wf-error);
-}
-.wf-btn.disabled {
-background: #efefef;
-color: #aaa;
-border-color: #d0d0d0;
-}
-.wf-btn.danger {
-background: #d98880;
-border-color: var(--wf-error);
-color: #fff;
-}
-.wf-btn.icon {
-padding: 2px 6px;
-width: 26px;
-height: 24px;
-text-align: center;
-font-size: 11px;
-}
-.wf-filters {
-display: flex;
-gap: 6px;
-margin-bottom: 10px;
-}
-.wf-chip-btn {
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-padding: 2px 8px;
-font-size: 11px;
-background: #fff;
-color: var(--wf-text);
-}
-.wf-chip-btn.on {
-background: var(--wf-fill);
-border-color: var(--wf-border-dark);
-font-weight: 600;
-}
-.wf-list-row {
-display: grid;
-grid-template-columns: 26px 1fr auto;
-gap: 8px;
-align-items: center;
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-padding: 8px;
-margin-bottom: 6px;
-background: #fff;
-}
-.wf-list-row.new {
-border: 1px dashed #777;
-}
-.wf-hatch-sq {
-width: 24px;
-height: 24px;
-border: 1px solid var(--wf-border-dark);
-background: var(--wf-hatch);
-}
-.wf-name {
-font-weight: 600;
-font-size: 13px;
-color: var(--wf-text);
-}
-.wf-desc-line {
-height: 5px;
-background: #d4d4d4;
-width: 70%;
-margin-top: 5px;
-border-radius: 2px;
-}
-.wf-meta {
-display: flex;
-gap: 4px;
-align-items: center;
-flex-wrap: wrap;
-justify-content: flex-end;
-}
-.wf-chip {
-border: 1px solid var(--wf-border);
-border-radius: 10px;
-padding: 1px 7px;
-font-size: 10px;
-color: #555;
-background: #f7f7f7;
-}
-.wf-actions {
-display: flex;
-gap: 4px;
-margin-left: 6px;
-}
-.wf-overlay {
-position: absolute;
-inset: 0;
-background: rgba(80, 80, 80, 0.45);
-z-index: 2;
-}
-.wf-modal {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 78%;
-max-width: 380px;
-background: #fff;
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-padding: 14px;
-z-index: 3;
-}
-.wf-modal-head {
-display: flex;
-justify-content: space-between;
-align-items: center;
-border-bottom: 1px solid var(--wf-border);
-padding-bottom: 6px;
-margin-bottom: 10px;
-}
-.wf-close {
-font-size: 16px;
-color: #555;
-}
-.wf-field {
-margin-bottom: 10px;
-}
-.wf-label {
-font-size: 12px;
-font-weight: 600;
-margin-bottom: 3px;
-color: var(--wf-text);
-}
-.wf-input {
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-padding: 5px 8px;
-font-size: 12px;
-color: #777;
-background: #fff;
-}
-.wf-input.error {
-border-color: var(--wf-error);
-box-shadow: inset 0 0 0 1px var(--wf-error);
-}
-.wf-textarea {
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-padding: 5px 8px;
-font-size: 12px;
-color: #777;
-height: 60px;
-position: relative;
-background: #fff;
-}
-.wf-counter {
-position: absolute;
-right: 6px;
-bottom: 4px;
-font-size: 10px;
-color: #777;
-}
-.wf-error-msg {
-color: var(--wf-error);
-font-size: 11px;
-margin-top: 3px;
-}
-.wf-modal-foot {
-display: flex;
-justify-content: space-between;
-gap: 8px;
-margin-top: 12px;
-}
-.wf-toast {
-position: absolute;
-top: 10px;
-right: 10px;
-background: #fff;
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-padding: 6px 10px;
-font-size: 12px;
-display: flex;
-align-items: center;
-gap: 8px;
-box-shadow: none;
-z-index: 4;
-}
-.wf-toast .close {
-color: #666;
-margin-left: 6px;
-}
-.wf-tabs-legend {
-display: flex;
-flex-wrap: wrap;
-gap: 14px;
-align-items: center;
-font-size: 12px;
-}
-.wf-legend-item {
-display: inline-flex;
-align-items: center;
-gap: 6px;
-}
-.wf-sw {
-display: inline-block;
-width: 26px;
-height: 14px;
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-background: #fff;
-}
-.wf-sw.fill { background: var(--wf-fill); }
-.wf-sw.hatch { background: var(--wf-hatch); }
-.wf-sw.dash { border-style: dashed; }
-.wf-sw.line { height: 4px; background: #c8c8c8; border: none; }
-.wf-flow {
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-gap: 6px;
-}
-.wf-flow a {
-border: 1px solid var(--wf-border-dark);
-border-radius: 2px;
-background: #fff;
-padding: 6px 10px;
-font-size: 12px;
-color: var(--wf-text);
-text-decoration: none;
-}
-.wf-flow a:hover {
-background: var(--wf-fill);
-}
-.wf-flow .arrow {
-color: #888;
-font-size: 14px;
-}
-.wf-card-num {
-font-size: 36px;
-font-weight: 700;
-color: #888;
-line-height: 1;
-}
-.wf-summary-cards {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 8px;
-margin-bottom: 14px;
-}
-.wf-sum {
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-background: #fff;
-padding: 8px;
-text-align: left;
-}
-.wf-sum.small {
-background: #f3f3f3;
-}
-.wf-sum .n {
-font-size: 22px;
-font-weight: 700;
-color: var(--wf-text);
-}
-.wf-sum .l {
-font-size: 11px;
-color: #666;
-}
-.wf-shortcut {
-display: flex;
-justify-content: space-between;
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-padding: 8px 10px;
-font-size: 12px;
-margin-bottom: 6px;
-background: #fff;
-}
-.wf-note-box {
-border: 1px solid var(--wf-border);
-border-radius: 2px;
-background: #f8f8f8;
-padding: 8px 10px;
-font-size: 12px;
-margin-top: 8px;
-color: var(--wf-text);
-}
-.wf-note-box strong {
-display: block;
-margin-bottom: 3px;
-font-size: 11px;
-text-transform: uppercase;
-letter-spacing: 0.4px;
-color: #555;
-}
-.wf-empty-hatch {
-height: 90px;
-border: 1px solid var(--wf-border);
-background: var(--wf-hatch);
-margin-bottom: 8px;
-}
-.wf-line {
-height: 5px;
-background: #d4d4d4;
-border-radius: 2px;
-margin: 6px 0;
-}
-.wf-placeholder-text {
-color: #888;
-font-size: 12px;
-}
-.wf-alert-triangle {
-width: 0;
-height: 0;
-border-left: 16px solid transparent;
-border-right: 16px solid transparent;
-border-bottom: 28px solid #d98880;
-margin: 0 auto 6px;
-position: relative;
-}
-.wf-alert-triangle span {
-position: absolute;
-top: 8px;
-left: -4px;
-font-size: 13px;
-font-weight: 700;
-color: #fff;
-}
-.wf-dashed-box {
-border: 1px dashed #888;
-border-radius: 2px;
-padding: 8px;
-background: #fff;
-}
-.wf-check {
-display: flex;
-gap: 6px;
-align-items: center;
-font-size: 12px;
-margin-top: 10px;
-color: var(--wf-text);
-}
-.wf-check .box {
-width: 12px;
-height: 12px;
-border: 1px solid #666;
-background: #fff;
-display: inline-block;
-}
-.wf-stack-info {
-font-size: 12px;
-color: var(--wf-text);
-margin: 8px 0;
-}
-.wf-stack-info li {
-margin-bottom: 3px;
-}
-.wf-card-section {
-border: 1px solid var(--wf-border);
-border-radius: 4px;
-background: #fff;
-padding: 18px;
-margin-bottom: 24px;
-}
-.wf-notes-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-}
-.wf-side-by-side {
-display: grid;
-grid-template-columns: 1.3fr 1fr;
-gap: 14px;
-align-items: start;
-}
-.wf-tracer-box {
-border: 1px dashed #888;
-border-radius: 2px;
-background: #fff;
-padding: 10px;
-}
-.wf-tracer-label {
-font-size: 11px;
-color: #666;
-margin-bottom: 6px;
-text-transform: uppercase;
-letter-spacing: 0.4px;
-}
-.wf-obs li {
-margin-bottom: 6px;
-}
-@media (max-width: 900px) {
-.wf-summary-cards { grid-template-columns: repeat(2, 1fr); }
-.wf-side-by-side { grid-template-columns: 1fr; }
-.wf-notes-row { grid-template-columns: 1fr; }
-.wf-layout { grid-template-columns: 110px 1fr; }
-}
+  --accent: #333333;
+  --accent-text: #333333;
+  --accent-contrast: #ffffff;
+  --wf-bg: #f5f5f5;
+  --wf-white: #ffffff;
+  --wf-border: #b0b0b0;
+  --wf-border-dark: #999999;
+  --wf-text: #333333;
+  --wf-fill: #e0e0e0;
+  --wf-error: #b85c5c;
+  --wf-error-bg: #fbeeee;
+  body { font-family: system-ui, sans-serif; background: #ffffff; color: var(--wf-text); }
+}
+body { font-family: system-ui, sans-serif; background: #ffffff; color: #333333; }
+.sb-page { max-width: 980px; margin: 0 auto; padding: 32px 20px 48px; }
+.sb-title { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
+.sb-sub { font-size: 15px; color: #555; margin: 0 0 20px; }
+.note-dashed { border: 1px dashed #999; border-radius: 2px; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; background: #fff; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+.note-i { width: 22px; height: 22px; border: 1px solid #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 13px; }
+.id-table { width: 100%; border-collapse: collapse; border: 1px solid #b0b0b0; margin-bottom: 18px; font-size: 14px; }
+.id-table td { border: 1px solid #b0b0b0; padding: 8px 12px; vertical-align: top; }
+.id-table td:first-child { width: 32%; background: #f5f5f5; font-weight: 600; }
+.lead { font-size: 15px; line-height: 1.6; margin-bottom: 22px; }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 22px; padding: 12px; border: 1px solid #b0b0b0; border-radius: 2px; background: #f5f5f5; }
+.flow a { display: inline-block; border: 1px solid #999; border-radius: 2px; background: #fff; padding: 6px 10px; font-size: 13px; color: #333; text-decoration: none; }
+.flow a:hover { background: #e0e0e0; }
+.flow .arr { color: #777; font-size: 14px; }
+.legend { border: 1px solid #b0b0b0; border-radius: 2px; padding: 12px 14px; margin-bottom: 26px; font-size: 13px; background: #fff; }
+.legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 16px; margin-top: 8px; }
+.legend-row { display: flex; align-items: center; gap: 8px; }
+.sw { width: 34px; height: 16px; border: 1px solid #999; border-radius: 2px; flex-shrink: 0; background: #fff; }
+.sw.fill { background: #e0e0e0; }
+.sw.dash { border-style: dashed; }
+.sw.hatch { background: repeating-linear-gradient(45deg, #fff 0 4px, #ccc 4px 5px); }
+.sw.line { height: 4px; background: #999; border: none; }
+.sw.err { border-color: var(--wf-error); background: var(--wf-error-bg); }
+.card-q { border: 1px solid #b0b0b0; border-radius: 2px; background: #fff; padding: 18px; margin-bottom: 26px; page-break-inside: avoid; break-inside: avoid; }
+.qhead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+.qnum { font-size: 34px; font-weight: 700; color: #333; line-height: 1; }
+.qtitle { font-size: 19px; font-weight: 600; margin: 0; }
+.qsub { font-size: 13px; color: #666; margin: 0 0 12px; }
+.screen { border: 1px solid #999; border-radius: 2px; background: #f5f5f5; overflow: hidden; margin-bottom: 14px; }
+.bar { background: #e0e0e0; border-bottom: 1px solid #b0b0b0; padding: 6px 10px; display: flex; gap: 6px; align-items: center; }
+.dot { width: 9px; height: 9px; border-radius: 50%; border: 1px solid #888; background: #fff; }
+.urlbar { margin-left: 10px; flex: 1; background: #fff; border: 1px solid #b0b0b0; border-radius: 2px; height: 16px; }
+.screen-body { padding: 18px; }
+.center-wrap { display: flex; justify-content: center; align-items: center; min-height: 280px; padding: 18px; }
+.card-wf { background: #fff; border: 1px solid #999; border-radius: 2px; padding: 18px; width: 100%; max-width: 340px; }
+.card-wf.narrow { max-width: 300px; }
+.card-wf.wide { max-width: 560px; }
+.logo { font-weight: 800; font-size: 18px; border: 1px solid #333; display: inline-block; padding: 2px 8px; border-radius: 2px; margin-bottom: 8px; letter-spacing: 1px; }
+.ctitle { font-size: 16px; font-weight: 600; margin: 4px 0 10px; }
+.field { margin-bottom: 10px; }
+.flabel { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.flabel .req { font-weight: 700; }
+.input-wf { border: 1px solid #999; border-radius: 2px; background: #fff; height: 32px; display: flex; align-items: center; padding: 0 8px; font-size: 13px; color: #777; gap: 6px; }
+.input-wf.err { border-color: var(--wf-error); border-width: 2px; color: #333; }
+.dots { letter-spacing: 3px; color: #333; }
+.hint { font-size: 11px; color: #666; margin-top: 3px; }
+.err-msg { font-size: 12px; color: var(--wf-error); margin-top: 3px; }
+.ico { font-size: 13px; color: #555; }
+.strength { display: flex; gap: 3px; margin-top: 6px; }
+.strength span { flex: 1; height: 6px; border-radius: 1px; background: #e0e0e0; border: 1px solid #b0b0b0; }
+.strength span.on { background: #888; border-color: #888; }
+.strength-text { font-size: 12px; margin-top: 4px; }
+.criteria { font-size: 11px; color: #666; }
+.row-line { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0; }
+.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.box { width: 13px; height: 13px; border: 1px solid #333; display: inline-block; background: #fff; }
+.link { text-decoration: underline; color: #333; cursor: pointer; }
+.btn-p { display: block; width: 100%; background: #555; color: #fff; text-align: center; padding: 9px; border-radius: 2px; font-size: 14px; font-weight: 600; margin: 10px 0; border: 1px solid #333; }
+.btn-p.dis { background: #ccc; border-color: #bbb; color: #777; }
+.btn-s { display: inline-block; border: 1px solid #333; background: #fff; color: #333; padding: 7px 14px; border-radius: 2px; font-size: 13px; font-weight: 600; }
+.btn-s.blue-free { background: #fff; }
+.sep { border-top: 1px solid #ccc; margin: 10px 0 6px; }
+.center { text-align: center; font-size: 12px; }
+.foot { font-size: 10px; color: #777; border-top: 1px solid #ddd; margin-top: 10px; padding-top: 6px; }
+.lines { display: flex; flex-direction: column; gap: 5px; }
+.lines span { display: block; height: 6px; background: #e0e0e0; border-radius: 1px; }
+.dashed-box { border: 1px dashed #999; border-radius: 2px; padding: 10px 12px; font-size: 12px; display: flex; gap: 8px; align-items: flex-start; background: #fff; }
+.toast { border: 1px solid #333; background: #fff; border-radius: 2px; padding: 8px 12px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; }
+.toast-dashed { border: 1px dashed #999; padding: 8px; border-radius: 2px; background: #fff; }
+.hatch-img { height: 80px; background: repeating-linear-gradient(45deg, #f0f0f0 0 6px, #d8d8d8 6px 7px); border: 1px solid #b0b0b0; }
+.app-top { display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid #b0b0b0; padding: 8px 12px; font-size: 12px; }
+.app-top .search { flex: 1; border: 1px solid #b0b0b0; border-radius: 2px; height: 24px; display: flex; align-items: center; padding: 0 8px; color: #777; }
+.app-body { display: grid; grid-template-columns: 150px 1fr; min-height: 260px; }
+.side { background: #fff; border-right: 1px solid #b0b0b0; padding: 10px 8px; font-size: 12px; }
+.side div { padding: 6px 8px; border-radius: 2px; margin-bottom: 2px; }
+.side .active { background: #d8d8d8; font-weight: 600; }
+.side hr { border: none; border-top: 1px solid #ccc; margin: 6px 0; }
+.main { padding: 14px; font-size: 12px; }
+.proj { border: 1px solid #b0b0b0; border-radius: 2px; background: #fff; padding: 8px 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.chip { border: 1px solid #999; border-radius: 10px; padding: 1px 7px; font-size: 10px; margin-right: 4px; display: inline-block; }
+.ico-btn { width: 20px; height: 20px; border: 1px solid #999; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-left: 4px; background: #fff; }
+.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #333; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: #e0e0e0; }
+.menu-dash { border: 1px dashed #999; border-radius: 2px; background: #fff; padding: 8px; font-size: 12px; width: 180px; }
+.menu-dash div { padding: 4px 6px; }
+.status-bar { border-top: 1px solid #b0b0b0; background: #fff; font-size: 11px; color: #555; padding: 5px 12px; }
+.overlay { background: rgba(0,0,0,0.25); padding: 22px; display: flex; justify-content: center; align-items: center; }
+.modal { background: #fff; border: 1px solid #999; border-radius: 2px; padding: 16px; width: 260px; text-align: center; font-size: 13px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px; }
+.step-row { display: grid; grid-template-columns: 1fr 24px 1fr; gap: 6px; align-items: start; }
+.arrow-step { text-align: center; font-size: 18px; padding-top: 40px; color: #666; }
+.step-card { background: #fff; border: 1px solid #999; border-radius: 2px; padding: 12px; font-size: 12px; }
+.step-num { font-weight: 700; font-size: 12px; margin-bottom: 4px; }
+.notes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.note-box { border: 1px solid #b0b0b0; border-radius: 2px; padding: 10px 12px; font-size: 12.5px; background: #fafafa; line-height: 1.5; }
+.note-box strong { display: block; margin-bottom: 4px; font-size: 12px; }
+.obs { border: 1px solid #b0b0b0; border-radius: 2px; padding: 16px 18px; background: #fff; }
+.obs ul { margin: 6px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+.nav-series { margin-top: 18px; font-size: 13px; color: #555; border-top: 1px solid #b0b0b0; padding-top: 12px; line-height: 1.6; }
+.actions-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.actions-row .btn-s { cursor: pointer; }
+.shell-footer { margin-top: 24px; font-size: 12px; color: #777; text-align: center; }
 @media print {
-body { background: #fff; }
-.wf-card-section {
-page-break-after: always;
-break-after: page;
-border: 1px solid #999;
+  body { background: #fff; }
+  .sb-page { max-width: 100%; padding: 10mm; }
+  .card-q { page-break-before: auto; page-break-inside: avoid; }
+  .card-q + .card-q { page-break-before: always; }
+  .flow a, .actions-row { display: none; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
-.wf-card-section:last-of-type { page-break-after: auto; }
-.wf-flow, .wf-tabs-legend { page-break-inside: avoid; }
-* {
--webkit-print-color-adjust: exact;
-print-color-adjust: exact;
-}
-.shell-container { max-width: 100%; }
+@media (max-width: 640px) {
+  .notes { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .step-row { grid-template-columns: 1fr; }
+  .arrow-step { display: none; }
+  .app-body { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .qnum { font-size: 26px; }
 }
 </style>
 </head>
 <body>
-<div class="shell-container shell-section">
+<div class="sb-page">
 
-<header class="shell-hero mb-6">
-<span class="eyebrow">Storyboard de Interface • SGR</span>
-<h1 class="text-2xl font-bold mt-2">Projeto de Interface — Storyboard 1</h1>
-<p class="muted text-sm mt-1">Cenário de uso: criar, ver, editar e excluir projetos (Requisito Funcional 4 / US-04)</p>
-</header>
+  <header>
+    <span class="badge" data-variant="secondary">Projeto de Interface · SGR</span>
+    <h1 class="sb-title mt-2">Projeto de Interface — Storyboard 1</h1>
+    <p class="sb-sub">Cenário de uso: criar conta e entrar no sistema (Requisitos Funcionais 2 e 3)</p>
+    <div class="note-dashed">
+      <span class="note-i">i</span>
+      <span>Nota de alinhamento com a arquitetura: a autenticação é implementada pela própria equipe, com senha protegida por hash bcrypt e sessão mantida pelo framework de apresentação. Não há login federado nem provedor externo de identidade nesta versão.</span>
+    </div>
+  </header>
 
-<section class="panel p-4 mb-6" aria-label="Identificação do cenário">
-<h2 class="text-lg font-semibold mb-1">Identificação do cenário</h2>
-<p class="muted text-xs mb-3">Quadro de referência para revisão com a equipe de produto e desenvolvimento.</p>
-<div class="shell-grid cols-2 gap-3">
-<div class="wf-dashed-box">
-<div class="wf-label">Cenário</div>
-<div class="text-sm">Gestão do ciclo de vida de projetos no SGR</div>
-</div>
-<div class="wf-dashed-box">
-<div class="wf-label">História de usuário relacionada</div>
-<div class="text-sm">Como um membro da equipe, eu quero criar, ver, editar e apagar projetos, para organizar cada produto ou cliente num lugar separado.</div>
-</div>
-<div class="wf-dashed-box">
-<div class="wf-label">Ator principal</div>
-<div class="text-sm">Membro da equipe / Product Owner</div>
-</div>
-<div class="wf-dashed-box">
-<div class="wf-label">Pré-condição</div>
-<div class="text-sm">Usuário autenticado com pelo menos um projeto ou nenhum</div>
-</div>
-</div>
-</section>
+  <table class="id-table">
+    <tr><td>Cenário</td><td>Criação de conta e autenticação</td></tr>
+    <tr><td>Requisitos funcionais</td><td>RF-02 e RF-03</td></tr>
+    <tr><td>Histórias de usuário</td><td>US-02 e US-03</td></tr>
+    <tr><td>Ator principal</td><td>Interessado em usar o sistema / usuário cadastrado</td></tr>
+    <tr><td>Pré-condição</td><td>Nenhuma, para criar conta; possuir conta ativa para entrar</td></tr>
+    <tr><td>Quadros</td><td>Q-01 a Q-07 — numeração contínua do projeto, de Q-01 a Q-40</td></tr>
+  </table>
 
-<section class="panel p-4 mb-6" aria-label="Fluxo dos quadros">
-<h2 class="text-lg font-semibold mb-1">Fluxo dos quadros</h2>
-<p class="muted text-xs mb-3">Clique em cada etapa para ir ao quadro correspondente.</p>
-<nav class="wf-flow" aria-label="Navegação entre quadros">
-<a href="#quadro-1">1 · Lista de projetos</a>
-<span class="arrow">→</span>
-<a href="#quadro-2">2 · Criar projeto</a>
-<span class="arrow">→</span>
-<a href="#quadro-3">3 · Projeto criado</a>
-<span class="arrow">→</span>
-<a href="#quadro-4">4 · Ver projeto</a>
-<span class="arrow">→</span>
-<a href="#quadro-5">5 · Editar projeto</a>
-<span class="arrow">→</span>
-<a href="#quadro-6">6 · Excluir projeto</a>
-</nav>
-</section>
+  <p class="lead">Este é o único cenário que antecede todos os demais: nenhum outro storyboard do projeto pode ser executado sem sessão válida. Os cinco storyboards do projeto somam quarenta quadros, numerados de Q-01 a Q-40; esta página cobre os sete primeiros.</p>
 
-<section class="panel p-4 mb-6" aria-label="Legenda de convenções">
-<h2 class="text-lg font-semibold mb-1">Legenda de convenções do wireframe</h2>
-<p class="muted text-xs mb-3">Convenções visuais usadas em todos os quadros deste storyboard.</p>
-<div class="wf-tabs-legend">
-<span class="wf-legend-item"><span class="wf-sw"></span> Container ou região</span>
-<span class="wf-legend-item"><span class="wf-sw fill"></span> Botão</span>
-<span class="wf-legend-item"><span class="wf-sw line"></span> Texto ou parágrafo</span>
-<span class="wf-legend-item"><span class="wf-sw hatch"></span> Imagem ou ilustração</span>
-<span class="wf-legend-item"><span class="wf-sw dash"></span> Área opcional ou estado alternativo</span>
-<span class="wf-legend-item"><strong>★</strong> Campo obrigatório</span>
-</div>
-</section>
+  <nav class="flow" aria-label="Fluxo dos quadros">
+    <a href="#q01">Q-01 Tela de entrada</a><span class="arr">→</span>
+    <a href="#q02">Q-02 Criar conta</a><span class="arr">→</span>
+    <a href="#q03">Q-03 Validação do cadastro</a><span class="arr">→</span>
+    <a href="#q04">Q-04 Conta criada</a><span class="arr">→</span>
+    <a href="#q05">Q-05 Sessão autenticada</a><span class="arr">→</span>
+    <a href="#q06">Q-06 Sessão expirada</a><span class="arr">→</span>
+    <a href="#q07">Q-07 Sair e recuperar senha</a>
+  </nav>
 
-<!-- QUADRO 1 -->
-<section class="wf-card-section" id="quadro-1" aria-labelledby="t1">
-<div class="row between mb-3">
-<span class="wf-card-num">1</span>
-<span class="badge" data-variant="outline">Tela principal</span>
-</div>
-<h2 id="t1" class="text-xl font-semibold mb-3">Lista de projetos</h2>
+  <section class="legend" aria-label="Legenda de convenções">
+    <strong>Legenda de convenções</strong>
+    <div class="legend-grid">
+      <div class="legend-row"><span class="sw"></span> Retângulo com borda = container ou região</div>
+      <div class="legend-row"><span class="sw fill"></span> Retângulo preenchido cinza = botão de ação primária</div>
+      <div class="legend-row"><span class="sw"></span> Apenas contorno = botão de ação secundária</div>
+      <div class="legend-row"><span class="sw line"></span> Linha cinza longa = texto ou parágrafo como bloco</div>
+      <div class="legend-row"><span class="sw hatch"></span> Hachura diagonal = área de imagem ou ilustração</div>
+      <div class="legend-row"><span class="sw dash"></span> Contorno tracejado = opcional, alternativo ou destaque</div>
+      <div class="legend-row"><span>★</span> Campo obrigatório</div>
+      <div class="legend-row"><span>⋯</span> Menu de mais ações</div>
+      <div class="legend-row"><span>••••• </span> Campo com valor oculto (senha ou dado sensível)</div>
+      <div class="legend-row"><span>✓ / ⚠</span> Confirmação de sucesso ou aviso, sem cor</div>
+      <div class="legend-row"><span class="sw err"></span> Vermelho suave = exclusivamente mensagens de erro</div>
+    </div>
+  </section>
 
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos</span></div>
-<div class="wf-body">
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-row-head">
-<div class="wf-title">Projetos</div>
-<span class="wf-btn">+ Novo projeto</span>
-</div>
-<div class="wf-filters">
-<span class="wf-chip-btn on">Todos</span>
-<span class="wf-chip-btn">Meus projetos</span>
-<span class="wf-chip-btn">Arquivados</span>
-</div>
+  <!-- Q-01 -->
+  <article class="card-q" id="q01">
+    <div class="qhead"><span class="qnum">Q-01</span><h2 class="qtitle">Tela de entrada</h2></div>
+    <p class="qsub">Acesso sem sessão: apenas autenticação disponível, sem menu lateral.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="center-wrap">
+        <div class="card-wf narrow">
+          <div class="center"><span class="logo">SGR</span>
+            <div class="lines" style="margin:6px auto 6px; width:70%"><span></span><span></span></div>
+          </div>
+          <div class="ctitle">Entrar</div>
+          <div class="field">
+            <div class="flabel">E-mail <span class="req">★</span></div>
+            <div class="input-wf"><span class="ico">✉</span> <span>seu@email.com</span></div>
+            <div class="hint">Use o e-mail cadastrado na sua conta.</div>
+          </div>
+          <div class="field">
+            <div class="flabel">Senha <span class="req">★</span></div>
+            <div class="input-wf"><span class="dots">•••••</span><span style="margin-left:auto" class="ico">👁</span></div>
+          </div>
+          <div class="row-line">
+            <span class="chk"><span class="box"></span> Continuar conectado</span>
+            <span class="link">Esqueci minha senha</span>
+          </div>
+          <div class="btn-p">Entrar</div>
+          <div class="sep"></div>
+          <div class="center">Ainda não tem conta? <span class="link">Criar conta</span></div>
+          <div class="foot">Dados tratados conforme a LGPD — finalidade informada no cadastro.</div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Informa e-mail e senha e aciona "Entrar"; se ainda não tem conta, escolhe "Criar conta"; se esqueceu a senha, escolhe "Esqueci minha senha".</div>
+      <div class="note-box"><strong>Decisão de design</strong>Sem menu lateral, pois nada além de autenticar está disponível sem sessão. O campo de senha tem controle de exibição, e o link de recuperação fica na mesma tela, porque senha esquecida é a causa mais comum de perda de acesso. O texto de conformidade informa a finalidade no momento da coleta.</div>
+    </div>
+  </article>
 
-<div class="wf-list-row">
-<span class="wf-hatch-sq"></span>
-<div>
-<div class="wf-name">Portal do Cliente</div>
-<div class="wf-desc-line"></div>
-</div>
-<div class="wf-meta">
-<span class="wf-chip">1 backlog</span>
-<span class="wf-chip">18 histórias</span>
-<span class="wf-chip">89 pontos</span>
-<span class="wf-actions">
-<span class="wf-btn icon outline">✎</span>
-<span class="wf-btn icon outline">🗑</span>
-</span>
-</div>
-</div>
-<div class="wf-list-row">
-<span class="wf-hatch-sq"></span>
-<div>
-<div class="wf-name">App de Campo</div>
-<div class="wf-desc-line"></div>
-</div>
-<div class="wf-meta">
-<span class="wf-chip">1 backlog</span>
-<span class="wf-chip">26 histórias</span>
-<span class="wf-chip">144 pontos</span>
-<span class="wf-actions">
-<span class="wf-btn icon outline">✎</span>
-<span class="wf-btn icon outline">🗑</span>
-</span>
-</div>
-</div>
-<div class="wf-list-row">
-<span class="wf-hatch-sq"></span>
-<div>
-<div class="wf-name">Integração Fiscal</div>
-<div class="wf-desc-line"></div>
-</div>
-<div class="wf-meta">
-<span class="wf-chip">1 backlog</span>
-<span class="wf-chip">12 histórias</span>
-<span class="wf-chip">55 pontos</span>
-<span class="wf-actions">
-<span class="wf-btn icon outline">✎</span>
-<span class="wf-btn icon outline">🗑</span>
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <!-- Q-02 -->
+  <article class="card-q" id="q02">
+    <div class="qhead"><span class="qnum">Q-02</span><h2 class="qtitle">Criar conta</h2></div>
+    <p class="qsub">Formulário de cadastro com coleta mínima de dados pessoais.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="center-wrap" style="min-height:460px">
+        <div class="card-wf narrow">
+          <div class="center"><span class="logo">SGR</span></div>
+          <div class="ctitle">Criar conta</div>
+          <div class="field">
+            <div class="flabel">Nome <span class="req">★</span></div>
+            <div class="input-wf"><span>Como você quer ser chamado</span></div>
+          </div>
+          <div class="field">
+            <div class="flabel">E-mail <span class="req">★</span></div>
+            <div class="input-wf"><span class="ico">✉</span> <span>seu@email.com</span></div>
+          </div>
+          <div class="field">
+            <div class="flabel">Senha <span class="req">★</span></div>
+            <div class="input-wf"><span class="dots">•••••</span><span style="margin-left:auto" class="ico">👁</span></div>
+            <div class="strength"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+            <div class="strength-text">Força da senha: boa</div>
+            <div class="criteria">mínimo 8 caracteres · uma letra e um número</div>
+          </div>
+          <div class="field">
+            <div class="flabel">Confirmar senha <span class="req">★</span></div>
+            <div class="input-wf"><span class="dots">•••••</span><span style="margin-left:auto" class="ico">👁</span></div>
+          </div>
+          <div class="chk" style="align-items:flex-start; margin:10px 0"><span class="box"></span>
+            <span>Li e aceito a <span class="link">política de privacidade</span>.</span>
+          </div>
+          <div class="btn-p">Criar conta</div>
+          <div class="center">Já tem conta? <span class="link">Entrar</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Informa nome, e-mail e senha duas vezes, aceita a política e cria a conta; ou volta à tela de entrada se já tiver conta.</div>
+      <div class="note-box"><strong>Decisão de design</strong>São pedidos apenas três dados pessoais, em coerência com a coleta mínima da LGPD. O indicador de força mostra os critérios junto do resultado. A confirmação existe porque o campo é mascarado; o aceite da política registra a base legal do tratamento.</div>
+    </div>
+  </article>
 
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Abre o sistema já autenticado e vê a lista dos seus projetos, podendo buscar, filtrar e escolher um projeto para abrir ou agir sobre ele.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-As ações de editar e excluir ficam na própria linha, sem exigir abrir o projeto (padrão adotado do Jira, onde o trabalho é editável direto na lista); os metadados em chips dão contexto de tamanho do projeto antes de entrar nele.
-</div>
-</div>
-</section>
+  <!-- Q-03 -->
+  <article class="card-q" id="q03">
+    <div class="qhead"><span class="qnum">Q-03</span><h2 class="qtitle">Validação do cadastro (estados de erro)</h2></div>
+    <p class="qsub">Três recortes do cartão de cadastro com mensagens no campo afetado.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="screen-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div class="card-wf wide" style="max-width:100%">
+          <div style="font-weight:700; font-size:12px; margin-bottom:6px">(A) Campo obrigatório vazio</div>
+          <div class="field">
+            <div class="flabel">Nome <span class="req">★</span></div>
+            <div class="input-wf err"><span></span></div>
+            <div class="err-msg">Informe seu nome.</div>
+          </div>
+          <div class="btn-p dis">Criar conta</div>
+        </div>
+        <div class="card-wf wide" style="max-width:100%">
+          <div style="font-weight:700; font-size:12px; margin-bottom:6px">(B) E-mail já cadastrado</div>
+          <div class="field">
+            <div class="flabel">E-mail <span class="req">★</span></div>
+            <div class="input-wf err"><span class="ico">✉</span> <span>maria@empresa.com.br</span></div>
+            <div class="err-msg">Este e-mail já tem conta. <span class="link" style="color:var(--wf-error)">Entre</span> ou <span class="link" style="color:var(--wf-error)">recupere sua senha</span>.</div>
+          </div>
+        </div>
+        <div class="two-col" style="padding:0">
+          <div class="card-wf" style="max-width:100%">
+            <div style="font-weight:700; font-size:12px; margin-bottom:6px">(C) Senhas diferentes</div>
+            <div class="field">
+              <div class="flabel">Senha <span class="req">★</span></div>
+              <div class="input-wf err"><span class="dots">•••••••</span></div>
+            </div>
+            <div class="field">
+              <div class="flabel">Confirmar senha <span class="req">★</span></div>
+              <div class="input-wf err"><span class="dots">•••••</span></div>
+              <div class="err-msg">As senhas não conferem.</div>
+            </div>
+          </div>
+          <div class="dashed-box" style="align-self:start">
+            <span class="ico">i</span>
+            <span>A senha precisa ter pelo menos 8 caracteres, uma letra e um número.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Tenta criar a conta, é impedido e vê exatamente qual campo está errado e como corrigir.</div>
+      <div class="note-box"><strong>Decisão de design</strong>A mensagem aparece no campo com a regra violada. Nenhum campo é limpo em caso de erro, pois redigitar tudo é a principal causa de abandono. O caso de e-mail já cadastrado oferece as duas saídas possíveis.</div>
+    </div>
+  </article>
 
-<!-- QUADRO 2 -->
-<section class="wf-card-section" id="quadro-2" aria-labelledby="t2">
-<div class="row between mb-3">
-<span class="wf-card-num">2</span>
-<span class="badge" data-variant="outline">Modal</span>
-</div>
-<h2 id="t2" class="text-xl font-semibold mb-3">Criar projeto — formulário</h2>
+  <!-- Q-04 -->
+  <article class="card-q" id="q04">
+    <div class="qhead"><span class="qnum">Q-04</span><h2 class="qtitle">Conta criada (primeiro acesso)</h2></div>
+    <p class="qsub">Confirmação do cadastro com sessão já iniciada.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="screen-body" style="display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; justify-content:center;">
+        <div class="card-wf narrow" style="text-align:center">
+          <div style="width:42px;height:42px;border:1px solid #333;border-radius:50%;margin:4px auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px">✓</div>
+          <div class="ctitle">Conta criada.</div>
+          <div style="font-size:12px; line-height:1.5; margin-bottom:10px">Enviamos uma confirmação para o endereço informado. Você já pode usar o sistema.</div>
+          <div class="dashed-box" style="text-align:left; margin-bottom:10px"><span class="ico">i</span><span>No primeiro acesso, seus projetos e backlogs aparecem vazios. Comece criando um projeto.</span></div>
+          <div class="btn-p" style="margin-top:4px">Começar agora</div>
+        </div>
+        <div class="toast-dashed" style="width:230px">
+          <div style="font-size:10px; color:#666; margin-bottom:4px">Lista de projetos vazia ao fundo</div>
+          <div class="toast"><span>Bem-vindo, Maria.</span><span>×</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Confirma que a conta foi criada e entra no sistema com a sessão já iniciada.</div>
+      <div class="note-box"><strong>Decisão de design</strong>O cadastro autentica de imediato, sem novo login logo após o preenchimento. O aviso de espaço vazio antecipa o estado que o usuário encontrará, e o nome na saudação confirma a associação ao cadastro certo.</div>
+    </div>
+  </article>
 
-<div class="wf-side-by-side">
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos/novo</span></div>
-<div class="wf-body">
-<div class="wf-overlay"></div>
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout" style="min-height:340px">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-row-head">
-<div class="wf-title">Projetos</div>
-<span class="wf-btn">+ Novo projeto</span>
-</div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Portal do Cliente</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">App de Campo</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-</div>
-</div>
-<div class="wf-modal">
-<div class="wf-modal-head">
-<strong style="font-size:14px">Novo projeto</strong>
-<span class="wf-close">×</span>
-</div>
-<div class="wf-field">
-<div class="wf-label">Nome do projeto ★</div>
-<div class="wf-input">Ex.: Portal do Cliente</div>
-</div>
-<div class="wf-field">
-<div class="wf-label">Descrição</div>
-<div class="wf-textarea">Para que serve este projeto?<span class="wf-counter">0/280</span></div>
-</div>
-<div class="wf-modal-foot">
-<span class="wf-btn outline">Cancelar</span>
-<span class="wf-btn">Criar projeto</span>
-</div>
-</div>
-</div>
-</div>
+  <!-- Q-05 -->
+  <article class="card-q" id="q05">
+    <div class="qhead"><span class="qnum">Q-05</span><h2 class="qtitle">Sessão autenticada (acesso aos serviços)</h2></div>
+    <p class="qsub">Tela interna em uso normal, com identificação permanente do usuário e do projeto.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="app-top">
+        <span class="logo" style="margin:0; font-size:13px">SGR</span>
+        <div class="search">Buscar projeto, história ou épico...</div>
+        <span class="chip">Portal do Cliente ▾</span>
+        <span>Maria</span>
+        <span class="avatar">MA</span>
+      </div>
+      <div class="app-body">
+        <div class="side">
+          <div class="active">Projetos</div>
+          <div>Backlogs</div>
+          <div>Épicos</div>
+          <div>Histórias</div>
+          <div>Priorização</div>
+          <hr>
+          <div>Administração</div>
+        </div>
+        <div class="main">
+          <div style="font-size:16px; font-weight:600">Projetos</div>
+          <div style="color:#555; margin-bottom:10px">Bem-vindo de volta, Maria.</div>
+          <div class="proj"><div><div style="font-weight:600">Portal do Cliente</div><div style="color:#666">Área de autosserviço do cliente</div><div style="margin-top:4px"><span class="chip">12 histórias</span><span class="chip">Ativo</span></div></div><div>✎ <span class="ico-btn">🗑</span></div></div>
+          <div class="proj"><div><div style="font-weight:600">App Mobile Vendas</div><div style="color:#666">Aplicativo de força de vendas</div><div style="margin-top:4px"><span class="chip">8 histórias</span><span class="chip">Em revisão</span></div></div><div>✎ <span class="ico-btn">🗑</span></div></div>
+          <div class="proj"><div><div style="font-weight:600">Integração Financeiro</div><div style="color:#666">Conciliação com o ERP</div><div style="margin-top:4px"><span class="chip">5 histórias</span><span class="chip">Planejado</span></div></div><div>✎ <span class="ico-btn">🗑</span></div></div>
+        </div>
+      </div>
+      <div class="status-bar">Sessão iniciada às 09:14 · expira em 8 horas</div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="dashed-box menu-dash" style="width:200px; display:block">
+        <div>Minha conta</div>
+        <div>Preferências de exibição</div>
+        <hr style="border:none;border-top:1px solid #ccc;margin:4px 0">
+        <div>Sair</div>
+      </div>
+      <div style="font-size:11px; color:#666; margin-top:4px">Menu do avatar, aberto</div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Navega entre projetos, backlogs, épicos e histórias sem se identificar novamente, e encerra a sessão pelo menu do avatar.</div>
+      <div class="note-box"><strong>Decisão de design</strong>Materializa o requisito 3: autenticado, o usuário acessa os serviços sem reautenticação. Usuário e projeto corrente ficam visíveis na barra superior, e a expiração é indicada de forma discreta.</div>
+    </div>
+  </article>
 
-<div>
-<div class="wf-tracer-box">
-<div class="wf-tracer-label">Estado de erro (recorte)</div>
-<div class="wf-modal" style="position:relative; transform:none; top:auto; left:auto; width:100%; max-width:none;">
-<div class="wf-modal-head">
-<strong style="font-size:14px">Novo projeto</strong>
-<span class="wf-close">×</span>
-</div>
-<div class="wf-field">
-<div class="wf-label">Nome do projeto ★</div>
-<div class="wf-input error">Ex.: Portal do Cliente</div>
-<div class="wf-error-msg">Informe o nome do projeto.</div>
-</div>
-<div class="wf-field">
-<div class="wf-label">Descrição</div>
-<div class="wf-textarea">Integração com o ERP fiscal<span class="wf-counter">28/280</span></div>
-</div>
-<div class="wf-modal-foot">
-<span class="wf-btn outline">Cancelar</span>
-<span class="wf-btn disabled">Criar projeto</span>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <!-- Q-06 -->
+  <article class="card-q" id="q06">
+    <div class="qhead"><span class="qnum">Q-06</span><h2 class="qtitle">Sessão expirada (guarda de acesso)</h2></div>
+    <p class="qsub">Dois motivos distintos para o mesmo efeito: expiração por tempo e ausência de sessão.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="screen-body two-col" style="padding:14px">
+        <div>
+          <div style="font-weight:700; font-size:12px; margin-bottom:6px">(A) Sessão expirada durante o uso</div>
+          <div class="overlay" style="padding:14px; border:1px solid #b0b0b0">
+            <div class="modal">
+              <div style="font-size:20px">◷</div>
+              <div class="ctitle">Sua sessão expirou</div>
+              <div style="font-size:12px; line-height:1.5">Por segurança, encerramos sua sessão após 8 horas de inatividade. Entre novamente para continuar.</div>
+              <div class="btn-p" style="margin:10px 0 6px">Entrar novamente</div>
+              <div class="center"><span class="link">Continuar como outro usuário</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:12px; margin-bottom:6px">(B) Acesso sem sessão por endereço direto</div>
+          <div class="card-wf" style="max-width:100%; text-align:center">
+            <div style="font-size:20px">🔒</div>
+            <div class="ctitle">Você precisa entrar para acessar esta página</div>
+            <div style="font-size:12px; line-height:1.5; margin-bottom:8px">O endereço que você tentou abrir exige autenticação.</div>
+            <div class="btn-p" style="margin-top:4px">Entrar</div>
+            <div style="font-size:10px; color:#666">Após entrar, você será levado de volta ao que estava tentando abrir.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Percebe que a sessão terminou e entra novamente, ou é conduzido à entrada ao tentar abrir um endereço interno sem sessão.</div>
+      <div class="note-box"><strong>Decisão de design</strong>A verificação de sessão ocorre em cada página, impedindo que um endereço digitado contorne a autenticação. Mostrar "sua sessão expirou" a quem nunca entrou seria informação falsa; o sistema devolve o usuário ao ponto em que estava.</div>
+    </div>
+  </article>
 
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Clica em "+ Novo projeto", preenche nome e, opcionalmente, descrição, e confirma.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-Formulário em modal curto, com apenas dois campos, para criar em segundos sem sair do contexto da lista; a validação aparece no campo e o botão desabilita, e os dados digitados permanecem na tela quando há erro.
-</div>
-</div>
-</section>
+  <!-- Q-07 -->
+  <article class="card-q" id="q07">
+    <div class="qhead"><span class="qnum">Q-07</span><h2 class="qtitle">Sair e recuperar senha</h2></div>
+    <p class="qsub">Encerramento de sessão com confirmação curta e recuperação de senha em três passos.</p>
+    <div class="screen">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar"></span></div>
+      <div class="screen-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div style="font-weight:700; font-size:12px">(A) Sair</div>
+        <div class="two-col" style="padding:0; align-items:start">
+          <div class="overlay" style="padding:14px; border:1px solid #b0b0b0">
+            <div class="modal">
+              <div class="ctitle">Sair do sistema?</div>
+              <div style="display:flex; gap:8px; justify-content:center; margin-top:10px">
+                <span class="btn-s">Cancelar</span>
+                <span class="btn-p" style="width:auto; margin:0; padding:7px 16px">Sair</span>
+              </div>
+            </div>
+          </div>
+          <div class="toast-dashed" style="align-self:center">
+            <div style="font-size:10px; color:#666; margin-bottom:4px">Tela de entrada ao fundo</div>
+            <div class="toast"><span>Você saiu do sistema.</span><span>×</span></div>
+          </div>
+        </div>
+        <div style="font-weight:700; font-size:12px">(B) Recuperar senha, em três passos</div>
+        <div class="step-row">
+          <div class="step-card">
+            <div class="step-num">1. Pedir o link</div>
+            <div class="ctitle" style="font-size:14px">Recuperar senha</div>
+            <div style="margin-bottom:6px">Informe seu e-mail e enviaremos um link para criar uma nova senha.</div>
+            <div class="field"><div class="flabel">E-mail <span class="req">★</span></div><div class="input-wf"><span class="ico">✉</span> <span>seu@email.com</span></div></div>
+            <div class="btn-p" style="font-size:12px; padding:6px; margin:4px 0">Enviar link</div>
+          </div>
+          <div class="arrow-step">→</div>
+          <div class="step-card">
+            <div class="step-num">2. Confirmar envio</div>
+            <div style="font-size:18px; text-align:center">✉</div>
+            <div class="ctitle" style="font-size:14px; text-align:center">Verifique seu e-mail</div>
+            <div style="font-size:11px; line-height:1.5">Se existir conta com esse endereço, o link chegará em instantes. Ele vale por 1 hora e só pode ser usado uma vez.</div>
+            <div style="font-size:11px; color:#777; margin-top:6px">Reenviar em 60 s</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="arrow-step" style="padding-top:0">&nbsp;</div>
+          <div></div>
+          <div class="arrow-step" style="padding-top:0">↓</div>
+        </div>
+        <div class="step-card" style="max-width:100%">
+          <div class="step-num">3. Criar nova senha</div>
+          <div class="ctitle" style="font-size:14px">Criar nova senha</div>
+          <div class="field"><div class="flabel">Nova senha <span class="req">★</span></div><div class="input-wf"><span class="dots">•••••••</span></div>
+            <div class="strength"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></div>
+          <div class="field"><div class="flabel">Confirmar nova senha <span class="req">★</span></div><div class="input-wf"><span class="dots">•••••••</span></div></div>
+          <div class="btn-p" style="font-size:12px; padding:6px">Salvar nova senha</div>
+          <div class="toast-dashed" style="margin-top:8px"><div class="toast"><span>Senha alterada. Entre com a nova senha.</span><span>×</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <div class="note-box"><strong>O que o usuário faz</strong>Encerra a sessão ao terminar, ou recupera a senha em três passos quando a esqueceu.</div>
+      <div class="note-box"><strong>Decisão de design</strong>A resposta da recuperação é sempre a mesma, exista ou não conta, impedindo descobrir quem tem conta. Prazo e uso único do link são informados antes de o usuário sair da tela.</div>
+    </div>
+  </article>
 
-<!-- QUADRO 3 -->
-<section class="wf-card-section" id="quadro-3" aria-labelledby="t3">
-<div class="row between mb-3">
-<span class="wf-card-num">3</span>
-<span class="badge" data-variant="outline">Sucesso</span>
-</div>
-<h2 id="t3" class="text-xl font-semibold mb-3">Projeto criado — retorno visual</h2>
+  <section class="obs" aria-labelledby="obs-title">
+    <strong id="obs-title">Observações do storyboard</strong>
+    <ul>
+      <li>Os sete quadros cobrem os requisitos funcionais 2 (Q-01, Q-02, Q-03 e Q-04) e 3 (Q-05, Q-06 e Q-07).</li>
+      <li>Este é o único cenário que antecede todos os demais: nenhum outro storyboard do projeto pode ser executado sem sessão válida, o que justifica a verificação de sessão em cada página.</li>
+      <li>A autenticação é implementada pela própria equipe, com senha protegida por hash bcrypt e sessão mantida pelo framework de apresentação; não há login federado nesta versão.</li>
+      <li>O cenário cobre os estados de erro, de sucesso e de exceção, e não apenas o caminho feliz: campo vazio, e-mail já cadastrado, senhas divergentes, sessão expirada e acesso direto sem sessão estão representados.</li>
+      <li>A recuperação de senha depende do envio de e-mail, que é um serviço externo; sua indisponibilidade afeta apenas esse fluxo, e não o login, conforme registrado no documento de infraestrutura.</li>
+      <li>Os wireframes são esboços de baixa fidelidade e não definem cores, tipografia ou identidade visual finais.</li>
+    </ul>
+    <div class="nav-series">
+      Este é o Storyboard 1 de 5. Os demais são: Storyboard 2 — Projetos (Q-08 a Q-13); Storyboard 3 — Histórias, épicos e critérios de aceitação (Q-14 a Q-22); Storyboard 4 — Backlogs e movimentação de histórias (Q-23 a Q-31); Storyboard 5 — Pontuação e priorização (Q-32 a Q-40).
+    </div>
+    <div class="actions-row">
+      <span class="btn-s" id="btn-print" role="button" tabindex="0">Imprimir / Salvar em PDF</span>
+      <span class="btn-s" id="btn-copy" role="button" tabindex="0">Copiar resumo do fluxo</span>
+    </div>
+  </section>
 
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos</span></div>
-<div class="wf-body">
-<div class="wf-toast"><span>✓</span><span>Projeto criado.</span><span class="close">×</span></div>
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-row-head">
-<div class="wf-title">Projetos</div>
-<span class="wf-btn">+ Novo projeto</span>
-</div>
-<div class="wf-filters">
-<span class="wf-chip-btn on">Todos</span>
-<span class="wf-chip-btn">Meus projetos</span>
-<span class="wf-chip-btn">Arquivados</span>
-</div>
-<div class="wf-list-row new"><span class="wf-hatch-sq"></span><div><div class="wf-name">Painel de Vendas</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">0 backlog</span><span class="wf-chip">0 histórias</span><span class="wf-actions"><span class="wf-btn icon outline">✎</span><span class="wf-btn icon outline">🗑</span></span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Portal do Cliente</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span><span class="wf-chip">18 histórias</span><span class="wf-chip">89 pontos</span><span class="wf-actions"><span class="wf-btn icon outline">✎</span><span class="wf-btn icon outline">🗑</span></span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">App de Campo</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span><span class="wf-chip">26 histórias</span><span class="wf-chip">144 pontos</span><span class="wf-actions"><span class="wf-btn icon outline">✎</span><span class="wf-btn icon outline">🗑</span></span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Integração Fiscal</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span><span class="wf-chip">12 histórias</span><span class="wf-chip">55 pontos</span><span class="wf-actions"><span class="wf-btn icon outline">✎</span><span class="wf-btn icon outline">🗑</span></span></div></div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Confirma a criação e vê o novo projeto já na lista, sem precisar recarregar.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-Retorno visual imediato e não bloqueante (toast), com o item destacado no lugar em que ele realmente vive; substitui a mensagem de sucesso em página inteira, que interromperia o fluxo.
-</div>
-</div>
-</section>
-
-<!-- QUADRO 4 -->
-<section class="wf-card-section" id="quadro-4" aria-labelledby="t4">
-<div class="row between mb-3">
-<span class="wf-card-num">4</span>
-<span class="badge" data-variant="outline">Detalhe</span>
-</div>
-<h2 id="t4" class="text-xl font-semibold mb-3">Ver projeto — visão geral</h2>
-
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos/portal-do-cliente</span></div>
-<div class="wf-body">
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-row-head">
-<div>
-<div class="wf-title" style="font-size:18px">Portal do Cliente</div>
-<div class="wf-desc-line" style="width:260px"></div>
-</div>
-<div class="row gap-2">
-<span class="wf-btn outline">Editar projeto</span>
-<span class="wf-btn ghost-danger">🗑 Excluir</span>
-</div>
-</div>
-<div class="wf-summary-cards">
-<div class="wf-sum"><div class="n">1</div><div class="l">Product backlog</div></div>
-<div class="wf-sum"><div class="n">3</div><div class="l">Sprint backlogs</div></div>
-<div class="wf-sum"><div class="n">4</div><div class="l">Épicos</div></div>
-<div class="wf-sum"><div class="n">18</div><div class="l">Histórias</div></div>
-<div class="wf-sum small"><div class="n">89</div><div class="l">Story points</div></div>
-</div>
-<div class="wf-title" style="font-size:13px; margin-bottom:6px">Ir para</div>
-<div class="wf-shortcut"><span>Product Backlog</span><span>→</span></div>
-<div class="wf-shortcut"><span>Sprint Backlogs</span><span>→</span></div>
-<div class="wf-shortcut"><span>Épicos</span><span>→</span></div>
-<div class="wf-shortcut"><span>Histórias</span><span>→</span></div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Abre o projeto para ver o que existe dentro dele e escolhe por onde continuar.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-A página de projeto funciona como painel de entrada que explicita a hierarquia do modelo (um product backlog, vários sprint backlogs), tornando visível a regra de cardinalidade do sistema em vez de escondê-la em menus — ideia derivada da separação explícita de product, release e sprint backlog adotada pelo Aha!.
-</div>
-</div>
-</section>
-
-<!-- QUADRO 5 -->
-<section class="wf-card-section" id="quadro-5" aria-labelledby="t5">
-<div class="row between mb-3">
-<span class="wf-card-num">5</span>
-<span class="badge" data-variant="outline">Edição</span>
-</div>
-<h2 id="t5" class="text-xl font-semibold mb-3">Editar projeto</h2>
-
-<div class="wf-side-by-side">
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos/portal-do-cliente</span></div>
-<div class="wf-body">
-<div class="wf-overlay"></div>
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout" style="min-height:340px">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-title" style="font-size:18px">Portal do Cliente</div>
-<div class="wf-line"></div>
-<div class="wf-line" style="width:60%"></div>
-</div>
-</div>
-<div class="wf-modal">
-<div class="wf-modal-head">
-<strong style="font-size:14px">Editar projeto</strong>
-<span class="wf-close">×</span>
-</div>
-<div class="wf-field">
-<div class="wf-label">Nome do projeto ★</div>
-<div class="wf-input" style="color:#333">Portal do Cliente</div>
-</div>
-<div class="wf-field">
-<div class="wf-label">Descrição</div>
-<div class="wf-textarea" style="color:#333">Área de autosserviço para clientes acompanharem pedidos e chamados.<span class="wf-counter">62/280</span></div>
-</div>
-<div class="wf-dashed-box" style="font-size:11px; color:#555;">Alterar nome e descrição não afeta backlogs, histórias nem critérios de aceitação.</div>
-<div class="wf-modal-foot">
-<span class="wf-btn outline">Cancelar</span>
-<span class="wf-btn">Salvar alterações</span>
-</div>
-</div>
-</div>
+  <footer class="shell-footer">Storyboard 1 de 5 · SGR — Sistema de Gestão de Requisitos · Wireframes de baixa fidelidade</footer>
 </div>
 
-<div>
-<div class="wf-tracer-box">
-<div class="wf-tracer-label">Resultado (recorte)</div>
-<div class="wf-screen" style="position:relative;">
-<div class="wf-toast" style="position:relative; top:auto; right:auto; margin:8px;"><span>✓</span><span>Alterações salvas.</span><span class="close">×</span></div>
-<div class="wf-main" style="padding-top:4px;">
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Portal do Cliente</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">App de Campo</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Abre o projeto, clica em "Editar projeto", altera o que precisa e salva.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-Reutiliza exatamente o mesmo formulário da criação, mudando apenas o título e o rótulo do botão, o que reduz aprendizado e inconsistência; o aviso explícito evita o medo de que editar o nome quebre os vínculos do projeto.
-</div>
-</div>
-</section>
-
-<!-- QUADRO 6 -->
-<section class="wf-card-section" id="quadro-6" aria-labelledby="t6">
-<div class="row between mb-3">
-<span class="wf-card-num">6</span>
-<span class="badge" data-variant="destructive">Ação destrutiva</span>
-</div>
-<h2 id="t6" class="text-xl font-semibold mb-3">Excluir projeto — confirmação destrutiva</h2>
-
-<div class="wf-side-by-side">
-<div class="wf-screen">
-<div class="wf-chrome"><span class="wf-dot"></span><span class="wf-dot"></span><span class="wf-dot"></span><span style="margin-left:8px">sgr.app/projetos/portal-do-cliente</span></div>
-<div class="wf-body">
-<div class="wf-overlay"></div>
-<div class="wf-topbar">
-<span class="wf-logo">SGR</span>
-<div class="wf-search">Buscar projeto...</div>
-<span class="wf-avatar">LM</span>
-</div>
-<div class="wf-layout" style="min-height:340px">
-<aside class="wf-sidebar">
-<div class="wf-nav-item active">Projetos</div>
-<div class="wf-nav-item">Product Backlogs</div>
-<div class="wf-nav-item">Sprint Backlogs</div>
-<div class="wf-nav-item">Épicos</div>
-<div class="wf-nav-item">Histórias</div>
-<div class="wf-nav-sep"></div>
-<div class="wf-nav-item">Administração</div>
-</aside>
-<div class="wf-main">
-<div class="wf-title" style="font-size:18px">Portal do Cliente</div>
-<div class="wf-line"></div>
-<div class="wf-line" style="width:70%"></div>
-</div>
-</div>
-<div class="wf-modal" style="width:84%; max-width:340px;">
-<div class="wf-alert-triangle"><span>!</span></div>
-<div style="text-align:center; font-weight:700; font-size:13px; margin-bottom:8px;">Excluir projeto 'Portal do Cliente'?</div>
-<div style="font-size:12px;">Esta ação removerá permanentemente:</div>
-<ul class="wf-stack-info" style="padding-left:18px;">
-<li>1 product backlog</li>
-<li>3 sprint backlogs</li>
-<li>18 histórias de usuário</li>
-<li>4 épicos e 42 critérios de aceitação</li>
-</ul>
-<label class="wf-check"><span class="box"></span><span>Entendo que esta ação não pode ser desfeita.</span></label>
-<div class="wf-modal-foot">
-<span class="wf-btn outline">Cancelar</span>
-<span class="wf-btn disabled">Excluir definitivamente</span>
-</div>
-</div>
-</div>
-</div>
-
-<div>
-<div class="wf-tracer-box">
-<div class="wf-tracer-label">Resultado após exclusão (recorte)</div>
-<div class="wf-screen" style="position:relative;">
-<div class="wf-toast" style="position:relative; top:auto; right:auto; margin:8px;"><span>✓</span><span>Projeto excluído.</span><span class="close">×</span></div>
-<div class="wf-main" style="padding-top:4px;">
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">App de Campo</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Integração Fiscal</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">1 backlog</span></div></div>
-<div class="wf-list-row"><span class="wf-hatch-sq"></span><div><div class="wf-name">Painel de Vendas</div><div class="wf-desc-line"></div></div><div class="wf-meta"><span class="wf-chip">0 backlog</span></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="shell-grid cols-2 gap-4 mt-4">
-<div class="wf-note-box">
-<strong>O que o usuário faz</strong>
-Clica em excluir, lê o que será perdido, marca o reconhecimento e confirma, ou cancela.
-</div>
-<div class="wf-note-box">
-<strong>Decisão de design</strong>
-Três barreiras proporcionais ao risco: nome do projeto no título, inventário do que será destruído e reconhecimento explícito; o botão destrutivo fica desabilitado por padrão, e a ação secundária é sempre "Cancelar". Este é o único ponto do storyboard com cor de destaque, justamente para sinalizar irreversibilidade.
-</div>
-</div>
-</section>
-
-<!-- OBSERVAÇÕES -->
-<section class="panel p-4 mb-6" aria-labelledby="obs">
-<h2 id="obs" class="text-lg font-semibold mb-1">Observações do storyboard</h2>
-<p class="muted text-xs mb-3">Premissas que valem para todos os seis quadros acima.</p>
-<ul class="wf-obs" style="padding-left:18px; font-size:13px;">
-<li>(a) Todos os seis quadros derivam da história US-04 e dos critérios de aceitação de criação, edição e exclusão.</li>
-<li>(b) O cenário cobre também os estados de erro, de sucesso e de lista vazia, e não apenas o caminho feliz.</li>
-<li>(c) A lista vazia deve exibir ilustração hachurada simples, o texto "Você ainda não tem projetos" e o botão "Criar meu primeiro projeto".</li>
-<li>(d) Os wireframes são esboços de baixa fidelidade e não definem cores, tipografia ou identidade visual finais.</li>
-</ul>
-<div class="wf-empty-hatch" style="margin-top:12px;"></div>
-<div class="row center gap-3 text-center">
-<span class="wf-placeholder-text">Você ainda não tem projetos</span>
-<span class="wf-btn">Criar meu primeiro projeto</span>
-</div>
-</section>
-
-<footer class="shell-footer text-center muted text-xs py-4">
-SGR — Sistema de Gestão de Requisitos • Storyboard de baixa fidelidade • RF-04 / US-04
-</footer>
-
-</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var printBtn = document.getElementById('btn-print');
+  var copyBtn = document.getElementById('btn-copy');
+  printBtn.addEventListener('click', function () { window.print(); });
+  copyBtn.addEventListener('click', function () {
+    var summary = 'Storyboard 1 — Conta e autenticação (Q-01 a Q-07): Q-01 Tela de entrada → Q-02 Criar conta → Q-03 Validação do cadastro → Q-04 Conta criada → Q-05 Sessão autenticada → Q-06 Sessão expirada → Q-07 Sair e recuperar senha.';
+    function done() { window.skipUI.toast('Resumo do fluxo copiado.', { type: 'success' }); }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(summary).then(done, done);
+    } else {
+      done();
+    }
+  });
+  [printBtn, copyBtn].forEach(function (el) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+});
+</script>
+</body>
+</html>
