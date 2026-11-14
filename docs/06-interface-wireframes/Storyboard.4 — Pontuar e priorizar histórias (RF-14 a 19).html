@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storyboard 3 — Product e sprint backlogs e movimentação de histórias (RF-05, 06, 08)</title>
+<title>Storyboard 4 — Pontuar e priorizar histórias (RF-14 a 19)</title>
 <style>
 /* Skip artifact shell — fixed styles served beside every artifact.
    Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
@@ -1029,7 +1029,7 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
 </script>
 <style>
 :root {
---accent: #555555;
+--accent: #4b5563;
 --accent-text: #333333;
 --accent-contrast: #ffffff;
 --wf-bg: #f5f5f5;
@@ -1038,870 +1038,769 @@ table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: ce
 --wf-border-dark: #999999;
 --wf-text: #333333;
 --wf-fill: #e0e0e0;
---wf-danger: #c97a7a;
---wf-danger-bg: #f6e3e3;
+--wf-fill-dark: #cfcfcf;
+--wf-danger: #b91c1c;
+--wf-danger-bg: #fdf2f2;
+--wf-hatch: repeating-linear-gradient(45deg, #ececec 0 2px, #ffffff 2px 6px);
+font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-html, body { background: #ffffff; }
-body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--wf-text); }
-.wf-page { max-width: 1040px; margin: 0 auto; padding: 32px 20px 56px; }
-.eyebrow-pill { display: inline-block; border: 1px solid var(--wf-border-dark); border-radius: 999px; padding: 2px 12px; font-size: 12px; color: var(--wf-text); background: var(--wf-bg); }
-.wf-title { font-size: 30px; font-weight: 700; margin: 12px 0 6px; color: var(--wf-text); }
-.wf-sub { color: #555; font-size: 15px; margin: 0; }
-.id-table { width: 100%; border-collapse: collapse; margin-top: 18px; border: 1px solid var(--wf-border); border-radius: 2px; }
-.id-table td { border-bottom: 1px solid var(--wf-border); padding: 8px 12px; font-size: 14px; vertical-align: top; }
-.id-table td:first-child { width: 220px; background: var(--wf-bg); font-weight: 600; }
-.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 22px 0; }
-.flow a { border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 6px 10px; font-size: 13px; color: var(--wf-text); text-decoration: none; background: var(--wf-white); }
-.flow a:hover { background: var(--wf-fill); }
-.flow a:focus-visible { outline: 2px solid #333; outline-offset: 2px; }
-.flow .arrow { color: #777; font-size: 14px; }
-.legend { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 14px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 20px; font-size: 13px; }
+body { background: #ffffff; color: var(--wf-text); }
+.sb-page { max-width: 1040px; margin: 0 auto; padding: 24px 20px 40px; }
+.sb-title { font-size: 1.8rem; font-weight: 700; margin: 8px 0 4px; color: #333; }
+.sb-sub { color: #555; margin: 0 0 16px; }
+.eyebrow-pill { display: inline-block; border: 1px solid var(--wf-border-dark); border-radius: 999px; padding: 3px 12px; font-size: 0.8rem; color: #333; background: var(--wf-bg); }
+.ident-table { width: 100%; border-collapse: collapse; border: 1px solid var(--wf-border); font-size: 0.92rem; }
+.ident-table td { border: 1px solid var(--wf-border); padding: 8px 12px; vertical-align: top; }
+.ident-table td:first-child { width: 22%; background: var(--wf-bg); font-weight: 600; }
+.flow-strip { display: flex; gap: 6px; overflow-x: auto; padding: 12px 4px; margin: 20px 0 8px; border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); align-items: center; }
+.flow-step { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; padding: 6px 10px; font-size: 0.82rem; color: #333; text-decoration: none; }
+.flow-step:hover, .flow-step:focus-visible { background: var(--wf-fill); outline: 2px solid #666; outline-offset: 2px; }
+.flow-num { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #333; color: #fff; font-weight: 700; font-size: 0.75rem; }
+.flow-arrow { color: #666; font-size: 0.95rem; }
+.legend { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 16px; font-size: 0.86rem; }
 .legend-item { display: flex; align-items: center; gap: 8px; }
-.sw { display: inline-block; width: 26px; height: 14px; border: 1px solid var(--wf-border-dark); border-radius: 2px; flex-shrink: 0; background: var(--wf-white); }
-.sw-fill { background: var(--wf-fill); }
-.sw-line { height: 4px; border: none; background: #bbb; width: 26px; }
-.sw-hatch { background: repeating-linear-gradient(45deg, #ddd 0 2px, #fff 2px 6px); }
+.sw { display: inline-block; width: 34px; height: 18px; border: 1px solid #999; border-radius: 2px; flex: 0 0 auto; background: #fff; }
+.sw-box { background: #fff; }
+.sw-btn { background: var(--wf-fill); }
+.sw-line { height: 4px; border: none; background: #bdbdbd; }
+.sw-hatch { background: var(--wf-hatch); }
 .sw-dash { border-style: dashed; }
-.sw-red { border-color: var(--wf-danger); background: var(--wf-danger-bg); }
-.card-frame { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 20px; margin: 22px 0; scroll-margin-top: 16px; }
-.card-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
-.card-num { font-size: 40px; font-weight: 700; line-height: 1; color: #333; min-width: 52px; }
-.card-title { font-size: 19px; font-weight: 700; margin: 0; }
-.card-meta { font-size: 13px; color: #666; margin: 2px 0 0; }
-.screen { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-bg); overflow: hidden; margin-bottom: 14px; }
-.screen-bar { display: flex; align-items: center; gap: 5px; padding: 6px 10px; background: var(--wf-fill); border-bottom: 1px solid var(--wf-border); }
-.dot { width: 9px; height: 9px; border-radius: 50%; background: #aaa; display: inline-block; }
-.screen-body { padding: 14px; background: var(--wf-bg); }
-.wf-btn { display: inline-block; border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 6px 12px; font-size: 13px; background: var(--wf-white); color: var(--wf-text); white-space: nowrap; }
-.wf-btn.fill { background: #888; color: #fff; border-color: #777; }
-.wf-btn.ghost { border-style: dashed; }
-.wf-btn.disabled { color: #aaa; border-color: #ccc; background: #f0f0f0; }
-.wf-btn.danger { background: var(--wf-danger-bg); border-color: var(--wf-danger); color: #7a3a3a; }
-.wf-chip { display: inline-block; border: 1px solid var(--wf-border); border-radius: 10px; padding: 1px 8px; font-size: 12px; background: var(--wf-white); color: var(--wf-text); white-space: nowrap; }
-.wf-chip.fill { background: #888; color: #fff; border-color: #777; }
+.sw-ast { border: none; background: none; font-weight: 700; width: auto; }
+.frame-card { border: 1px solid var(--wf-border); border-radius: 2px; background: #fff; padding: 18px; margin: 22px 0; scroll-margin-top: 16px; }
+.frame-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+.frame-num { font-size: 2.4rem; font-weight: 800; color: #333; line-height: 1; }
+.frame-title { font-size: 1.15rem; font-weight: 700; margin: 0; }
+.frame-desc { color: #555; font-size: 0.9rem; margin: 0 0 12px; }
+.screen { border: 1px solid #888; border-radius: 2px; background: var(--wf-white); overflow: hidden; margin-bottom: 14px; }
+.screen-bar { background: var(--wf-bg); border-bottom: 1px solid var(--wf-border); padding: 5px 8px; display: flex; gap: 5px; align-items: center; }
+.screen-bar i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid #888; display: inline-block; }
+.screen-bar span.url { margin-left: 8px; height: 10px; flex: 1; background: var(--wf-fill); border-radius: 2px; max-width: 320px; }
+.screen-body { padding: 12px; }
+.wf-btn { display: inline-block; border: 1px solid #777; background: var(--wf-fill); color: #333; border-radius: 2px; padding: 5px 12px; font-size: 0.82rem; font-weight: 600; }
+.wf-btn.outline { background: #fff; }
+.wf-btn.dis { opacity: 0.55; }
+.wf-btn.danger { border-color: var(--wf-danger); color: var(--wf-danger); background: #fff; }
+.wf-chip { display: inline-block; border: 1px solid #888; border-radius: 12px; padding: 3px 10px; font-size: 0.8rem; background: #fff; color: #333; margin: 2px; }
 .wf-chip.dashed { border-style: dashed; }
-.wf-label { font-size: 12px; color: #444; margin-bottom: 3px; font-weight: 600; }
-.wf-input { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-white); padding: 6px 8px; font-size: 13px; color: var(--wf-text); min-height: 30px; display: flex; align-items: center; justify-content: space-between; }
-.wf-input.area { min-height: 60px; align-items: flex-start; }
-.wf-input.error { border-color: var(--wf-danger); }
-.wf-note { font-size: 12px; color: #666; margin-top: 3px; }
-.wf-note.err { color: #8a4a4a; }
-.line { height: 8px; background: var(--wf-fill); border-radius: 2px; margin: 6px 0; }
-.line.short { width: 60%; }
-.line.mid { width: 80%; }
-.hatch { background: repeating-linear-gradient(45deg, #ddd 0 2px, #f7f7f7 2px 8px); border: 1px solid var(--wf-border); border-radius: 2px; }
-.dashed-box { border: 1px dashed #888; border-radius: 2px; padding: 10px 12px; background: var(--wf-white); font-size: 13px; }
-.bar { height: 6px; background: var(--wf-fill); border-radius: 3px; overflow: hidden; border: 1px solid #ccc; }
-.bar > span { display: block; height: 100%; background: #888; }
-.cols { display: grid; gap: 14px; }
-.cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.cols-3 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
-.cols-4 { grid-template-columns: repeat(4, 1fr); }
-.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.between { justify-content: space-between; }
-.box { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 10px; }
-.box-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-.box-title.upper { text-transform: uppercase; letter-spacing: 0.04em; font-size: 12px; color: #555; }
-.sidebar { width: 150px; background: var(--wf-fill); border-right: 1px solid var(--wf-border); padding: 10px 0; flex-shrink: 0; font-size: 13px; }
-.sidebar .it { padding: 6px 12px; color: var(--wf-text); }
-.sidebar .it.active { background: #c8c8c8; font-weight: 700; }
-.sidebar .sep { border-top: 1px solid var(--wf-border); margin: 8px 0; }
-.app { display: flex; min-height: 300px; }
-.app-main { flex: 1; padding: 12px 14px; min-width: 0; }
-.topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--wf-border); background: var(--wf-white); }
-.avatar { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #888; background: var(--wf-fill); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-.search { border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 4px 8px; font-size: 12px; color: #777; background: var(--wf-white); width: 200px; }
-.crumb { font-size: 13px; color: #555; }
-.pb-card { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: var(--wf-white); padding: 12px; }
-.sp-card { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-white); padding: 10px 12px; margin-top: 8px; }
-.empty-dash { border: 1px dashed #888; border-radius: 2px; padding: 16px; text-align: center; background: repeating-linear-gradient(45deg, #efefef 0 6px, #fafafa 6px 12px); font-size: 13px; }
-.modal-wrap { position: relative; background: #d6d6d6; padding: 18px; border-radius: 2px; }
-.modal-wrap .dim { position: absolute; inset: 0; background: rgba(60,60,60,0.25); }
-.modal { position: relative; max-width: 420px; margin: 0 auto; background: var(--wf-white); border: 1px solid var(--wf-border-dark); border-radius: 2px; padding: 16px; box-shadow: none; }
-.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; font-size: 16px; }
-.modal-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
-.field { margin-bottom: 12px; }
-.ann-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-.kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.kcol { border: 1px solid var(--wf-border); border-radius: 2px; background: #ececec; padding: 8px; min-height: 180px; }
-.kcol h4 { margin: 0 0 8px; font-size: 13px; }
-.kcard { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; padding: 6px 8px; margin-bottom: 6px; font-size: 12px; }
-.ctx-menu { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; font-size: 13px; min-width: 170px; }
-.ctx-menu div { padding: 6px 10px; border-bottom: 1px solid #eee; }
-.ctx-menu div.sel { background: #e0e0e0; font-weight: 700; }
-.ctx-menu hr { border: none; border-top: 1px solid #ccc; margin: 0; }
-.toast-ghost { border: 1px solid var(--wf-border-dark); border-radius: 2px; background: #fff; padding: 8px 12px; font-size: 13px; display: inline-block; }
-.tip { border: 1px solid #777; border-radius: 2px; background: #fff; padding: 6px 8px; font-size: 12px; max-width: 280px; }
-.warn-icon { width: 38px; height: 38px; border: 2px solid #777; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #555; }
-.lock-icon { width: 38px; height: 38px; border: 2px solid #777; border-radius: 50%; position: relative; display: inline-block; }
-.lock-icon::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 3px; background: #777; transform: translate(-50%,-50%) rotate(-45deg); }
-.drag-item { transform: rotate(-2deg); border: 2px dashed #555; background: #fff; }
-.insert-line { height: 3px; background: #444; border-radius: 2px; margin: 4px 0; }
-.foot-note { font-size: 13px; color: #555; margin-top: 16px; }
-.pill-line { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 12px; }
-.wf-section-title { font-size: 14px; font-weight: 700; margin: 0 0 2px; }
-.wf-section-sub { font-size: 12px; color: #666; margin: 0 0 10px; }
-.ann-box { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 12px; }
-.ann-box h5 { margin: 0 0 6px; font-size: 13px; }
-.ann-box p { margin: 0; font-size: 13px; line-height: 1.5; color: #333; }
-.bullets { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; }
-.quad-note { font-size: 12px; color: #555; }
-.obs { border: 1px solid var(--wf-border); border-radius: 2px; background: var(--wf-bg); padding: 16px 18px; margin-top: 26px; }
-.obs h2 { font-size: 17px; margin: 0 0 8px; }
-.obs ol { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
-.toolbar-chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
-.story-row { display: flex; align-items: center; gap: 8px; border: 1px solid var(--wf-border); background: #fff; border-radius: 2px; padding: 6px 8px; margin-bottom: 6px; font-size: 13px; }
-.grip { color: #888; letter-spacing: -2px; font-size: 13px; }
-.sprint-mini { border: 1px solid var(--wf-border); border-radius: 2px; background: #fff; padding: 8px; margin-bottom: 8px; }
-.sprint-mini.target { border: 1px dashed #555; }
-.mini-row { font-size: 12px; border-bottom: 1px dotted #ccc; padding: 3px 0; }
-.drop-zone { border: 1px dashed #666; border-radius: 2px; padding: 8px; text-align: center; font-size: 12px; margin-top: 8px; background: repeating-linear-gradient(45deg, #f1f1f1 0 6px, #fafafa 6px 12px); }
-.check-row { font-size: 13px; display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; }
-.radio { display: inline-block; width: 12px; height: 12px; border: 1px solid #555; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
-.radio.on { background: radial-gradient(circle, #444 0 4px, #fff 5px); }
-.radio-list div { font-size: 13px; padding: 6px 0; display: flex; gap: 8px; align-items: center; border-bottom: 1px dotted #ccc; }
-.radio-list div.dis { color: #999; }
-.checkbox { display: inline-block; width: 12px; height: 12px; border: 1px solid #555; flex-shrink: 0; position: relative; }
-.checkbox.on::after { content: "✓"; position: absolute; left: 1px; top: -4px; font-size: 12px; }
-.tab-hint { font-size: 12px; color: #555; margin-top: 8px; }
-@media (max-width: 760px) {
-.cols-4, .kanban { grid-template-columns: repeat(2, 1fr); }
-.ann-wrap { grid-template-columns: 1fr; }
-.app { flex-direction: column; }
-.sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--wf-border); }
-.search { width: 120px; }
+.wf-chip.sel { background: var(--wf-fill); border-width: 2px; }
+.wf-input { border: 1px solid #888; border-radius: 2px; padding: 5px 8px; font-size: 0.84rem; background: #fff; color: #333; min-width: 60px; display: inline-block; }
+.wf-input.err { border-color: var(--wf-danger); background: var(--wf-danger-bg); color: var(--wf-danger); }
+.wf-label { font-size: 0.82rem; font-weight: 600; color: #333; display: block; margin-bottom: 4px; }
+.wf-help { font-size: 0.78rem; color: #666; margin: 2px 0 0; }
+.wf-err { font-size: 0.8rem; color: var(--wf-danger); margin: 4px 0 0; }
+.line { height: 8px; background: #d4d4d4; border-radius: 2px; margin: 6px 0; }
+.line.s { width: 60%; }
+.line.m { width: 80%; }
+.line.l { width: 100%; }
+.hatch { background: var(--wf-hatch); border: 1px solid #aaa; border-radius: 2px; }
+.calc { background: var(--wf-fill-dark); border: 2px dashed #555; border-radius: 2px; padding: 10px 12px; }
+.calc .lbl { font-size: 0.72rem; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 0.04em; }
+.calc .val { font-size: 1.8rem; font-weight: 800; color: #222; line-height: 1.1; }
+.calc .formula { font-size: 0.82rem; color: #333; }
+.calc-note { font-size: 0.74rem; color: #555; }
+.dash { border: 1px dashed #777; border-radius: 2px; padding: 8px 10px; font-size: 0.84rem; background: #fff; color: #333; }
+.wf-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.wf-table th, .wf-table td { border: 1px solid #c4c4c4; padding: 5px 6px; text-align: left; color: #333; }
+.wf-table th { background: var(--wf-bg); font-weight: 700; }
+.wf-table th.calc-h { background: var(--wf-fill-dark); }
+.wf-table td.calc-c { border: 1px dashed #555; font-weight: 800; background: #fafafa; }
+.grp-h { background: var(--wf-fill); font-weight: 700; }
+.menu-open { border: 1px solid #888; background: #fff; border-radius: 2px; padding: 6px; font-size: 0.82rem; display: inline-block; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.menu-open .opt { padding: 4px 8px; color: #333; display: flex; gap: 6px; align-items: center; }
+.menu-open .opt.hl { background: var(--wf-fill); font-weight: 700; }
+.ck { width: 12px; height: 12px; border: 1px solid #555; display: inline-block; background: #fff; flex: 0 0 auto; }
+.ck.on { background: #555; }
+.rd { width: 12px; height: 12px; border: 1px solid #555; border-radius: 50%; display: inline-block; background: #fff; flex: 0 0 auto; }
+.rd.on { background: radial-gradient(circle, #333 45%, #fff 50%); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.grid10 { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.sq { border: 1px solid #888; border-radius: 2px; text-align: center; padding: 6px 0; font-size: 0.86rem; font-weight: 600; background: #fff; color: #333; }
+.sq.sel { border-width: 2px; background: var(--wf-fill-dark); }
+.sq.dis { color: #888; background: #eee; text-decoration: line-through; }
+.sq-lbl { font-size: 0.66rem; color: #555; display: block; font-weight: 400; }
+.overlay-wrap { position: relative; background: #d9d9d9; padding: 14px; border-radius: 2px; }
+.overlay-wrap .table-under { opacity: 0.55; }
+.modal-box { background: #fff; border: 1px solid #666; border-radius: 2px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.modal-box.center { max-width: 640px; margin: -220px auto 0; position: relative; }
+.modal-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.modal-hd h4 { margin: 0; font-size: 0.98rem; color: #333; }
+.close-x { border: 1px solid #888; width: 24px; height: 24px; display: inline-grid; place-items: center; border-radius: 2px; background: #fff; color: #333; font-size: 0.9rem; }
+.drawer { border-left: 1px solid #666; background: #fff; padding: 14px; box-shadow: -2px 0 4px rgba(0,0,0,.08); }
+.note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.note { border: 1px solid var(--wf-border); background: var(--wf-bg); border-radius: 2px; padding: 10px 12px; font-size: 0.86rem; color: #333; }
+.note h5 { margin: 0 0 4px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: #444; }
+.note p { margin: 0; line-height: 1.5; }
+.obs ul { margin: 0; padding-left: 20px; line-height: 1.6; }
+.matrix { position: relative; width: 100%; max-width: 560px; aspect-ratio: 1.5 / 1; margin: 10px auto 4px; border: 1px solid #888; background: #fff; }
+.matrix .q-line-v { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #888; }
+.matrix .q-line-h { position: absolute; top: 50%; left: 0; right: 0; border-top: 1px dashed #888; }
+.matrix .q-lbl { position: absolute; font-size: 0.7rem; color: #444; padding: 2px 4px; }
+.matrix .dot { position: absolute; width: 14px; height: 14px; border: 1px solid #333; border-radius: 50%; background: #fff; transform: translate(-50%, -50%); }
+.matrix .dot-lbl { position: absolute; font-size: 0.72rem; color: #333; font-weight: 600; transform: translate(10px, -50%); white-space: nowrap; }
+.axis-x { position: absolute; bottom: -22px; left: 0; right: 0; text-align: center; font-size: 0.78rem; color: #333; font-weight: 600; }
+.axis-y { position: absolute; left: -68px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 0.78rem; color: #333; font-weight: 600; white-space: nowrap; }
+.card-ph { text-align: center; color: #555; font-size: 0.82rem; }
+.sb-foot { border-top: 1px solid var(--wf-border); margin-top: 28px; padding-top: 12px; color: #555; font-size: 0.85rem; text-align: center; }
+.wf-scroll { overflow-x: auto; }
+@media (max-width: 720px) {
+.two-col, .three-col, .note-grid { grid-template-columns: 1fr; }
+.grid10 { grid-template-columns: repeat(5, 1fr); }
+.modal-box.center { margin-top: 0; }
+.axis-y { left: -40px; }
 }
 @media print {
-@page { size: A4 portrait; margin: 14mm; }
-body { print-color-adjust: exact; -webkit-print-color-adjust: exact; background: #fff; }
-.wf-page { max-width: none; padding: 0; }
-.flow, .no-print { display: none !important; }
-.card-frame { break-inside: avoid; page-break-inside: avoid; page-break-after: always; margin: 0 0 8px; }
-.card-frame:last-of-type { page-break-after: auto; }
-.obs { break-inside: avoid; }
-.kanban { grid-template-columns: repeat(4, 1fr); }
+@page { size: A4 portrait; margin: 12mm; }
+body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.flow-strip { display: none; }
+.frame-card { break-before: page; page-break-before: always; border: 1px solid #999; margin: 0 0 12px; }
+.frame-card:first-of-type { break-before: auto; }
+.screen { break-inside: avoid; }
+.note, .calc, .legend { break-inside: avoid; }
+.no-print { display: none !important; }
+.sb-page { padding: 0; max-width: 100%; }
 }
 </style>
 </head>
 <body>
-<div class="wf-page">
+<main class="sb-page">
 
 <header>
-<span class="eyebrow-pill">Storyboard 3 · Projeto de Interface</span>
-<h1 class="wf-title">Projeto de Interface — Storyboard 3</h1>
-<p class="wf-sub">Cenário de uso: gerenciar product e sprint backlogs e mover histórias entre eles (Requisitos Funcionais 5, 6 e 8)</p>
+<span class="eyebrow-pill">SGR · Storyboard de Interface · Baixa fidelidade</span>
+<h1 class="sb-title">Projeto de Interface — Storyboard 4</h1>
+<p class="sb-sub">Cenário de uso: pontuar e priorizar histórias (Requisitos Funcionais 14 a 19)</p>
+<div class="note" style="border-style:dashed;margin:0 0 16px;display:flex;gap:10px;align-items:flex-start;"><span style="display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid #333;border-radius:50%;font-weight:700;font-size:0.8rem;flex:0 0 auto;">i</span><p>Nota de alinhamento com a arquitetura: não há arrastar e soltar nem posição manual no backlog, porque o framework de apresentação não oferece arraste nativo e a ordenação é derivada do critério escolhido. As histórias são movidas entre backlogs por seleção e botão, conforme o storyboard 3.</p></div>
 
-<table class="id-table">
-<tr><td>Cenário</td><td>Gestão de product backlog e de sprint backlogs, com movimentação de histórias entre backlogs</td></tr>
-<tr><td>Histórias de usuário relacionadas</td><td>US-05, US-06 e US-08</td></tr>
+<table class="ident-table">
+<tr><td>Cenário</td><td>Pontuar e priorizar histórias de usuário no product backlog</td></tr>
+<tr><td>Histórias de usuário relacionadas</td><td>US-14, US-15, US-16, US-17, US-18 e US-19</td></tr>
 <tr><td>Ator principal</td><td>Product Owner / Membro da equipe</td></tr>
-<tr><td>Pré-condição</td><td>Usuário autenticado dentro de um projeto, com product backlog criado e histórias já cadastradas</td></tr>
+<tr><td>Pré-condição</td><td>Usuário autenticado, dentro de um projeto com product backlog e histórias já cadastradas</td></tr>
 </table>
+
+<p class="text-xs muted mt-2" style="margin-top:6px;">Cada etapa abaixo corresponde a um quadro do storyboard. Clique em um número para ir direto ao quadro.</p>
+<nav class="flow-strip" aria-label="Fluxo de telas do cenário">
+<a class="flow-step" href="#q1"><span class="flow-num">1</span> Backlog priorizado — dimensões na mesma tabela</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q2"><span class="flow-num">2</span> Estimar pontos</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q3"><span class="flow-num">3</span> Valor inválido</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q4"><span class="flow-num">4</span> Etiqueta MoSCoW</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q5"><span class="flow-num">5</span> Filtrar MoSCoW</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q6"><span class="flow-num">6</span> Painel RICE</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q7"><span class="flow-num">7</span> Domínios RICE</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q8"><span class="flow-num">8</span> Pontuação calculada</a>
+<span class="flow-arrow">→</span>
+<a class="flow-step" href="#q9"><span class="flow-num">9</span> Ordenar e comparar</a>
+</nav>
+<div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+<span class="badge" data-variant="secondary">9 quadros</span>
+<span class="badge" data-variant="outline">RF-14 a RF-19</span>
+<span class="badge" data-variant="outline">Formato A4 retrato</span>
+<button class="btn" data-variant="outline" data-size="sm" id="btnPrint">Imprimir / Salvar em PDF</button>
+<button class="btn" data-variant="ghost" data-size="sm" id="btnCopy">Copiar resumo do cenário</button>
+</div>
 </header>
 
-<nav class="flow" aria-label="Sequência dos quadros">
-<a href="#quadro-1">(1) Backlogs do projeto</a><span class="arrow">→</span>
-<a href="#quadro-2">(2) Criar product backlog</a><span class="arrow">→</span>
-<a href="#quadro-3">(3) Bloqueio do segundo product backlog</a><span class="arrow">→</span>
-<a href="#quadro-4">(4) Criar sprint backlog</a><span class="arrow">→</span>
-<a href="#quadro-5">(5) Product backlog com painel de sprints</a><span class="arrow">→</span>
-<a href="#quadro-6">(6) Mover história</a><span class="arrow">→</span>
-<a href="#quadro-7">(7) Sprint backlog (Kanban)</a><span class="arrow">→</span>
-<a href="#quadro-8">(8) Editar sprint backlog</a><span class="arrow">→</span>
-<a href="#quadro-9">(9) Excluir backlog</a>
-</nav>
-
-<section aria-labelledby="legenda-titulo">
-<h2 id="legenda-titulo" class="wf-section-title">Legenda de convenções</h2>
-<p class="wf-section-sub">Como ler os desenhos de baixa fidelidade deste storyboard.</p>
+<section style="margin-top:20px;" aria-labelledby="leg-title">
+<h2 id="leg-title" class="text-base font-bold" style="margin:0 0 4px;">Legenda de convenções</h2>
+<p class="wf-help" style="margin-bottom:8px;">Símbolos usados nos wireframes deste storyboard.</p>
 <div class="legend">
-<div class="legend-item"><span class="sw"></span> Retângulo com borda = container ou região</div>
-<div class="legend-item"><span class="sw sw-fill"></span> Retângulo preenchido cinza = botão</div>
+<div class="legend-item"><span class="sw sw-box"></span> Retângulo com borda = container ou região</div>
+<div class="legend-item"><span class="sw sw-btn"></span> Retângulo preenchido cinza = botão</div>
 <div class="legend-item"><span class="sw sw-line"></span> Linha cinza longa = texto ou parágrafo</div>
+<div class="legend-item"><span class="sw sw-box"></span> Caixa de seleção à esquerda da linha | Seleção de uma ou mais histórias para operação em lote</div>
+<div class="legend-item"><span class="sw sw-ast">↓</span> Seta para cima ou para baixo ao lado do cabeçalho da coluna | Ordem derivada do critério escolhido, não editável por arraste</div>
 <div class="legend-item"><span class="sw sw-hatch"></span> Hachura diagonal = imagem ou ilustração</div>
-<div class="legend-item"><span class="sw sw-dash"></span> Contorno tracejado = opcional, alternativo ou em arraste</div>
-<div class="legend-item"><span class="sw sw-red"></span> Vermelho suave = exclusão destrutiva ou erro</div>
-<div class="legend-item"><span>★</span> Campo obrigatório</div>
-<div class="legend-item"><span>⋯</span> Menu de mais ações</div>
-<div class="legend-item"><span>⇄</span> Indicador de movimentação entre backlogs</div>
+<div class="legend-item"><span class="sw sw-dash sw-box"></span> Contorno tracejado = opcional, alternativo ou valor calculado</div>
+<div class="legend-item"><span class="sw sw-ast">★</span> Campo obrigatório</div>
+<div class="legend-item"><span class="sw sw-ast">⋯</span> Menu de mais ações</div>
+<div class="legend-item"><span class="sw sw-ast">ƒ</span> Valor derivado por cálculo, não editável</div>
 </div>
 </section>
 
 <!-- QUADRO 1 -->
-<article class="card-frame" id="quadro-1" aria-labelledby="q1-title">
-<div class="card-head">
-<div class="card-num">1</div>
-<div>
-<h2 class="card-title" id="q1-title">Backlogs do projeto — visão de entrada</h2>
-<p class="card-meta">Tela de entrada do cenário, com product backlog e sprint backlogs</p>
-</div>
-</div>
+<article class="frame-card" id="q1">
+<div class="frame-head"><span class="frame-num">1</span><h2 class="frame-title">Backlog priorizado — dimensões na mesma tabela</h2></div>
+<p class="frame-desc">Tela de priorização com as três dimensões na mesma tabela, ordenação derivada de um critério escolhido e seleção para operação em lote.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-<div class="screen-body" style="padding:0;">
-<div class="topbar">
-<strong>SGR</strong>
-<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<div class="row between items-center" style="border-bottom:1px solid #bbb;padding-bottom:8px;margin-bottom:8px;">
+<div class="row items-center gap-2">
+<span class="wf-btn outline">SGR</span>
+<span class="wf-input" style="min-width:160px;color:#666;">Buscar história...</span>
 </div>
-<div class="app">
-<aside class="sidebar">
-<div class="it">Projetos</div>
-<div class="it active">Backlogs</div>
-<div class="it">Épicos</div>
-<div class="it">Histórias</div>
-<div class="sep"></div>
-<div class="it">Administração</div>
+<div class="row items-center gap-2"><span class="wf-input" style="min-width:auto;">LM</span></div>
+</div>
+<div class="two-col" style="grid-template-columns: 150px 1fr; gap:10px;">
+<aside style="border-right:1px solid #bbb;padding-right:8px;font-size:0.84rem;">
+<div class="wf-chip" style="display:block;margin:2px 0;">Projetos</div>
+<div class="wf-chip" style="display:block;margin:2px 0;">Backlogs</div>
+<div class="wf-chip" style="display:block;margin:2px 0;">Épicos</div>
+<div class="wf-chip" style="display:block;margin:2px 0;">Histórias</div>
+<div class="wf-chip sel" style="display:block;margin:2px 0;font-weight:700;">Priorização</div>
+<hr style="border:none;border-top:1px solid #bbb;margin:8px 0;">
+<div class="wf-chip" style="display:block;margin:2px 0;">Administração</div>
 </aside>
-<div class="app-main">
-<div class="row between" style="margin-bottom:12px;">
 <div>
-<div class="crumb">Portal do Cliente › Backlogs</div>
+<div class="row between items-center" style="margin-bottom:6px;">
+<span style="font-size:0.8rem;color:#555;">Portal do Cliente › Priorização</span>
+<span class="wf-btn outline">⋯</span>
 </div>
-<div class="row">
-<span class="wf-btn">+ Novo sprint backlog</span>
-<span class="wf-btn">⋯</span>
+<div class="row gap-2" style="flex-wrap:wrap;margin-bottom:6px;">
+<span class="wf-chip">Épico: Todos ▾</span>
+<span class="wf-chip">MoSCoW: Todas ▾</span>
+<span class="wf-chip">Pontos: Qualquer ▾</span>
+<span class="wf-chip">RICE: Qualquer ▾</span>
+<span class="wf-chip dashed">Limpar filtros</span>
 </div>
+<div class="row between items-center" style="margin-bottom:6px;gap:8px;flex-wrap:wrap;">
+<span style="font-size:0.82rem;">18 histórias · 89 pontos</span>
+<div class="row items-center gap-2">
+<span style="font-size:0.82rem;">Ordenar por:</span>
+<span class="wf-input" style="min-width:190px;">RICE (maior primeiro) ▾</span>
+<span class="wf-btn outline" data-size="sm">Inverter ordem ↑</span>
 </div>
-
-<div class="wf-section-title">Product backlog <span class="wf-chip dashed">no máximo 1 por projeto</span></div>
-<div class="wf-section-sub">Backlog principal do produto; reúne todas as histórias do projeto.</div>
-<div class="pb-card">
-<div class="row between">
-<div style="flex:1;min-width:0;">
-<strong>Product Backlog</strong>
-<div class="line mid" style="margin-top:6px;"></div>
-</div>
-<div class="row">
-<span class="wf-btn fill">Abrir</span>
-<span class="wf-btn">✎</span>
-<span class="wf-btn">⋯</span>
-</div>
-</div>
-<div class="row" style="margin-top:8px;">
-<span class="wf-chip">18 histórias</span>
-<span class="wf-chip">89 pontos</span>
-<span class="wf-chip">RICE médio 24</span>
+<div style="position:relative;">
+<span class="wf-btn outline dis">Selecionar para mover</span>
+<span class="wf-help" style="position:absolute;right:0;top:100%;background:#fff;border:1px solid #888;padding:3px 6px;white-space:nowrap;">Marque a caixa de seleção de uma ou mais histórias para habilitar.</span>
 </div>
 </div>
-
-<div class="row between" style="margin-top:18px;">
-<div>
-<div class="wf-section-title">Sprint backlogs <span class="wf-chip">3</span></div>
-<div class="wf-section-sub">Ciclos de trabalho do projeto, do mais recente ao mais antigo.</div>
+<div style="height:56px;"></div>
+<div style="position:relative;margin-bottom:8px;">
+<div class="menu-open" style="position:absolute;right:0;top:0;z-index:2;width:220px;font-size:0.76rem;opacity:.85;border-style:dashed;">
+<div class="opt">RICE (maior primeiro) ✓</div>
+<div class="opt">Pontos</div>
+<div class="opt">MoSCoW</div>
+<div class="opt">Data de criação</div>
+<div class="opt">Título (A–Z)</div>
 </div>
 </div>
-
-<div class="sp-card">
-<div class="row between">
-<div style="flex:1;min-width:0;">
-<div class="row"><strong>Sprint 12 · 01/10 a 14/10</strong><span class="wf-chip fill">Em andamento</span></div>
-<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
-<div class="bar" style="margin-top:8px;"><span style="width:45%;"></span></div>
-</div>
-<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
-</div>
-</div>
-
-<div class="sp-card">
-<div class="row between">
-<div style="flex:1;min-width:0;">
-<div class="row"><strong>Sprint 11 · 17/09 a 30/09</strong><span class="wf-chip">Encerrado</span></div>
-<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
-<div class="bar" style="margin-top:8px;"><span style="width:100%;"></span></div>
-</div>
-<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
-</div>
-</div>
-
-<div class="sp-card">
-<div class="row between">
-<div style="flex:1;min-width:0;">
-<div class="row"><strong>Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip">Planejado</span></div>
-<div class="row" style="margin-top:6px;"><span class="wf-chip">8 histórias</span><span class="wf-chip">34 pontos</span></div>
-<div class="bar" style="margin-top:8px;"><span style="width:0%;"></span></div>
-</div>
-<div class="row"><span class="wf-btn">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
-</div>
-</div>
-
-<div class="dashed-box" style="margin-top:10px;text-align:center;">+ Adicionar sprint backlog</div>
+<div class="wf-scroll">
+<table class="wf-table">
+<thead>
+<tr>
+<th style="width:26px;"><span class="ck"></span></th>
+<th>História</th>
+<th>Épico</th>
+<th>Pontos</th>
+<th>MoSCoW</th>
+<th class="calc-h">RICE ƒ ↓</th>
+<th style="width:26px;">⋯</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><span class="ck"></span></td><td>Como um visitante, eu quero filtrar a lista, para achar rápido o que procuro</td><td>Épico A</td><td>5</td><td><span class="wf-chip">M</span></td><td class="calc-c">32</td><td>⋯</td></tr>
+<tr><td><span class="ck"></span></td><td>Como um cliente, eu quero salvar meu endereço, para não digitar de novo</td><td>Épico A</td><td>3</td><td><span class="wf-chip">M</span></td><td class="calc-c">24</td><td>⋯</td></tr>
+<tr><td><span class="ck"></span></td><td>Como um cliente, eu quero receber aviso de entrega, para me organizar</td><td>Épico B</td><td>8</td><td><span class="wf-chip">S</span></td><td class="calc-c">18</td><td>⋯</td></tr>
+<tr><td><span class="ck"></span></td><td>Como um visitante, eu quero modo escuro, para usar à noite</td><td>—</td><td>2</td><td><span class="wf-chip">C</span></td><td class="calc-c">4</td><td>⋯</td></tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 </div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Abre o projeto e vê, de um lado, o product backlog e, de outro, a lista de sprints, podendo entrar em qualquer um.</p>
 </div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>A tela separa visualmente os dois níveis de backlog e usa a etiqueta textual "no máximo 1 por projeto" para tornar a regra de cardinalidade legível na própria interface, em vez de deixá-la como surpresa na tentativa de erro; o padrão de lista com estado e barra de progresso é o mesmo do painel de sprints do Taiga e da separação de níveis de backlog do Aha!.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Vê todas as dimensões de priorização na mesma tabela, escolhe por qual critério quer ordenar e seleciona histórias para mover quando precisar.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>As três dimensões — pontos, MoSCoW e RICE — aparecem lado a lado porque são independentes entre si: uma mede tamanho, outra mede compromisso de escopo, a terceira mede retorno econômico. Não existe posição manual: como não há arraste e a nota RICE é calculada, a ordem é sempre derivada do critério escolhido, o que elimina a possibilidade de a lista contradizer os números que ela exibe. A marca ƒ e o contorno tracejado na coluna RICE comunicam visualmente que o valor é derivado, nunca digitado.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 2 -->
-<article class="card-frame" id="quadro-2" aria-labelledby="q2-title">
-<div class="card-head">
-<div class="card-num">2</div>
-<div>
-<h2 class="card-title" id="q2-title">Criar product backlog</h2>
-<p class="card-meta">Modal sobre a tela de backlogs, com recorte do estado vazio</p>
-</div>
-</div>
+<article class="frame-card" id="q2">
+<div class="frame-head"><span class="frame-num">2</span><h2 class="frame-title">Estimar story points — seleção em escala fechada</h2></div>
+<p class="frame-desc">Modal sobre a tabela escurecida; a escala é apresentada como paleta de opções.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="modal-wrap">
-<div class="dim"></div>
-<div class="modal" style="position:relative;">
-<div class="modal-head"><span>Novo product backlog</span><span>×</span></div>
-<div class="wf-note" style="margin-bottom:10px;">Projeto: Portal do Cliente (somente leitura)</div>
-<div class="field">
-<div class="wf-label">Nome ★</div>
-<div class="wf-input"><span>Product Backlog</span></div>
-<div class="wf-note">Sugestão preenchida automaticamente; pode ser alterada.</div>
+<div class="overlay-wrap">
+<div class="table-under"><div class="line l"></div><div class="line l"></div><div class="line m"></div><div class="line l"></div><div class="line m"></div></div>
+<div class="modal-box" style="margin-top:10px;">
+<div class="modal-hd"><h4>Estimar história SGR-142</h4><span class="close-x">×</span></div>
+<div class="dash" style="margin-bottom:10px;">Como um cliente, eu quero salvar meu endereço, para não digitar de novo</div>
+<span class="wf-label">Story points ★</span>
+<div class="grid10" style="margin-bottom:6px;">
+<div class="sq">0</div>
+<div class="sq">1</div>
+<div class="sq">2</div>
+<div class="sq">3</div>
+<div class="sq sel">5<span class="sq-lbl">pequeno</span></div>
+<div class="sq">8<span class="sq-lbl">médio</span></div>
+<div class="sq">13<span class="sq-lbl">grande</span></div>
+<div class="sq">21<span class="sq-lbl">muito grande</span></div>
+<div class="sq">34<span class="sq-lbl">épico</span></div>
+<div class="sq">55<span class="sq-lbl">—</span></div>
 </div>
-<div class="field">
-<div class="wf-label">Descrição</div>
-<div class="wf-input area"><span style="color:#888;">O que este backlog reúne?</span></div>
-<div class="wf-note" style="text-align:right;">0/280</div>
-</div>
-<div class="dashed-box"><strong>i</strong> Cada projeto tem um único product backlog. Ele reúne todas as histórias do produto e é o ponto de partida de todo sprint.</div>
-<div class="modal-foot">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn fill">Criar product backlog</span>
-</div>
-</div>
-</div>
-</div>
-<div style="margin-top:14px;">
-<div class="wf-label">Recorte: estado de lista vazia</div>
-<div class="pb-card" style="background:#fff;">
-<div class="wf-section-title">Product backlog</div>
-<div class="empty-dash" style="margin-top:8px;">
-<div>Este projeto ainda não tem product backlog</div>
-<div style="margin-top:8px;"><span class="wf-btn fill">Criar product backlog</span></div>
+<p class="wf-help">A escala é fixa. Não é possível informar valores como 4 ou 7.</p>
+<div class="dash" style="margin:10px 0;"><b>i</b> Sugestão do sistema: a média das últimas 3 histórias do Épico A é 5 pontos.</div>
+<div class="row gap-2" style="justify-content:flex-end;">
+<span class="wf-btn outline">Cancelar</span>
+<span class="wf-btn">Salvar estimativa</span>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Cria o product backlog do projeto, normalmente uma única vez, logo após criar o projeto.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>O campo Nome vem pré-preenchido e o texto explicativo antecipa que existe apenas um, o que evita o usuário criar expectativa de múltiplos backlogs de produto; o estado vazio é explícito e oferece a ação, em vez de deixar a área em branco.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Escolhe um valor da escala para a história, vendo todas as opções possíveis ao mesmo tempo.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>A escala fechada é uma paleta de opções, e não um campo numérico com validação posterior — assim o valor inválido é impossível de digitar. É a mesma estratégia do quadro de formato de história do storyboard 2: restringir por construção, não por mensagem de erro. A sugestão do histórico apoia sem obrigar.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 3 -->
-<article class="card-frame" id="quadro-3" aria-labelledby="q3-title">
-<div class="card-head">
-<div class="card-num">3</div>
-<div>
-<h2 class="card-title" id="q3-title">Bloqueio do segundo product backlog — regra de cardinalidade</h2>
-<p class="card-meta">Recorte da seção Product backlog e tentativa de acesso por URL direta</p>
+<article class="frame-card" id="q3">
+<div class="frame-head"><span class="frame-num">3</span><h2 class="frame-title">Valor de pontos inválido — como a regra aparece mesmo assim</h2></div>
+<p class="frame-desc">Três vias de acesso ao erro e a resposta do sistema em cada uma.</p>
+<div class="three-col">
+<div class="screen">
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<span class="wf-label">A · Importação de CSV</span>
+<table class="wf-table">
+<thead><tr><th>História</th><th>Pontos</th></tr></thead>
+<tbody>
+<tr><td>Linha 6 · filtro de busca</td><td>3</td></tr>
+<tr style="background:var(--wf-danger-bg);"><td>Linha 7 · modo escuro</td><td style="color:var(--wf-danger);font-weight:700;">4</td></tr>
+</tbody>
+</table>
+<p class="wf-err">Linha 7: 4 não é um valor permitido. Use 0, 1, 2, 3, 5, 8, 13, 21, 34 ou 55.</p>
+<div style="margin-top:8px;"><span class="wf-btn dis">Importar</span> <span class="wf-help">Corrija 1 linha para continuar</span></div>
 </div>
 </div>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="cols cols-2">
-<div>
-<div class="row between">
-<div class="wf-section-title">Product backlog <span class="wf-chip dashed">no máximo 1 por projeto</span></div>
+<span class="wf-label">B · Requisição direta ao serviço</span>
+<div class="dash" style="font-family:ui-monospace,monospace;font-size:0.8rem;line-height:1.5;">
+<b>422 Unprocessable Entity</b><br>
+storyPoints: valor fora do domínio permitido [0,1,2,3,5,8,13,21,34,55]
 </div>
-<div class="row" style="justify-content:flex-end;margin-bottom:6px;">
-<span class="wf-btn disabled" aria-disabled="true">+ Novo product backlog</span>
-</div>
-<div class="tip" style="margin-left:auto;">Este projeto já tem um product backlog. Para outro, crie um novo projeto.</div>
-<div class="pb-card" style="margin-top:10px;">
-<div class="row between">
-<div><strong>Product Backlog</strong><div class="line mid" style="margin-top:6px;"></div></div>
-<div class="row"><span class="wf-btn fill">Abrir</span><span class="wf-btn">✎</span><span class="wf-btn">⋯</span></div>
-</div>
-<div class="row" style="margin-top:8px;"><span class="wf-chip">18 histórias</span><span class="wf-chip">89 pontos</span></div>
+<p class="wf-help" style="margin-top:8px;">A regra é aplicada no servidor, independentemente da tela.</p>
 </div>
 </div>
-<div>
-<div class="wf-label">Acesso direto por URL</div>
-<div class="box" style="text-align:center;padding:18px;">
-<div><span class="lock-icon"></span></div>
-<div style="font-weight:700;margin-top:10px;">Não é possível criar outro product backlog</div>
-<div class="wf-note" style="margin-top:6px;color:#444;">O projeto Portal do Cliente já possui o Product Backlog. Cada projeto admite apenas um.</div>
-<div style="margin-top:12px;"><span class="wf-btn">Voltar aos backlogs</span></div>
+<div class="screen">
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<span class="wf-label">C · Edição em lote</span>
+<div class="line s"></div>
+<div class="line s"></div>
+<span class="wf-label" style="margin-top:6px;">Aplicar pontos a 2 histórias</span>
+<span class="wf-input" style="min-width:90px;">— ▾</span>
+<p class="wf-err" style="color:#555;">Selecione um valor da lista para aplicar em lote.</p>
+<div class="grid10" style="margin-top:6px;">
+<div class="sq">0</div><div class="sq">1</div><div class="sq">2</div><div class="sq">3</div><div class="sq">5</div>
+<div class="sq">8</div><div class="sq">13</div><div class="sq">21</div><div class="sq">34</div><div class="sq">55</div>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Percebe que não pode criar um segundo product backlog e entende o motivo, com um caminho alternativo sugerido.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>A regra é aplicada em três camadas visíveis: o botão desabilitado com explicação, a mensagem no tooltip e a tela de aviso quando o acesso ocorre por URL direta. Desabilitar sem explicar seria pior que permitir e falhar; o texto sempre indica a saída, que é criar um novo projeto. A regra também é imposta no servidor, mas a interface a antecipa.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Percebe que a regra vale em qualquer caminho, não apenas na tela principal.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>A restrição é imposta no servidor e sobrevive à interface; o storyboard mostra isso porque um avaliador técnico vai perguntar o que acontece quando alguém contorna a tela. As três respostas são consistentes e sempre informam a lista de valores válidos, transformando o erro em orientação.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 4 -->
-<article class="card-frame" id="quadro-4" aria-labelledby="q4-title">
-<div class="card-head">
-<div class="card-num">4</div>
-<div>
-<h2 class="card-title" id="q4-title">Criar sprint backlog</h2>
-<p class="card-meta">Modal com datas, duração calculada e estado de erro</p>
-</div>
-</div>
+<article class="frame-card" id="q4">
+<div class="frame-head"><span class="frame-num">4</span><h2 class="frame-title">Atribuir etiqueta MoSCoW</h2></div>
+<p class="frame-desc">Modal com quatro opções; cada uma traz letra, nome, descrição e contagem atual.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="modal-wrap">
-<div class="dim"></div>
-<div class="modal" style="position:relative;">
-<div class="modal-head"><span>Novo sprint backlog</span><span>×</span></div>
-<div class="wf-note" style="margin-bottom:10px;">Projeto: Portal do Cliente (somente leitura)</div>
-<div class="field">
-<div class="wf-label">Nome ★</div>
-<div class="wf-input"><span>Sprint 13</span></div>
+<div class="overlay-wrap">
+<div class="table-under"><div class="line l"></div><div class="line m"></div><div class="line l"></div></div>
+<div class="modal-box" style="margin-top:10px;">
+<div class="modal-hd"><h4>Prioridade MoSCoW — SGR-142</h4><span class="close-x">×</span></div>
+<div class="dash" style="margin-bottom:10px;">Como um cliente, eu quero salvar meu endereço, para não digitar de novo</div>
+<div class="row items-center gap-2" style="border:2px solid #333;border-radius:2px;padding:8px 10px;margin-bottom:6px;">
+<span class="rd on"></span>
+<span class="wf-chip" style="font-size:1.1rem;font-weight:800;padding:2px 10px;">M</span>
+<div style="flex:1;"><b style="font-size:0.88rem;">Must have</b> · obrigatório neste escopo</div>
+<span class="wf-help">6 histórias</span>
 </div>
-<div class="cols cols-2" style="gap:10px;">
-<div class="field">
-<div class="wf-label">Início ★</div>
-<div class="wf-input"><span>15/10/2026</span><span>📅</span></div>
+<div class="row items-center gap-2" style="border:1px solid #888;border-radius:2px;padding:8px 10px;margin-bottom:6px;">
+<span class="rd"></span>
+<span class="wf-chip" style="font-size:1.1rem;font-weight:800;padding:2px 10px;">S</span>
+<div style="flex:1;"><b style="font-size:0.88rem;">Should have</b> · importante, mas não bloqueia</div>
+<span class="wf-help">4 histórias</span>
 </div>
-<div class="field">
-<div class="wf-label">Fim ★</div>
-<div class="wf-input"><span>28/10/2026</span><span>📅</span></div>
+<div class="row items-center gap-2" style="border:1px solid #888;border-radius:2px;padding:8px 10px;margin-bottom:6px;">
+<span class="rd"></span>
+<span class="wf-chip" style="font-size:1.1rem;font-weight:800;padding:2px 10px;">C</span>
+<div style="flex:1;"><b style="font-size:0.88rem;">Could have</b> · desejável, se houver folga</div>
+<span class="wf-help">5 histórias</span>
 </div>
+<div class="row items-center gap-2" style="border:1px solid #888;border-radius:2px;padding:8px 10px;margin-bottom:8px;">
+<span class="rd"></span>
+<span class="wf-chip" style="font-size:1.1rem;font-weight:800;padding:2px 10px;">W</span>
+<div style="flex:1;"><b style="font-size:0.88rem;">Won't have</b> · fora deste escopo, registrado para depois</div>
+<span class="wf-help">3 histórias</span>
 </div>
-<div class="wf-note" style="margin-bottom:10px;">Duração: 14 dias</div>
-<div class="field">
-<div class="wf-label">Meta do sprint</div>
-<div class="wf-input area" style="min-height:44px;"><span style="color:#888;">O que queremos entregar neste ciclo?</span></div>
-</div>
-<div class="modal-foot">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn fill">Criar sprint</span>
-</div>
-</div>
-</div>
-</div>
-<div style="margin-top:14px;">
-<div class="wf-label">Recorte: estado de erro</div>
-<div class="dashed-box" style="max-width:420px;">
-<div class="wf-label">Fim ★</div>
-<div class="wf-input error"><span>27/10/2026</span><span>📅</span></div>
-<div class="wf-note err">A data de fim deve ser posterior à data de início.</div>
-<div style="margin-top:10px;"><span class="wf-btn disabled">Criar sprint</span></div>
+<div class="dash">A etiqueta é obrigatória. Toda história precisa de uma das quatro.</div>
+<div class="row gap-2" style="justify-content:flex-end;margin-top:10px;">
+<span class="wf-btn outline">Cancelar</span>
+<span class="wf-btn">Salvar prioridade</span>
 </div>
 </div>
 </div>
 </div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Nomeia o sprint, define o período e, opcionalmente, a meta, e cria quantos sprints quiser.</p>
 </div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>Datas em formato brasileiro com seletor, e a duração calculada automaticamente serve de conferência rápida; a validação de ordem das datas acontece no campo, não em alerta genérico no topo. Diferentemente do product backlog, nada aqui restringe a quantidade, porque a regra do sistema é de vários sprint backlogs por projeto.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Escolhe uma das quatro etiquetas e entende o significado de cada uma sem consultar manual.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>A sigla sozinha não comunica nada a quem não é do time: por isso a letra vem com o nome e uma descrição, e o MoSCoW deixa de ser jargão. As contagens mostram o equilíbrio do backlog no momento da escolha, evitando o padrão em que tudo vira Must have — problema que o campo Priority do Jira sofre por não ter contexto.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 5 -->
-<article class="card-frame" id="quadro-5" aria-labelledby="q5-title">
-<div class="card-head">
-<div class="card-num">5</div>
-<div>
-<h2 class="card-title" id="q5-title">Product backlog com painel de sprints — visão de movimentação</h2>
-<p class="card-meta">Tela em duas colunas: backlog à esquerda, sprints à direita</p>
-</div>
-</div>
+<article class="frame-card" id="q5">
+<div class="frame-head"><span class="frame-num">5</span><h2 class="frame-title">Filtrar e agrupar por MoSCoW</h2></div>
+<p class="frame-desc">Tabela com o filtro MoSCoW aberto, agrupada por etiqueta, com bloco de soma de esforço.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-<div class="screen-body" style="padding:0;">
-<div class="topbar">
-<strong>SGR</strong>
-<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<div class="row between items-start" style="margin-bottom:6px;">
+<div>
+<span style="font-size:0.8rem;color:#555;">Portal do Cliente › Product Backlog</span>
+<div style="font-weight:700;font-size:0.98rem;">Product Backlog</div>
 </div>
-<div class="app">
-<aside class="sidebar">
-<div class="it">Projetos</div>
-<div class="it active">Backlogs</div>
-<div class="it">Épicos</div>
-<div class="it">Histórias</div>
-<div class="sep"></div>
-<div class="it">Administração</div>
-</aside>
-<div class="app-main" style="display:grid;grid-template-columns:1.6fr 1fr;gap:0;padding:0;">
-<div style="padding:12px 14px;border-right:1px solid #b0b0b0;">
-<div class="wf-section-title">Product Backlog</div>
-<div class="wf-section-sub">18 histórias · 89 pontos</div>
-<div class="toolbar-chips">
+<div class="calc" style="min-width:200px;padding:6px 10px;">
+<div class="lbl" style="font-size:0.66rem;">Resumo por MoSCoW ƒ</div>
+<div style="font-size:0.8rem;">M: 6 · 31 pts</div>
+<div style="font-size:0.8rem;">S: 4 · 22 pts</div>
+<div style="font-size:0.8rem;">C: 5 · 19 pts</div>
+<div style="font-size:0.8rem;color:#777;">W: 3 · 8 pts — fora do filtro</div>
+</div>
+</div>
+<div class="row gap-2" style="flex-wrap:wrap;margin-bottom:6px;align-items:flex-start;">
 <span class="wf-chip">Épico: Todos ▾</span>
-<span class="wf-chip">MoSCoW: Todas ▾</span>
-<span class="wf-chip">Ordenar por: Posição ▾</span>
-<span class="wf-chip dashed">Limpar filtros</span>
-</div>
-<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line short"></span><span class="wf-chip">5 pts</span><span class="wf-chip">M</span><span class="wf-chip">RICE 32</span><span>⋯</span></div>
-<div class="story-row" style="border:2px dashed #444;"><span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line mid"></span><span class="wf-chip">3 pts</span><span class="wf-chip">S</span><span class="wf-chip">RICE 28</span><span>⋯</span><span style="font-weight:700;">⇄</span></div>
-<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico B</span><span style="flex:1;" class="line"></span><span class="wf-chip">8 pts</span><span class="wf-chip">M</span><span class="wf-chip">RICE 24</span><span>⋯</span></div>
-<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico B</span><span style="flex:1;" class="line short"></span><span class="wf-chip">2 pts</span><span class="wf-chip">C</span><span class="wf-chip">RICE 19</span><span>⋯</span></div>
-<div class="story-row"><span class="grip">⠿</span><span class="wf-chip">Épico C</span><span style="flex:1;" class="line mid"></span><span class="wf-chip">5 pts</span><span class="wf-chip">S</span><span class="wf-chip">RICE 15</span><span>⋯</span></div>
-</div>
-<div style="padding:12px 14px;background:#fafafa;">
-<div class="row between"><div class="wf-section-title">Sprints</div><span class="wf-btn" style="padding:2px 8px;">+</span></div>
-<div class="wf-section-sub">Arraste histórias para um sprint para planejar.</div>
-<div class="sprint-mini">
-<div class="row between"><strong style="font-size:13px;">Sprint 12 · 01/10 a 14/10</strong><span class="wf-chip fill">Em andamento</span></div>
-<div class="bar" style="margin:6px 0;"><span style="width:45%;"></span></div>
-<div class="mini-row">SGR-131 · Cadastro de cliente</div>
-<div class="mini-row">SGR-134 · Filtro por status</div>
-<div class="mini-row">SGR-138 · Exportar relatório</div>
-</div>
-<div class="sprint-mini target">
-<div class="row between"><strong style="font-size:13px;">Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip dashed">Planejado</span></div>
-<div class="mini-row">SGR-139 · Login com e-mail</div>
-<div class="mini-row">SGR-140 · Painel de métricas</div>
-<div class="dashed-box" style="margin-top:6px;font-size:12px;text-align:center;">Destino do arraste</div>
-</div>
-<div class="drop-zone">Solte aqui para mover</div>
+<div style="position:relative;display:inline-block;">
+<span class="wf-chip sel">MoSCoW: M, S ▾</span>
+<div class="menu-open" style="position:absolute;left:0;top:28px;z-index:2;width:200px;">
+<div class="opt"><span class="ck on"></span> M — Must have</div>
+<div class="opt"><span class="ck on"></span> S — Should have</div>
+<div class="opt"><span class="ck"></span> C — Could have</div>
+<div class="opt"><span class="ck"></span> W — Won't have</div>
+<div class="opt" style="border-top:1px solid #ccc;margin-top:4px;">Limpar seleção</div>
 </div>
 </div>
+<span class="wf-chip">Pontos: Qualquer ▾</span>
+<span class="wf-chip">RICE: Qualquer ▾</span>
+</div>
+<div style="height:126px;"></div>
+<table class="wf-table">
+<thead><tr><th style="width:26px;"> </th><th>História</th><th>Pontos</th><th>MoSCoW</th><th class="calc-h">RICE ƒ</th></tr></thead>
+<tbody>
+<tr class="grp-h"><td colspan="5">Must have (6 histórias)</td></tr>
+<tr><td>≡</td><td>Como um visitante, eu quero filtrar a lista, para achar rápido o que procuro</td><td>5</td><td><span class="wf-chip">M</span></td><td class="calc-c">32</td></tr>
+<tr><td>≡</td><td>Como um cliente, eu quero salvar meu endereço, para não digitar de novo</td><td>3</td><td><span class="wf-chip">M</span></td><td class="calc-c">24</td></tr>
+<tr><td>≡</td><td>Como um cliente, eu quero pagar com Pix, para concluir a compra</td><td>8</td><td><span class="wf-chip">M</span></td><td class="calc-c">21</td></tr>
+<tr class="grp-h"><td colspan="5">Should have (4 histórias)</td></tr>
+<tr><td>≡</td><td>Como um cliente, eu quero receber aviso de entrega, para me organizar</td><td>8</td><td><span class="wf-chip">S</span></td><td class="calc-c">18</td></tr>
+<tr><td>≡</td><td>Como um visitante, eu quero comparar dois produtos, para decidir</td><td>5</td><td><span class="wf-chip">S</span></td><td class="calc-c">14</td></tr>
+<tr><td>≡</td><td>Como um cliente, eu quero repetir um pedido anterior, para economizar tempo</td><td>3</td><td><span class="wf-chip">S</span></td><td class="calc-c">10</td></tr>
+</tbody>
+</table>
 </div>
 </div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Vê o product backlog e os sprints lado a lado e reorganiza o trabalho, arrastando histórias do produto para o sprint.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>Esta é a tela central do cenário, porque resolve o requisito de movimentação sem exigir abrir a história: dois containers visíveis ao mesmo tempo, com o destino sempre à vista. O layout em duas colunas com backlog à esquerda e sprints à direita é o mesmo padrão de Jira e Taiga, e foi adotado por reduzir o custo de mover histórias em lote no planejamento; as linhas compactas no painel de sprint evitam duplicar toda a informação do backlog.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Recorta o backlog por compromisso de escopo e vê quanto esforço está em cada faixa.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>O filtro não apenas esconde linhas: ele agrupa e soma, porque a pergunta real do product owner não é “quais são Must have”, mas “quanto esforço está comprometido em Must have”. O bloco de resumo responde isso sem exportar para planilha, que é o problema descrito no documento de visão.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 6 -->
-<article class="card-frame" id="quadro-6" aria-labelledby="q6-title">
-<div class="card-head">
-<div class="card-num">6</div>
-<div>
-<h2 class="card-title" id="q6-title">Mover história — arraste e alternativa acessível</h2>
-<p class="card-meta">Duas formas de executar a mesma ação: arraste e menu com teclado</p>
-</div>
-</div>
+<article class="frame-card" id="q6">
+<div class="frame-head"><span class="frame-num">6</span><h2 class="frame-title">Painel RICE — quatro entradas com domínios fechados</h2></div>
+<p class="frame-desc">Painel lateral aberto pela direita; cada entrada tem o controle que corresponde ao seu domínio.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="cols cols-2">
-<div>
-<div class="wf-label">Recorte A · Arraste</div>
-<div class="box" style="background:#fafafa;">
-<div class="story-row drag-item" style="transform:rotate(-2deg);">
-<span class="grip">⠿</span><span class="wf-chip">Épico A</span><span style="flex:1;" class="line short"></span><span class="wf-chip">5 pts</span><span class="wf-chip">M</span>
+<div style="display:grid;grid-template-columns:1fr 340px;gap:0;min-height:320px;">
+<div style="padding-right:10px;">
+<div class="table-under" style="opacity:.55;"><div class="line l"></div><div class="line l"></div><div class="line m"></div><div class="line l"></div><div class="line m"></div><div class="line l"></div></div>
 </div>
-<div style="position:relative;">
-<span class="wf-chip" style="position:absolute;top:-30px;left:10px;background:#fff;">SGR-142</span>
-<span style="position:absolute;top:-20px;left:120px;font-size:18px;">↖</span>
-<span class="wf-chip" style="position:absolute;top:-38px;right:4px;background:#fff;">3 histórias</span>
+<aside class="drawer">
+<div class="modal-hd"><h4>Critério RICE</h4><span class="close-x">×</span></div>
+<div style="font-size:0.8rem;color:#555;margin-bottom:2px;">SGR-142</div>
+<div style="font-size:0.84rem;margin-bottom:10px;">Como um cliente, eu quero salvar meu endereço, para não digitar de novo</div>
+
+<div style="margin-bottom:10px;">
+<span class="wf-label">Reach ★ — número de usuários</span>
+<span class="wf-input" style="min-width:120px;">100</span>
+<p class="wf-help">Informe quantos usuários são alcançados no período.</p>
 </div>
-<div class="sprint-mini target" style="margin-top:14px;">
-<div class="row between"><strong style="font-size:13px;">Sprint 13</strong><span class="wf-chip dashed">Planejado</span></div>
-<div class="mini-row">SGR-139 · Login com e-mail</div>
-<div class="insert-line"></div>
-<div class="mini-row">SGR-140 · Painel de métricas</div>
-</div>
-</div>
-</div>
-<div>
-<div class="wf-label">Recorte B · Menu e teclado</div>
-<div class="row" style="align-items:flex-start;gap:10px;">
-<div class="ctx-menu">
-<div>Abrir</div>
-<div>Editar</div>
-<div class="sel">Mover para...</div>
-<div>Duplicar</div>
-<hr>
-<div style="color:#8a4a4a;">Excluir</div>
-</div>
-<div class="modal" style="max-width:260px;margin:0;">
-<div class="modal-head" style="font-size:14px;"><span>Mover SGR-142</span><span>×</span></div>
-<div class="radio-list">
-<div><span class="radio"></span> Product Backlog</div>
-<div><span class="radio"></span> Sprint 12 · Em andamento</div>
-<div><span class="radio on"></span> Sprint 13 · Planejado</div>
-<div class="dis"><span class="radio"></span> Sprint 11 · Encerrado (somente leitura)</div>
-</div>
-<div class="check-row"><span class="checkbox on"></span><span>Mover mais 2 histórias selecionadas</span></div>
-<div class="modal-foot" style="margin-top:8px;">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn fill">Mover</span>
+
+<div style="margin-bottom:10px;">
+<span class="wf-label">Impact ★</span>
+<div style="display:flex;gap:4px;flex-wrap:wrap;">
+<span class="wf-chip"><span class="rd"></span> 3 massivo</span>
+<span class="wf-chip sel"><span class="rd on"></span> 2 alto</span>
+<span class="wf-chip"><span class="rd"></span> 1 médio</span>
+<span class="wf-chip"><span class="rd"></span> 0,5 baixo</span>
+<span class="wf-chip"><span class="rd"></span> 0,25 mínimo</span>
 </div>
 </div>
+
+<div style="margin-bottom:10px;">
+<span class="wf-label">Confidence ★</span>
+<div style="display:flex;gap:4px;flex-wrap:wrap;">
+<span class="wf-chip"><span class="rd"></span> 100% alta</span>
+<span class="wf-chip sel"><span class="rd on"></span> 80% média</span>
+<span class="wf-chip"><span class="rd"></span> 50% baixa</span>
+</div>
+</div>
+
+<div style="margin-bottom:10px;">
+<span class="wf-label">Effort ★ — em pontos de história</span>
+<div class="grid10">
+<div class="sq">0</div><div class="sq">1</div><div class="sq">2</div><div class="sq">3</div><div class="sq sel">5</div>
+<div class="sq">8</div><div class="sq">13</div><div class="sq">21</div><div class="sq">34</div><div class="sq">55</div>
+</div>
+<p class="wf-help">Mesma escala dos story points.</p>
+</div>
+
+<div class="calc" style="margin-bottom:10px;">
+<div class="lbl">Pontuação RICE ƒ</div>
+<div class="val">32</div>
+<div class="formula">(100 × 2 × 80) / 5 = 32</div>
+<div class="calc-note">Calculado pelo sistema · não editável</div>
+</div>
+
+<div class="row gap-2" style="justify-content:flex-end;">
+<span class="wf-btn outline">Cancelar</span>
+<span class="wf-btn">Salvar critério RICE</span>
+</div>
+</aside>
 </div>
 </div>
 </div>
-<div class="dashed-box" style="margin-top:14px;font-size:13px;">Também é possível mover sem arrastar: selecione a história, use o menu ⋯ → Mover para..., ou pressione a tecla M com a linha em foco.</div>
-</div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Move uma história ou várias, por arraste ou por menu e teclado.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>O arraste é rápido, mas não é o único caminho: o menu "Mover para..." e o atalho de teclado garantem que a operação exista sem mouse, conforme o requisito de navegação completa por teclado e de acessibilidade WCAG 2.1 AA. O modal mostra claramente o destino atual e desabilita sprint encerrado, impedindo movimentação para um ciclo já fechado.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Informa as quatro entradas e vê a pontuação aparecer, sem fazer conta.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>Cada entrada tem seu próprio controle, refletindo o domínio real: número livre para Reach, opções fechadas para Impact e Confidence, escala fixa para Effort. Ao contrário do Productboard e do airfocus, onde o usuário define critérios e pesos, aqui os domínios são fixos por requisito. Exibir a conta ao lado do resultado torna o cálculo auditável.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 7 -->
-<article class="card-frame" id="quadro-7" aria-labelledby="q7-title">
-<div class="card-head">
-<div class="card-num">7</div>
-<div>
-<h2 class="card-title" id="q7-title">Sprint backlog — quadro Kanban</h2>
-<p class="card-meta">Visão de execução do sprint com colunas de status</p>
+<article class="frame-card" id="q7">
+<div class="frame-head"><span class="frame-num">7</span><h2 class="frame-title">Validação dos domínios RICE</h2></div>
+<p class="frame-desc">Três estados inválidos distintos, cada um com sua mensagem e a faixa de resultado suspensa.</p>
+<div class="three-col">
+<div class="screen">
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<span class="wf-label">A · Impact</span>
+<span class="wf-input err">0,3</span>
+<p class="wf-err">Impact aceita apenas 3, 2, 1, 0,5 ou 0,25.</p>
+<div style="margin-top:6px;">
+<span class="wf-chip">3</span> <span class="wf-chip">2</span> <span class="wf-chip">1</span> <span class="wf-chip sel">0,5</span> <span class="wf-chip">0,25</span>
+</div>
+<div class="calc" style="margin-top:8px;padding:6px 8px;">
+<div class="lbl" style="font-size:0.66rem;">Pontuação RICE ƒ</div>
+<div class="val" style="font-size:1.2rem;">—</div>
+<div class="calc-note">aguardando valores válidos</div>
+</div>
+<div style="margin-top:6px;"><span class="wf-btn dis">Salvar critério RICE</span></div>
 </div>
 </div>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-<div class="screen-body" style="padding:0;">
-<div class="topbar">
-<strong>SGR</strong>
-<div class="row"><span class="search">Buscar backlog...</span><span class="avatar">LM</span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<span class="wf-label">B · Confidence</span>
+<span class="wf-input err">85%</span>
+<p class="wf-err">Confidence aceita apenas 100, 80 ou 50 por cento.</p>
+<div style="margin-top:6px;">
+<span class="wf-chip">100%</span> <span class="wf-chip">80%</span> <span class="wf-chip">50%</span>
 </div>
-<div class="app">
-<aside class="sidebar">
-<div class="it">Projetos</div>
-<div class="it active">Backlogs</div>
-<div class="it">Épicos</div>
-<div class="it">Histórias</div>
-<div class="sep"></div>
-<div class="it">Administração</div>
-</aside>
-<div class="app-main">
-<div class="row between" style="margin-bottom:10px;">
-<div>
-<div class="row"><strong style="font-size:17px;">Sprint 13 · 15/10 a 28/10</strong><span class="wf-chip">Planejado</span></div>
-<div class="wf-note">Meta do sprint: entregar o login e o painel inicial</div>
+<div class="calc" style="margin-top:8px;padding:6px 8px;">
+<div class="lbl" style="font-size:0.66rem;">Pontuação RICE ƒ</div>
+<div class="val" style="font-size:1.2rem;">—</div>
+<div class="calc-note">aguardando valores válidos</div>
 </div>
-<div class="row"><span class="wf-btn">Editar sprint</span><span class="wf-btn">Iniciar sprint</span><span class="wf-btn">⋯</span></div>
+<div style="margin-top:6px;"><span class="wf-btn dis">Salvar critério RICE</span></div>
 </div>
-<div class="cols cols-3" style="grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
-<div class="box"><div class="wf-label">8 histórias</div><div class="line short"></div></div>
-<div class="box"><div class="wf-label">34 pontos</div><div class="line short"></div></div>
-<div class="box"><div class="wf-label">12 critérios de aceitação</div><div class="line short"></div></div>
 </div>
-<div class="kanban">
-<div class="kcol">
-<h4>A fazer (4)</h4>
-<div class="kcard"><strong>SGR-141</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">5 pts</span> <span class="wf-chip">M</span> <span class="avatar" style="width:18px;height:18px;font-size:9px;">AL</span></div>
-<div class="kcard"><strong>SGR-143</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico B</span> <span class="wf-chip">3 pts</span></div>
-<div class="kcard"><strong>SGR-145</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico C</span> <span class="wf-chip">2 pts</span></div>
+<div class="screen">
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
+<div class="screen-body">
+<span class="wf-label">C · Effort</span>
+<div class="grid10">
+<div class="sq sel" style="border-color:var(--wf-danger);color:var(--wf-danger);">0</div>
+<div class="sq">1</div><div class="sq">2</div><div class="sq">3</div><div class="sq">5</div>
+<div class="sq">8</div><div class="sq">13</div><div class="sq">21</div><div class="sq">34</div><div class="sq">55</div>
 </div>
-<div class="kcol">
-<h4>Em andamento (2)</h4>
-<div class="kcard"><strong>SGR-139</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">8 pts</span> <span class="wf-chip">M</span> <span class="avatar" style="width:18px;height:18px;font-size:9px;">RS</span></div>
-<div class="kcard"><strong>SGR-140</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico B</span> <span class="wf-chip">5 pts</span></div>
+<p class="wf-err">Effort não pode ser zero: a divisão da fórmula seria impossível.</p>
+<div class="calc" style="margin-top:8px;padding:6px 8px;">
+<div class="lbl" style="font-size:0.66rem;">Pontuação RICE ƒ</div>
+<div class="val" style="font-size:1.2rem;">—</div>
+<div class="calc-note">aguardando valores válidos</div>
 </div>
-<div class="kcol">
-<h4>Em revisão (1)</h4>
-<div class="kcard"><strong>SGR-144</strong><div class="line mid" style="margin:4px 0;"></div><span class="wf-chip">Épico C</span> <span class="wf-chip">3 pts</span> <span class="wf-chip">S</span></div>
-</div>
-<div class="kcol">
-<h4>Concluído (1)</h4>
-<div class="kcard"><strong>SGR-138</strong><div class="line short" style="margin:4px 0;"></div><span class="wf-chip">Épico A</span> <span class="wf-chip">2 pts</span> <span class="wf-chip">C</span></div>
-<div class="drop-zone" style="margin-top:10px;">Solte aqui para mover<div class="insert-line" style="margin-top:6px;"></div></div>
+<div style="margin-top:6px;"><span class="wf-btn dis">Salvar critério RICE</span></div>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Abre o sprint backlog e acompanha o andamento das suas histórias por coluna de status.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>O sprint backlog tem duas leituras possíveis — lista ordenada, para planejamento, e quadro Kanban, para execução — e o sistema oferece as duas sobre o mesmo dado, sem duplicar registros. Isso evita o problema de times que mantêm planilha paralela para acompanhar o dia a dia, que é justamente o problema descrito no documento de visão.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>É impedido de salvar valores fora do domínio e entende exatamente quais são aceitos.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>Dois níveis de proteção convivem: o controle já oferece apenas valores válidos, e quando um valor inválido chega por outro caminho a mensagem lista as opções. O Effort zero é tratado à parte porque é impossibilidade aritmética na fórmula (R × I × C) / E, por isso aparece desabilitado no próprio controle.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 8 -->
-<article class="card-frame" id="quadro-8" aria-labelledby="q8-title">
-<div class="card-head">
-<div class="card-num">8</div>
-<div>
-<h2 class="card-title" id="q8-title">Editar sprint backlog</h2>
-<p class="card-meta">Modal de metadados, estado somente leitura e recorte do toast</p>
-</div>
-</div>
+<article class="frame-card" id="q8">
+<div class="frame-head"><span class="frame-num">8</span><h2 class="frame-title">Pontuação calculada — recálculo imediato</h2></div>
+<p class="frame-desc">Antes e depois da alteração de uma entrada, com o efeito na ordenação do backlog.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="modal-wrap">
-<div class="dim"></div>
-<div class="modal" style="position:relative;">
-<div class="modal-head"><span>Editar sprint backlog</span><span>×</span></div>
-<div class="field">
-<div class="wf-label">Nome</div>
-<div class="wf-input"><span>Sprint 13</span></div>
-</div>
-<div class="cols cols-2" style="gap:10px;">
-<div class="field">
-<div class="wf-label">Início</div>
-<div class="wf-input"><span>15/10/2026</span><span>📅</span></div>
-</div>
-<div class="field">
-<div class="wf-label">Fim</div>
-<div class="wf-input"><span>28/10/2026</span><span>📅</span></div>
+<div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:8px;align-items:center;">
+<div class="dash" style="font-size:0.82rem;">
+<b>Antes</b><br>
+Reach 100 · Impact 2 alto · Confidence 80% média · Effort <b>5</b>
+<div class="calc" style="margin-top:8px;">
+<div class="lbl">Pontuação RICE ƒ</div>
+<div class="val">32</div>
+<div class="formula">(100 × 2 × 80) / 5 = 32</div>
 </div>
 </div>
-<div class="field">
-<div class="wf-label">Meta do sprint <span class="wf-note" style="float:right;">84/280</span></div>
-<div class="wf-input area" style="min-height:44px;"><span>Entregar o login com e-mail e o painel inicial</span></div>
+<div style="text-align:center;font-size:0.78rem;color:#333;">
+<div style="font-size:1.8rem;">→</div>
+alterar Effort de 5 para 8
 </div>
-<div class="field">
-<div class="wf-label">Estado</div>
-<div class="wf-input" style="background:#f0f0f0;"><span><span class="wf-chip">Planejado</span></span><span>▾</span></div>
-<div class="wf-note">Para alterar o estado use Iniciar sprint ou Encerrar sprint.</div>
-</div>
-<div class="dashed-box" style="margin-bottom:8px;"><strong>i</strong> As histórias deste sprint não são afetadas pela alteração do nome ou do período.</div>
-<div class="dashed-box">
-<strong>i</strong> Ao encerrar o sprint, as histórias que não estiverem concluídas voltam para o product backlog.
-<div style="margin-top:8px;"><span class="wf-btn ghost">Encerrar sprint</span></div>
-</div>
-<div class="modal-foot">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn fill">Salvar alterações</span>
+<div class="dash" style="font-size:0.82rem;">
+<b>Depois</b><br>
+Reach 100 · Impact 2 alto · Confidence 80% média · Effort <b style="border:1px dashed #777;padding:0 3px;">8</b> <span style="font-size:0.72rem;color:#555;">(antes 5)</span>
+<div class="calc" style="margin-top:8px;">
+<div class="lbl">Pontuação RICE ƒ</div>
+<div class="val">20</div>
+<div class="formula">(100 × 2 × 80) / 8 = 20</div>
+<div class="calc-note">antes 32 · agora 20 ↓</div>
 </div>
 </div>
 </div>
+<p class="wf-help" style="margin-top:10px;text-align:center;">O recálculo acontece ao alterar qualquer uma das quatro entradas. O valor nunca é digitado.</p>
+
+<div style="margin-top:12px;border-top:1px solid #ccc;padding-top:10px;">
+<span class="wf-label">Backlog após a alteração</span>
+<table class="wf-table">
+<thead><tr><th>Posição</th><th>História</th><th class="calc-h">RICE ƒ</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Como um visitante, eu quero filtrar a lista…</td><td class="calc-c">32</td></tr>
+<tr><td>2</td><td>Como um cliente, eu quero pagar com Pix…</td><td class="calc-c">21</td></tr>
+<tr><td>3</td><td>Como um cliente, eu quero receber aviso…</td><td class="calc-c">18</td></tr>
+<tr style="background:#eeeeee;"><td>3 → 4</td><td>Como um cliente, eu quero salvar meu endereço… ↓</td><td class="calc-c">20</td></tr>
+</tbody>
+</table>
 </div>
-<div style="margin-top:14px;">
-<div class="wf-label">Recorte: toast após salvar</div>
-<div class="box" style="background:#fafafa;">
-<div class="line mid"></div>
-<div class="line short"></div>
-<div style="margin-top:10px;"><span class="toast-ghost">Sprint atualizado.</span></div>
 </div>
 </div>
-</div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Ajusta nome, período e meta do sprint, e encerra o ciclo quando termina.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>A alteração de metadados é separada da mudança de estado, que é uma transição de ciclo de vida com consequência sobre as histórias; explicitar que histórias não concluídas voltam ao product backlog evita a perda silenciosa de trabalho e preserva a integridade do modelo. O padrão de formulário reutilizado, com dois avisos de impacto, é o mesmo do storyboard de projetos.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Altera uma entrada e vê a nota ser recalculada na hora, com efeito visível na ordenação do backlog.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>Mostrar a conta e a variação torna o número confiável: o usuário vê de onde veio o 20 e quanto caiu em relação ao 32. A nova nota reposiciona o trabalho na lista ordenada por RICE, atendendo ao requisito de ordenar o backlog pela pontuação.</p></div>
 </div>
 </article>
 
 <!-- QUADRO 9 -->
-<article class="card-frame" id="quadro-9" aria-labelledby="q9-title">
-<div class="card-head">
-<div class="card-num">9</div>
-<div>
-<h2 class="card-title" id="q9-title">Excluir backlog — regras de integridade por tipo</h2>
-<p class="card-meta">Comparação entre exclusão de sprint backlog e de product backlog</p>
-</div>
-</div>
+<article class="frame-card" id="q9">
+<div class="frame-head"><span class="frame-num">9</span><h2 class="frame-title">Ordenar e comparar por RICE — lista e matriz</h2></div>
+<p class="frame-desc">Lista reordenada por RICE e matriz de quadrantes de valor × esforço somente leitura.</p>
 <div class="screen">
-<div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="screen-bar"><i></i><i></i><i></i><span class="url"></span></div>
 <div class="screen-body">
-<div class="cols cols-2">
-<div>
-<div class="wf-label">Coluna A · Excluir sprint backlog</div>
-<div class="modal" style="max-width:none;margin:0;">
-<div style="text-align:center;margin-bottom:8px;"><span class="warn-icon">!</span></div>
-<div class="modal-head" style="justify-content:center;"><span>Excluir o Sprint 13?</span></div>
-<ul class="bullets">
-<li>8 histórias serão movidas de volta ao Product Backlog</li>
-<li>os critérios de aceitação, pontos, etiqueta MoSCoW e vínculos com épicos serão mantidos</li>
-<li>nenhuma história será apagada</li>
-</ul>
-<div class="check-row"><span class="checkbox"></span><span>Entendo que as histórias voltam para o product backlog.</span></div>
-<div class="modal-foot">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn danger disabled" style="opacity:0.7;">Excluir sprint</span>
+<div class="row between items-center" style="margin-bottom:6px;">
+<span style="font-size:0.82rem;">18 histórias · 89 pontos</span>
+<span class="row items-center gap-2"><span class="wf-input" style="min-width:230px;">Ordenar por: RICE (maior primeiro) ▾</span><span class="wf-btn outline" data-size="sm">Inverter ordem ↑</span></span>
+</div>
+<table class="wf-table">
+<thead><tr><th style="width:26px;"> </th><th>História</th><th>Épico</th><th>Pontos</th><th>MoSCoW</th><th class="calc-h">RICE ƒ ↓</th></tr></thead>
+<tbody>
+<tr><td>≡</td><td>Como um visitante, eu quero filtrar a lista…</td><td>Épico A</td><td>5</td><td><span class="wf-chip">M</span></td><td class="calc-c">32</td></tr>
+<tr><td>≡</td><td>Como um cliente, eu quero pagar com Pix…</td><td>Épico A</td><td>8</td><td><span class="wf-chip">M</span></td><td class="calc-c">24</td></tr>
+</tbody>
+</table>
+<div style="border-top:1px dashed #666;margin:6px 0;position:relative;">
+<span style="position:absolute;right:0;top:-9px;background:#fff;font-size:0.7rem;color:#555;padding:0 4px;">corte sugerido: 2 itens acima da média</span>
+</div>
+<table class="wf-table">
+<tbody>
+<tr><td style="width:26px;">≡</td><td>Como um cliente, eu quero receber aviso…</td><td>Épico B</td><td>8</td><td><span class="wf-chip">S</span></td><td class="calc-c">18</td></tr>
+<tr><td style="width:26px;">≡</td><td>Como um visitante, eu quero modo escuro…</td><td>—</td><td>2</td><td><span class="wf-chip">C</span></td><td class="calc-c">4</td></tr>
+</tbody>
+</table>
+
+<div style="margin-top:14px;padding-left:70px;">
+<div class="matrix">
+<div class="q-line-v"></div>
+<div class="q-line-h"></div>
+<div class="q-lbl" style="left:6px;top:6px;">fazer agora</div>
+<div class="q-lbl" style="right:6px;top:6px;text-align:right;">avaliar com calma</div>
+<div class="q-lbl" style="left:6px;bottom:6px;">ganho rápido</div>
+<div class="q-lbl" style="right:6px;bottom:6px;text-align:right;">descartar</div>
+<div class="dot" style="left:22%;top:24%;"></div><span class="dot-lbl" style="left:22%;top:24%;">SGR-142</span>
+<div class="dot" style="left:74%;top:22%;"></div><span class="dot-lbl" style="left:74%;top:22%;">SGR-139</span>
+<div class="dot" style="left:24%;top:72%;"></div><span class="dot-lbl" style="left:24%;top:72%;">SGR-131</span>
+<div class="dot" style="left:78%;top:76%;"></div><span class="dot-lbl" style="left:78%;top:76%;">SGR-138</span>
+<div class="axis-x">Effort →</div>
+<div class="axis-y">Valor (R × I × C) →</div>
 </div>
 </div>
-</div>
-<div>
-<div class="wf-label">Coluna B · Excluir product backlog</div>
-<div class="modal" style="max-width:none;margin:0;">
-<div style="text-align:center;margin-bottom:8px;"><span class="lock-icon"></span></div>
-<div class="modal-head" style="justify-content:center;"><span>Não é possível excluir o Product Backlog</span></div>
-<ul class="bullets">
-<li>ele é obrigatório em todo projeto</li>
-<li>18 histórias dependem dele</li>
-<li>todo projeto precisa de um product backlog para receber histórias</li>
-</ul>
-<div class="modal-foot"><span class="wf-btn fill">Entendi</span></div>
-</div>
-<div style="margin-top:12px;">
-<div class="wf-label">Alternativa permitida: backlog vazio</div>
-<div class="modal" style="max-width:none;margin:0;">
-<div class="modal-head" style="font-size:14px;"><span>Excluir este product backlog?</span></div>
-<div class="wf-note" style="color:#444;">Este backlog não tem histórias e pode ser excluído.</div>
-<div class="modal-foot">
-<span class="wf-btn">Cancelar</span>
-<span class="wf-btn danger">Excluir backlog</span>
+<p class="wf-help" style="text-align:center;margin-top:30px;">Posição derivada das entradas. Não é possível arrastar para mudar o valor.</p>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="ann-wrap">
-<div class="ann-box">
-<h5>O que o usuário faz</h5>
-<p>Exclui um sprint, sabendo que as histórias voltam ao product backlog, e descobre que o product backlog só pode ser excluído quando está vazio.</p>
-</div>
-<div class="ann-box">
-<h5>Decisão de design</h5>
-<p>A exclusão tem comportamento diferente por tipo, e o storyboard explicita os dois: o sprint backlog nunca destrói trabalho, apenas devolve; o product backlog, por ser obrigatório e concentrar todas as histórias, tem exclusão condicionada ao estado vazio. A cor destrutiva aparece apenas na operação que realmente apaga algo, sinalizando a diferença de risco entre os dois casos.</p>
-</div>
+<div class="note-grid">
+<div class="note"><h5>O que o usuário faz</h5><p>Ordena o backlog pela nota e, se preferir leitura visual, vê a distribuição por esforço e valor em quadrantes.</p></div>
+<div class="note"><h5>Decisão de design</h5><p>A matriz se inspira na visualização valor × esforço do Productboard e do airfocus, com uma diferença deliberada: lá o usuário arrasta as bolhas para definir a posição; aqui a posição é consequência das entradas numéricas, por isso é somente leitura. O corte sugerido acima da média apoia a decisão sem substituí-la. A ordenação é feita pelo seletor de critério e pelo botão de inverter ordem, sem arraste, o que mantém a lista coerente com os valores calculados.</p></div>
 </div>
 </article>
 
-<section class="obs" aria-labelledby="obs-title">
-<h2 id="obs-title">Observações do storyboard</h2>
-<ol>
-<li>Os nove quadros cobrem o requisito funcional 5 (CRUD de product backlog, com a regra de um por projeto nos quadros 2 e 3), o requisito 6 (CRUD de sprint backlogs, nos quadros 4, 7, 8 e 9) e o requisito 8 (movimentação de histórias entre backlogs, nos quadros 5 e 6).</li>
-<li>A preservação de critérios de aceitação, pontos, etiqueta, nota RICE e vínculos com épicos ao mover a história é o critério de aceitação central de US-08 e está representada no quadro 6 e reforçada no quadro 9.</li>
-<li>O identificador da história não muda ao ser movida entre backlogs, o que mantém rastreabilidade entre sprints.</li>
-<li>Mover histórias em lote deve ser possível pela seleção múltipla do quadro 6, porque o planejamento de sprint é feito com várias histórias de uma vez.</li>
-<li>Os wireframes são esboços de baixa fidelidade e não definem cores, tipografia ou identidade visual finais.</li>
-</ol>
+<section class="frame-card obs" aria-labelledby="obs-title">
+<h2 id="obs-title" class="frame-title" style="margin-bottom:8px;">Observações do storyboard</h2>
+<p class="frame-desc">Pontos de atenção para a leitura técnica deste cenário.</p>
+<ul>
+<li>(a) Os nove quadros cobrem os requisitos funcionais 14 (atribuir pontos, quadro 2), 15 (escala fixa de pontos, quadros 2 e 3), 16 (etiqueta MoSCoW, quadros 4 e 5), 17 (atribuir RICE, quadro 6), 18 (domínios válidos de RICE, quadro 7) e 19 (cálculo e uso da pontuação, quadros 8 e 9).</li>
+<li>(b) Em nenhum quadro a pontuação RICE aparece como campo editável, o que é a decisão de projeto mais importante deste cenário.</li>
+<li>(c) A escala de story points e os domínios de Impact e Confidence aparecem sempre como paleta de opções, nunca como digitação livre, para impedir erro por construção.</li>
+<li>(d) O Effort reutiliza a mesma escala de story points, e o valor zero é bloqueado por impossibilitar a divisão da fórmula.</li>
+<li>(e) As três dimensões de priorização — pontos, MoSCoW e RICE — são independentes e aparecem juntas na tabela do backlog, sem que uma substitua a outra.</li>
+<li>(f) Não existe arraste nem posição manual no backlog: a ordenação é derivada do critério escolhido no seletor, o que garante coerência entre a ordem exibida e os valores calculados e respeita a limitação do framework de apresentação, que não oferece arrastar e soltar nativo.</li>
+<li>(g) Os wireframes são esboços de baixa fidelidade e não definem cores, tipografia ou identidade visual finais.</li>
+</ul>
 </section>
 
-<footer class="shell-footer" style="margin-top:24px;font-size:13px;color:#666;">
-SGR — Sistema de Gestão de Requisitos · Storyboard 3 · Projeto de Interface (esboço de baixa fidelidade)
+<footer class="sb-foot">
+SGR — Sistema de Gestão de Requisitos · Storyboard 4 · Esboço de baixa fidelidade, não é a interface final.
 </footer>
+</main>
 
-</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+var btnPrint = document.getElementById('btnPrint');
+var btnCopy = document.getElementById('btnCopy');
+if (btnPrint) {
+btnPrint.addEventListener('click', function () {
+window.print();
+});
+}
+if (btnCopy) {
+btnCopy.addEventListener('click', function () {
+var resumo = 'Storyboard 4 — Pontuar e priorizar histórias (RF-14 a 19). Histórias US-14 a US-19. Ator: Product Owner / Membro da equipe. Pré-condição: usuário autenticado, projeto com product backlog e histórias cadastradas.';
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard.writeText(resumo).then(function () {
+window.skipUI.toast('Resumo do cenário copiado.', { type: 'success' });
+}, function () {
+window.skipUI.toast('Não foi possível copiar o resumo.', { type: 'error' });
+});
+} else {
+window.skipUI.toast('Copiar não está disponível neste navegador.', { type: 'error' });
+}
+});
+}
+});
+</script>
 </body>
 </html>
