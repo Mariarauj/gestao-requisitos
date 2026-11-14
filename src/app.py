@@ -1,26 +1,26 @@
 """Ponto de entrada do Streamlit: streamlit run app.py
 
-Por enquanto exibe apenas o estado da conexão com o banco. As páginas do sistema
-serão adicionadas em sgr/ui/.
+Sem login, só a tela de acesso (entrar / criar conta) é exibida. Depois do login, as
+páginas do sistema entram na navegação; novas páginas devem ser adicionadas à lista abaixo.
 """
 import streamlit as st
-from sqlalchemy import inspect, text
 
-from sgr.db import get_engine
+from sgr.ui.pagina_acesso import pagina_acesso
+from sgr.ui.pagina_inicio import pagina_inicio
+from sgr.ui.sessao import encerrar_sessao, usuario_logado
 
 st.set_page_config(page_title="SGR", page_icon="📋")
-st.title("Sistema de Gestão de Requisitos")
 
-try:
-    engine = get_engine()
-    with engine.connect() as conn:
-        conn.execute(text("SELECT 1"))
-    tabelas = sorted(t for t in inspect(engine).get_table_names() if t != "alembic_version")
-    st.success("Conexão com o banco de dados estabelecida.")
-    if tabelas:
-        st.caption(f"{len(tabelas)} tabelas: " + ", ".join(tabelas))
-    else:
-        st.warning("Banco vazio. Execute `alembic upgrade head` para criar as tabelas.")
-except Exception as erro:  # noqa: BLE001
-    st.error("Não foi possível conectar ao banco de dados.")
-    st.exception(erro)
+usuario = usuario_logado()
+if usuario is None:
+    pagina_acesso()
+    st.stop()
+
+with st.sidebar:
+    st.write(f"Conectado como **{usuario.nome}**")
+    if st.button("Sair", key="btn_sair"):
+        encerrar_sessao()
+        st.rerun()
+
+paginas = [st.Page(pagina_inicio, title="Início", icon="🏠", default=True)]
+st.navigation(paginas).run()
