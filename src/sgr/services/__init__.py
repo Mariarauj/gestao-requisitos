@@ -1,6 +1,9 @@
 """Camada de negócio: regras do domínio (validações, cálculo RICE, movimentação de histórias)."""
 from sgr.services.auth_service import AuthService
 from sgr.services.backlog_service import BacklogService
+from sgr.services.criterio_service import CriterioService
+from sgr.services.epico_service import EpicoService
+from sgr.services.historia_service import HistoriaService
 from sgr.services.projeto_service import ProjetoService
 
 # Instância compartilhada pela interface: o limitador de tentativas fica em memória no
@@ -8,12 +11,21 @@ from sgr.services.projeto_service import ProjetoService
 autenticacao = AuthService()
 projetos = ProjetoService()
 backlogs = BacklogService()
+historias = HistoriaService()
+epicos = EpicoService()
+criterios = CriterioService()
 
 __all__ = [
     "AuthService",
     "BacklogService",
+    "CriterioService",
+    "EpicoService",
+    "HistoriaService",
     "ProjetoService",
     "autenticacao",
     "backlogs",
+    "criterios",
+    "epicos",
+    "historias",
     "projetos",
 ]

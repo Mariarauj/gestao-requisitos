@@ -4,6 +4,7 @@ Usam um PostgreSQL real, indicado por TEST_DATABASE_URL. ATENÇÃO: o schema pub
 banco é APAGADO e recriado a cada execução. Sem TEST_DATABASE_URL, os testes são ignorados.
 """
 import os
+from pathlib import Path
 
 import pytest
 from alembic import command
@@ -14,8 +15,13 @@ from sqlalchemy import create_engine, text
 load_dotenv()
 
 
+SRC = Path(__file__).resolve().parent.parent  # pasta src/, qualquer que seja o diretório atual
+
+
 def _alembic_config(url: str) -> Config:
-    config = Config("alembic.ini")
+    config = Config(str(SRC / "alembic.ini"))
+    config.set_main_option("script_location", str(SRC / "migrations"))
+    config.set_main_option("prepend_sys_path", str(SRC))
     config.set_main_option("sqlalchemy.url", url.replace("%", "%%"))
     return config
 
