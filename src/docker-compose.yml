@@ -1,0 +1,30 @@
+# Sobe o PostgreSQL 16 e a aplicação. Uso: docker compose up --build
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: sgr
+      POSTGRES_PASSWORD: sgr
+      POSTGRES_DB: sgr
+    ports:
+      - "5432:5432"
+    volumes:
+      - sgr_dados:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgr -d sgr"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://sgr:sgr@db:5432/sgr
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+
+volumes:
+  sgr_dados:
