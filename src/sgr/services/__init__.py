@@ -4,6 +4,7 @@ from sgr.services.backlog_service import BacklogService
 from sgr.services.criterio_service import CriterioService
 from sgr.services.epico_service import EpicoService
 from sgr.services.historia_service import HistoriaService
+from sgr.services.priorizacao_service import PriorizacaoService
 from sgr.services.projeto_service import ProjetoService
 
 # Instância compartilhada pela interface: o limitador de tentativas fica em memória no
@@ -14,6 +15,7 @@ backlogs = BacklogService()
 historias = HistoriaService()
 epicos = EpicoService()
 criterios = CriterioService()
+priorizacao = PriorizacaoService()
 
 __all__ = [
     "AuthService",
@@ -21,11 +23,13 @@ __all__ = [
     "CriterioService",
     "EpicoService",
     "HistoriaService",
+    "PriorizacaoService",
     "ProjetoService",
     "autenticacao",
     "backlogs",
     "criterios",
     "epicos",
     "historias",
+    "priorizacao",
     "projetos",
 ]

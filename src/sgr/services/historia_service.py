@@ -7,7 +7,8 @@ Regras:
 - o código legível (SGR-1, SGR-2...) é gerado pelo sistema, é único no projeto e não muda
   quando a história é movida;
 - story points e MoSCoW são aceitos aqui por existirem no formulário da história; os valores
-  válidos também são garantidos pelo banco. A nota RICE fica fora deste serviço;
+  válidos também são garantidos pelo banco. As entradas e a nota RICE são lidas aqui, mas
+  gravadas pelo PriorizacaoService (a fórmula vive em services/rice.py);
 - uma história pode ter vários épicos, sempre do mesmo projeto;
 - quem tem acesso ao projeto gerencia as histórias; fora dele, tudo é "não encontrado";
 - toda escrita gera registro de auditoria.
@@ -16,6 +17,7 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Callable, Iterable
 
 from sqlalchemy.orm import Session
@@ -32,6 +34,7 @@ from sgr.repositories import (
 )
 from sgr.services.auth_service import ErroDeValidacao
 from sgr.services.projeto_service import ProjetoNaoEncontrado
+from sgr.services.rice import calcular_rice
 
 PAPEL_MAX = 120
 ACAO_MAX = 200
@@ -77,10 +80,21 @@ class HistoriaDados:
     epicos: tuple[EpicoRef, ...] = ()
     criterios_total: int = 0
     criterios: tuple[CriterioDados, ...] = field(default=(), compare=False)  # só em obter()
+    rice_reach: int | None = None
+    rice_impact: Decimal | None = None
+    rice_confidence: int | None = None
+    rice_effort: int | None = None
 
     @property
     def frase(self) -> str:
         return f"Como um {self.papel}, eu quero {self.acao}, para {self.beneficio}"
+
+    @property
+    def rice(self) -> Decimal | None:
+        """Nota RICE calculada na hora a partir das quatro entradas (None sem RICE)."""
+        if self.rice_reach is None:
+            return None
+        return calcular_rice(self.rice_reach, self.rice_impact, self.rice_confidence, self.rice_effort)
 
 
 @dataclass(frozen=True)
@@ -333,6 +347,10 @@ class HistoriaService:
                 moscow=h.moscow,
                 epicos=tuple(EpicoRef(i, n) for i, n in epicos[h.id]),
                 criterios_total=criterios[h.id],
+                rice_reach=h.rice_reach,
+                rice_impact=h.rice_impact,
+                rice_confidence=h.rice_confidence,
+                rice_effort=h.rice_effort,
             )
             for h in historias
         ]
