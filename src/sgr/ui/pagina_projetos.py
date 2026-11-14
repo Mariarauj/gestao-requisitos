@@ -11,11 +11,11 @@ from sgr.services.auth_service import ErroDeValidacao
 from sgr.services.projeto_service import (
     DESCRICAO_MAX,
     NOME_MAX,
+    Contagens,
     ProjetoDados,
     ProjetoNaoEncontrado,
     SemPermissao,
 )
-from sgr.repositories.projeto_repository import Contagens
 from sgr.ui.sessao import exigir_login
 
 _ABERTO = "projeto_aberto"

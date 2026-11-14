@@ -5,7 +5,7 @@ não divergir entre telas.
 
     RICE = (Reach × Impact × Confidence) / Effort
 
-- Reach: número de usuários atingidos (inteiro, 0 ou mais);
+- Reach: número de usuários atingidos (inteiro de 0 até REACH_MAX, o limite da coluna);
 - Impact: 3, 2, 1, 0.5 ou 0.25;
 - Confidence: 100, 80 ou 50, tratado como percentual (divide por 100);
 - Effort: valor da escala de story points, exceto o zero (divisão por zero). O banco recusa
@@ -20,6 +20,7 @@ from sgr.services.auth_service import ErroDeValidacao
 IMPACTOS = (Decimal("3"), Decimal("2"), Decimal("1"), Decimal("0.5"), Decimal("0.25"))
 CONFIANCAS = (100, 80, 50)
 ESFORCOS = (1, 2, 3, 5, 8, 13, 21, 34, 55)
+REACH_MAX = 2_147_483_647  # maior valor da coluna INTEGER; acima disso o banco recusaria com erro
 
 _CENTAVOS = Decimal("0.01")
 
@@ -65,6 +66,8 @@ def validar_rice(reach, impact, confidence, effort) -> tuple[int, Decimal, int, 
         erros["rice_reach"] = "Informe o Reach (número de usuários)."
     elif r is None or r < 0:
         erros["rice_reach"] = "Reach inválido. Informe um número inteiro maior ou igual a 0."
+    elif r > REACH_MAX:
+        erros["rice_reach"] = f"Reach muito grande. O máximo aceito é {REACH_MAX:,}.".replace(",", ".")
 
     i = _decimal(impact)
     if impact is None:
@@ -81,6 +84,11 @@ def validar_rice(reach, impact, confidence, effort) -> tuple[int, Decimal, int, 
     e = _inteiro(effort)
     if effort is None:
         erros["rice_effort"] = "Informe o Effort."
+    elif e == 0:
+        erros["rice_effort"] = (
+            "O Effort não pode ser zero: a nota RICE divide por ele. "
+            f"Valores aceitos: {_texto(ESFORCOS)}."
+        )
     elif e not in ESFORCOS:
         erros["rice_effort"] = f"Effort inválido. Valores aceitos: {_texto(ESFORCOS)}."
 
