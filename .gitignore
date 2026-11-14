@@ -1,0 +1,14 @@
+# Ambiente virtual do Python
+.venv/
+venv/
+
+# Variáveis de ambiente (contêm credenciais)
+.env
+
+# Cache e arquivos gerados
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# macOS
+.DS_Store

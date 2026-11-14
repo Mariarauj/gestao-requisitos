@@ -65,3 +65,28 @@ Detalhes, justificativas e impacto das ferramentas no [architecture notebook](do
 | Autenticação | Própria (hash com bcrypt) |
 | Testes | pytest |
 | Implantação | Docker |
+
+## Executando o protótipo
+
+O código fica em `src/`. Pré-requisitos: Python 3.11 ou superior e PostgreSQL 16 (ou Docker).
+
+```bash
+cd src
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env                  # ajuste DATABASE_URL se necessário
+docker compose up -d db               # PostgreSQL local (ou use um servidor próprio)
+alembic upgrade head                  # cria as nove tabelas do artefato 7
+streamlit run app.py                  # http://localhost:8501
+```
+
+Aplicação e banco juntos: `docker compose up --build` (dentro de `src/`).
+
+Testes (apagam o conteúdo do banco indicado em `TEST_DATABASE_URL`):
+
+```bash
+createdb sgr_test                     # ou crie o banco de testes de outra forma
+pytest
+```
+
+Estrutura de `src/`: `sgr/db` (conexão), `sgr/models` (tabelas), `sgr/repositories` (persistência), `sgr/services` (regras de negócio), `sgr/ui` (páginas do Streamlit), `migrations/` (Alembic) e `tests/`.
