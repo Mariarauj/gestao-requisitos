@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, cast, func, select, text
+from sqlalchemy import BigInteger, cast, func, select, text, update
 from sqlalchemy.orm import Session
 
 from sgr.models import Backlog, CriterioAceitacao, Epico, EpicoHistoria, Historia, Projeto
@@ -14,6 +14,31 @@ def buscar_acessivel(session: Session, usuario_id: int, historia_id: int) -> His
         .join(Projeto, Projeto.id == Historia.projeto_id)
         .where(Historia.id == historia_id, filtro_acesso(usuario_id))
     )
+
+
+def buscar_acessiveis_travadas(
+    session: Session, usuario_id: int, historia_ids: set[int]
+) -> list[Historia]:
+    """Histórias acessíveis ao usuário, em ordem de id, com a linha travada (FOR UPDATE).
+
+    Travar na ordem do id evita impasse entre duas movimentações que cruzam as mesmas
+    histórias; a segunda espera a primeira terminar e já lê o backlog atualizado.
+    """
+    return list(
+        session.scalars(
+            select(Historia)
+            .join(Projeto, Projeto.id == Historia.projeto_id)
+            .where(Historia.id.in_(historia_ids), filtro_acesso(usuario_id))
+            .order_by(Historia.id)
+            .with_for_update(of=Historia)
+        )
+    )
+
+
+def mover_para_backlog(session: Session, historia_ids: list[int], backlog_id: int) -> None:
+    """Troca só o backlog das histórias: código, critérios, pontos, etiqueta, RICE e épicos
+    não dependem do backlog e ficam intactos."""
+    session.execute(update(Historia).where(Historia.id.in_(historia_ids)).values(backlog_id=backlog_id))
 
 
 def proximo_codigo(session: Session, projeto_id: int) -> str:

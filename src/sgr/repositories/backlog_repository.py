@@ -17,6 +17,12 @@ def buscar_acessivel(session: Session, usuario_id: int, backlog_id: int) -> Back
     )
 
 
+def por_ids(session: Session, backlog_ids: set[int]) -> dict[int, Backlog]:
+    if not backlog_ids:
+        return {}
+    return {b.id: b for b in session.scalars(select(Backlog).where(Backlog.id.in_(backlog_ids)))}
+
+
 def product_do_projeto(session: Session, projeto_id: int) -> Backlog | None:
     return session.scalar(
         select(Backlog).where(Backlog.projeto_id == projeto_id, Backlog.tipo == "PRODUCT")
