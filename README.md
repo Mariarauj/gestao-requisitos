@@ -59,9 +59,9 @@ Detalhes, justificativas e impacto das ferramentas no [architecture notebook](do
 | Item | Escolha |
 |---|---|
 | Interface | Gráfica (web) |
-| Linguagem | Ruby |
-| Framework | Ruby on Rails (ERB + Hotwire/Turbo) |
-| Banco de dados | PostgreSQL |
-| Autenticação | Devise |
-| Estilo | Bootstrap |
+| Linguagem | Python |
+| Framework | Streamlit |
+| Banco de dados | PostgreSQL (SQLAlchemy e Alembic) |
+| Autenticação | Própria (hash com bcrypt) |
+| Testes | pytest |
 | Implantação | Docker |
