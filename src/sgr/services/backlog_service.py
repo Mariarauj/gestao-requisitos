@@ -9,22 +9,33 @@ Regras:
   nasce PLANEJADO (a mudança de estado não faz parte do CRUD);
 - excluir um sprint nunca apaga histórias: elas voltam ao product backlog com todos os dados;
 - nome com até 120 caracteres; descrição/meta com até 280;
-- toda escrita gera registro de auditoria.
+- toda escrita gera registro de auditoria;
+- movimentação de histórias (requisito 8): uma ou várias de uma vez, do product backlog para
+  um sprint, entre sprints ou de volta ao product backlog, sempre dentro do mesmo projeto.
+  Só o backlog da história muda (código, critérios, pontos, etiqueta, RICE e épicos ficam
+  intactos). Sprint ENCERRADO é somente leitura: não recebe nem libera histórias. A operação
+  é atômica (tudo ou nada); histórias que já estão no destino são ignoradas e informadas.
 """
 from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Callable
+from typing import Callable, Iterable
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from sgr.db.session import get_session
 from sgr.models import Backlog
-from sgr.repositories import auditoria_repository, backlog_repository, projeto_repository
+from sgr.repositories import (
+    auditoria_repository,
+    backlog_repository,
+    historia_repository,
+    projeto_repository,
+)
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.historia_service import HistoriaNaoEncontrada
 from sgr.services.projeto_service import ProjetoNaoEncontrado
 
 NOME_MAX = 120
@@ -50,6 +61,11 @@ class BacklogDados:
         return self.tipo == "PRODUCT"
 
     @property
+    def somente_leitura(self) -> bool:
+        """Sprint encerrado não recebe nem libera histórias."""
+        return self.estado == "ENCERRADO"
+
+    @property
     def duracao_dias(self) -> int | None:
         """Duração contando o dia inicial e o final (15/10 a 28/10 = 14 dias)."""
         if self.data_inicio and self.data_fim:
@@ -72,6 +88,26 @@ class HistoriaResumo:
 class BacklogsDoProjeto:
     product: BacklogDados | None
     sprints: list[BacklogDados]
+
+
+@dataclass(frozen=True)
+class HistoriaMovida:
+    id: int
+    codigo: str
+    de_backlog_id: int
+
+
+@dataclass(frozen=True)
+class ResultadoMovimentacao:
+    """O que a movimentação fez, para a confirmação "2 histórias movidas para Sprint 13"."""
+
+    destino: BacklogDados  # com as contagens já atualizadas
+    movidas: tuple[HistoriaMovida, ...]
+    ja_no_destino: tuple[str, ...] = ()  # códigos das histórias que já estavam lá
+
+    @property
+    def codigos(self) -> tuple[str, ...]:
+        return tuple(h.codigo for h in self.movidas)
 
 
 class BacklogNaoEncontrado(Exception):
@@ -103,6 +139,22 @@ class SemProductBacklog(Exception):
             "Este sprint tem histórias e o projeto não tem product backlog para recebê-las. "
             "Crie o product backlog antes de excluir o sprint."
         )
+
+
+class SprintEncerrado(Exception):
+    """Sprint encerrado é somente leitura. `nome` é o do sprint; `destino` diz o papel dele."""
+
+    def __init__(self, nome: str, *, destino: bool, codigos: tuple[str, ...] = ()) -> None:
+        self.nome = nome
+        self.destino = destino
+        if destino:
+            super().__init__(f"O {nome} está encerrado (somente leitura) e não recebe histórias.")
+        else:
+            lista = ", ".join(codigos)
+            super().__init__(
+                f"{lista} está no {nome}, que está encerrado (somente leitura): "
+                "as histórias de um sprint encerrado não podem ser movidas."
+            )
 
 
 def _como_data(valor: date | datetime | None) -> date | None:
@@ -301,6 +353,71 @@ class BacklogService:
                 valor_anterior=anterior,
             )
             return len(devolvidas)
+
+    # ---------- mover histórias ----------
+
+    def mover_historias(
+        self, usuario_id: int, historias_ids: Iterable[int], destino_id: int
+    ) -> ResultadoMovimentacao:
+        """Move as histórias para o backlog de destino (product ou sprint) numa transação.
+
+        Tudo ou nada: qualquer problema recusa a operação inteira sem mover nenhuma.
+        """
+        ids = self._ids_da_selecao(historias_ids)
+        with self._sessao() as sessao:
+            destino = self._acessivel(sessao, usuario_id, destino_id)
+            historias = historia_repository.buscar_acessiveis_travadas(sessao, usuario_id, ids)
+            if {h.id for h in historias} != ids:
+                raise HistoriaNaoEncontrada()
+            if any(h.projeto_id != destino.projeto_id for h in historias):
+                raise ErroDeValidacao(
+                    {"destino": "O backlog de destino precisa ser do mesmo projeto das histórias."}
+                )
+            if destino.estado == "ENCERRADO":
+                raise SprintEncerrado(destino.nome, destino=True)
+
+            a_mover = [h for h in historias if h.backlog_id != destino.id]
+            ja_no_destino = tuple(h.codigo for h in historias if h.backlog_id == destino.id)
+            if not a_mover:
+                raise ErroDeValidacao(
+                    {"destino": f"As histórias selecionadas já estão no {destino.nome}."}
+                )
+
+            origens = backlog_repository.por_ids(sessao, {h.backlog_id for h in a_mover})
+            for origem in origens.values():
+                if origem.estado == "ENCERRADO":
+                    codigos = tuple(h.codigo for h in a_mover if h.backlog_id == origem.id)
+                    raise SprintEncerrado(origem.nome, destino=False, codigos=codigos)
+
+            movidas = tuple(HistoriaMovida(h.id, h.codigo, h.backlog_id) for h in a_mover)
+            historia_repository.mover_para_backlog(sessao, [m.id for m in movidas], destino.id)
+            for m in movidas:
+                auditoria_repository.registrar(
+                    sessao,
+                    usuario_id=usuario_id,
+                    entidade="historia",
+                    entidade_id=m.id,
+                    operacao="ALTERAR",
+                    valor_anterior={"backlog_id": m.de_backlog_id},
+                    valor_posterior={"backlog_id": destino.id},
+                )
+            return ResultadoMovimentacao(
+                destino=self._dados(destino, backlog_repository.contagens(sessao, [destino.id])),
+                movidas=movidas,
+                ja_no_destino=ja_no_destino,
+            )
+
+    @staticmethod
+    def _ids_da_selecao(historias_ids: Iterable[int]) -> set[int]:
+        try:
+            ids = list(historias_ids)
+        except TypeError:
+            ids = [historias_ids]
+        if not ids:
+            raise ErroDeValidacao({"historias": "Selecione ao menos uma história para mover."})
+        if any(isinstance(i, bool) or not isinstance(i, int) for i in ids):
+            raise ErroDeValidacao({"historias": "Seleção de histórias inválida."})
+        return set(ids)
 
     # ---------- internos ----------
 
