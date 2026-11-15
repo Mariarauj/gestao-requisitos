@@ -43,7 +43,7 @@ Sistema de software que dá suporte à gestão de requisitos em projetos que usa
 
 ## Gerenciamento
 
-O projeto usa Kanban. O quadro fica no [GitHub Projects](https://github.com/Mariarauj/gestao-requisitos/projects); o propósito das colunas e as regras de uso estão em [`KANBAN.md`](KANBAN.md).
+O projeto usa Kanban. O quadro fica no [GitHub Projects](https://github.com/Mariarauj/gestao-requisitos/projects); o propósito das colunas e as regras de uso estão em [`KANBAN.md`](docs/01-processo-kanban/Kanban.md).
 
 ## Equipe
 
