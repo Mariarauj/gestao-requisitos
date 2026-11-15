@@ -16,6 +16,12 @@ PROJETO_DOS_BACKLOGS = "backlogs_projeto_id"
 BACKLOG_ABERTO = "backlog_aberto"
 AVISO_BACKLOG = "aviso_backlog"  # toast exibido na próxima execução da página de Backlogs
 
+# estado lido pelas páginas de Histórias e de Épicos
+HISTORIA_ABERTA = "historia_aberta"
+AVISO_HISTORIA = "aviso_historia"
+AVISO_EPICO = "aviso_epico"
+CRITERIO_REABRIR = "criterio_reabrir"  # id da história cujo diálogo de critério deve reabrir
+
 
 def registrar(paginas: dict[str, object]) -> None:
     """Guarda as páginas da navegação, por nome curto ("projetos", "backlogs", ...)."""
