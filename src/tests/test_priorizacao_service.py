@@ -114,6 +114,55 @@ def test_repetir_o_mesmo_valor_nao_gera_auditoria(cenario, prio):
     assert auditoria(cenario.conn, "historia", "ALTERAR") == []
 
 
+# ---------- story points em lote (Q-34, caminho C) ----------
+
+
+def test_lote_aplica_os_pontos_a_todas_e_audita_so_as_que_mudaram(cenario, prio):
+    a = criar_historia(cenario, story_points=2)
+    b = criar_historia(cenario, story_points=5)  # já tem o valor: não gera auditoria
+    c = criar_historia(cenario)
+    resultado = prio.definir_story_points_em_lote(cenario.dono, [a.id, b.id, c.id], 5)
+    assert [h.story_points for h in resultado] == [5, 5, 5]
+    assert {cenario.historias.obter(cenario.dono, h.id).story_points for h in (a, b, c)} == {5}
+    linhas = auditoria(cenario.conn, "historia", "ALTERAR")
+    assert sorted(linha.entidade_id for linha in linhas) == sorted([a.id, c.id])
+
+
+def test_lote_e_tudo_ou_nada_quando_uma_historia_nao_e_acessivel(cenario, prio):
+    a = criar_historia(cenario, story_points=2)
+    with pytest.raises(HistoriaNaoEncontrada):
+        prio.definir_story_points_em_lote(cenario.dono, [a.id, 999999], 8)
+    assert cenario.historias.obter(cenario.dono, a.id).story_points == 2
+    assert auditoria(cenario.conn, "historia", "ALTERAR") == []
+
+
+def test_lote_de_outro_usuario_e_nao_encontrado(cenario, prio):
+    a = criar_historia(cenario, story_points=2)
+    with pytest.raises(HistoriaNaoEncontrada):
+        prio.definir_story_points_em_lote(cenario.outro, [a.id], 8)
+    assert cenario.historias.obter(cenario.dono, a.id).story_points == 2
+
+
+@pytest.mark.parametrize("pontos", [4, -1, 56, True, "5", 2.5])
+def test_lote_recusa_valor_fora_da_escala_e_informa_os_validos(cenario, prio, pontos):
+    a = criar_historia(cenario, story_points=3)
+    with pytest.raises(ErroDeValidacao) as erro:
+        prio.definir_story_points_em_lote(cenario.dono, [a.id], pontos)
+    assert "0, 1, 2, 3, 5, 8, 13, 21, 34, 55" in erro.value.erros["story_points"]
+    assert cenario.historias.obter(cenario.dono, a.id).story_points == 3
+
+
+def test_lote_exige_valor_e_selecao(cenario, prio):
+    a = criar_historia(cenario, story_points=3)
+    with pytest.raises(ErroDeValidacao) as erro:
+        prio.definir_story_points_em_lote(cenario.dono, [a.id], None)  # None não remove em lote
+    assert set(erro.value.erros) == {"story_points"}
+    with pytest.raises(ErroDeValidacao) as erro:
+        prio.definir_story_points_em_lote(cenario.dono, [], 5)
+    assert set(erro.value.erros) == {"historias"}
+    assert cenario.historias.obter(cenario.dono, a.id).story_points == 3
+
+
 # ---------- MoSCoW ----------
 
 
