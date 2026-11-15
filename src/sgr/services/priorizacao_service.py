@@ -8,7 +8,9 @@ Regras:
   services/rice.py e nunca é digitada nem gravada;
 - as três dimensões são independentes: alterar uma não toca as outras;
 - quem tem acesso ao projeto prioriza as histórias; fora dele, tudo é "não encontrado";
-- toda alteração real gera registro de auditoria (repetir o mesmo valor não gera).
+- toda alteração real gera registro de auditoria (repetir o mesmo valor não gera);
+- a edição em lote de story points é tudo ou nada: se qualquer história não for encontrada,
+  nenhuma é alterada.
 
 A validação aqui é a segunda barreira; a terceira são as CHECK constraints do banco.
 """
@@ -16,7 +18,7 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from decimal import Decimal
-from typing import Callable
+from typing import Callable, Iterable
 
 from sqlalchemy.orm import Session
 
@@ -74,6 +76,26 @@ class PriorizacaoService:
         story_points = validar_story_points(story_points)
         return self._alterar(usuario_id, historia_id, {"story_points": story_points})
 
+    def definir_story_points_em_lote(
+        self, usuario_id: int, historias_ids: Iterable[int], story_points: int
+    ) -> list[HistoriaDados]:
+        """Aplica os mesmos story points a várias histórias, numa transação (tudo ou nada).
+
+        Exige um valor da escala (None, que remove a estimativa, não vale em lote). Só as
+        histórias cujo valor muda geram auditoria.
+        """
+        if story_points is None:
+            raise ErroDeValidacao({"story_points": "Selecione um valor da escala para aplicar em lote."})
+        story_points = validar_story_points(story_points)
+        ids = self._ids_da_selecao(historias_ids)
+        with self._sessao() as sessao:
+            historias = historia_repository.buscar_acessiveis_travadas(sessao, usuario_id, ids)
+            if {h.id for h in historias} != ids:
+                raise HistoriaNaoEncontrada()
+            for historia in historias:
+                self._gravar(sessao, usuario_id, historia, {"story_points": story_points})
+            return HistoriaService._dados(sessao, historias)
+
     # ---------- MoSCoW ----------
 
     def definir_moscow(self, usuario_id: int, historia_id: int, moscow: str | None) -> HistoriaDados:
@@ -115,14 +137,30 @@ class PriorizacaoService:
             historia = historia_repository.buscar_acessivel(sessao, usuario_id, historia_id)
             if historia is None:
                 raise HistoriaNaoEncontrada()
-            anterior = {campo: _numero(getattr(historia, campo)) for campo in novos}
-            posterior = {campo: _numero(valor) for campo, valor in novos.items()}
-            if posterior != anterior:
-                for campo, valor in novos.items():
-                    setattr(historia, campo, valor)
-                sessao.flush()
-                self._auditar(sessao, usuario_id, historia, anterior, posterior)
+            self._gravar(sessao, usuario_id, historia, novos)
             return HistoriaService._dados(sessao, [historia])[0]
+
+    def _gravar(self, sessao: Session, usuario_id: int, historia: Historia, novos: dict) -> None:
+        """Grava os campos que mudaram e audita; valor repetido não grava nem audita."""
+        anterior = {campo: _numero(getattr(historia, campo)) for campo in novos}
+        posterior = {campo: _numero(valor) for campo, valor in novos.items()}
+        if posterior != anterior:
+            for campo, valor in novos.items():
+                setattr(historia, campo, valor)
+            sessao.flush()
+            self._auditar(sessao, usuario_id, historia, anterior, posterior)
+
+    @staticmethod
+    def _ids_da_selecao(historias_ids: Iterable[int]) -> set[int]:
+        try:
+            ids = list(historias_ids)
+        except TypeError:
+            ids = [historias_ids]
+        if not ids:
+            raise ErroDeValidacao({"historias": "Selecione ao menos uma história."})
+        if any(isinstance(i, bool) or not isinstance(i, int) for i in ids):
+            raise ErroDeValidacao({"historias": "Seleção de histórias inválida."})
+        return set(ids)
 
     @staticmethod
     def _auditar(sessao: Session, usuario_id: int, historia: Historia, anterior: dict, posterior: dict) -> None:

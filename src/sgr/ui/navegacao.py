@@ -22,6 +22,11 @@ AVISO_HISTORIA = "aviso_historia"
 AVISO_EPICO = "aviso_epico"
 CRITERIO_REABRIR = "criterio_reabrir"  # id da história cujo diálogo de critério deve reabrir
 
+# estado lido pela página de Priorização
+AVISO_PRIORIZACAO = "aviso_priorizacao"  # toast exibido na próxima execução da página
+GERACAO_SELECAO_PRIORIZACAO = "geracao_selecao_priorizacao"  # muda ao limpar a seleção: caixas novas, desmarcadas
+HISTORIA_ALTERADA = "priorizacao_historia_alterada"  # id da história marcada como "(alterada)" (Q-39)
+
 
 def registrar(paginas: dict[str, object]) -> None:
     """Guarda as páginas da navegação, por nome curto ("projetos", "backlogs", ...)."""
