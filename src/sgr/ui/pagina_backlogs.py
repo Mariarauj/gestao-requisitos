@@ -1,8 +1,8 @@
 """Backlogs (requisitos 5 e 6): product backlog (um por projeto) e sprint backlogs — Storyboard 3.
 
-Cobre listar, criar, ver, editar e excluir. Ainda não há movimentação de histórias nem
-quadro Kanban (requisito 8). Criar, editar e excluir usam diálogos modais; o retorno de
-sucesso é um toast mostrado na tela seguinte.
+Cobre listar, criar, ver, editar e excluir. As histórias do backlog aberto e a movimentação
+entre backlogs (requisito 8) ficam em backlog_historias.py. Criar, editar, excluir e mover usam
+diálogos modais; o retorno de sucesso é um toast mostrado na tela seguinte.
 """
 from datetime import date, timedelta
 
@@ -21,22 +21,16 @@ from sgr.services.backlog_service import (
     SemProductBacklog,
 )
 from sgr.services.projeto_service import ProjetoNaoEncontrado
-from sgr.ui import navegacao
+from sgr.ui import backlog_historias, navegacao
+from sgr.ui.formatos import ESTADOS as _ESTADOS
+from sgr.ui.formatos import data as _data
+from sgr.ui.formatos import plural as _plural
 from sgr.ui.sessao import exigir_login
 
 _PROJETO = navegacao.PROJETO_DOS_BACKLOGS
 _ABERTO = navegacao.BACKLOG_ABERTO
-_AVISO = "aviso_backlog"
-_ESTADOS = {"PLANEJADO": "Planejado", "EM_ANDAMENTO": "Em andamento", "ENCERRADO": "Encerrado"}
+_AVISO = navegacao.AVISO_BACKLOG
 _EXPLICACAO_BLOQUEIO = "Este projeto já tem um product backlog. Para outro, crie um novo projeto."
-
-
-def _plural(n: int, singular: str, plural: str) -> str:
-    return f"{n} {singular if n <= 1 else plural}"
-
-
-def _data(d: date | None) -> str:
-    return d.strftime("%d/%m/%Y") if d else ""
 
 
 def _periodo(b: BacklogDados) -> str:
@@ -364,7 +358,8 @@ def _detalhe(usuario_id: int, backlog_id: int, projeto_nome: str) -> None:
         st.session_state.pop(_ABERTO, None)
         st.rerun()
         return
-    tem_product = backlogs.listar(usuario_id, b.projeto_id).product is not None
+    conjunto = backlogs.listar(usuario_id, b.projeto_id)
+    tem_product = conjunto.product is not None
 
     if st.button("← Backlogs", key="btn_voltar_backlogs"):
         st.session_state.pop(_ABERTO, None)
@@ -391,14 +386,7 @@ def _detalhe(usuario_id: int, backlog_id: int, projeto_nome: str) -> None:
     c1.metric("Histórias", b.historias)
     c2.metric("Story points", b.pontos)
 
-    historias = backlogs.listar_historias(usuario_id, b.id)
-    if not historias:
-        st.caption("Nenhuma história neste backlog.")
-    for h in historias:
-        with st.container(border=True):
-            pts = f"{h.story_points} pts" if h.story_points is not None else "sem estimativa"
-            st.markdown(f"**{h.codigo}** · Como um {h.papel}, eu quero {h.acao} para {h.beneficio}")
-            st.caption(f"{pts} · MoSCoW {h.moscow}")
+    backlog_historias.renderizar(usuario_id, b, conjunto)
 
 
 def pagina_backlogs() -> None:

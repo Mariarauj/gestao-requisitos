@@ -14,6 +14,7 @@ _PAGINAS = "_paginas_registradas"
 # estado lido pela página de Backlogs
 PROJETO_DOS_BACKLOGS = "backlogs_projeto_id"
 BACKLOG_ABERTO = "backlog_aberto"
+AVISO_BACKLOG = "aviso_backlog"  # toast exibido na próxima execução da página de Backlogs
 
 
 def registrar(paginas: dict[str, object]) -> None:
