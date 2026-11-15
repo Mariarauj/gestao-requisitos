@@ -60,6 +60,11 @@ def test_aceita_qualquer_iteravel_e_ignora_repeticao(cenario, backlogs):
     assert len(r.movidas) == 2
 
 
+def test_aceita_um_id_avulso_no_lugar_de_uma_lista(cenario, backlogs):
+    h = criar_historia(cenario)
+    assert backlogs.mover_historias(cenario.dono, h.id, sprint(cenario)).codigos == (h.codigo,)
+
+
 def test_vai_e_volta_entre_product_e_sprints(cenario, backlogs):
     h = criar_historia(cenario)
     s1, s2 = sprint(cenario, "Sprint 1"), sprint(cenario, "Sprint 2")

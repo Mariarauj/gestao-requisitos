@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Callable, Iterable
 
 from sqlalchemy.orm import Session
@@ -33,6 +33,7 @@ from sgr.repositories import (
     projeto_repository,
 )
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 from sgr.services.projeto_service import ProjetoNaoEncontrado
 from sgr.services.rice import calcular_rice
 
@@ -42,6 +43,10 @@ BENEFICIO_MAX = 200
 STORY_POINTS = (0, 1, 2, 3, 5, 8, 13, 21, 34, 55)
 MOSCOW = ("M", "S", "C", "W")
 MOSCOW_PADRAO = "S"
+ORDENACOES = ("posicao", "rice")
+# Nenhuma nota RICE chega perto disso (o teto real é cerca de 6,4 bilhões). Faixas maiores são
+# reduzidas a este valor, que dá o mesmo resultado e evita estourar o tipo numérico do banco.
+LIMITE_RICE = Decimal("1E+12")
 
 
 @dataclass(frozen=True)
@@ -118,6 +123,22 @@ class ProductBacklogInexistente(Exception):
         )
 
 
+def _limite_rice(valor, campo: str, rotulo: str, erros: dict[str, str]) -> Decimal | None:
+    """Converte um limite de faixa de RICE; registra o erro e devolve None se for inválido."""
+    if valor is None:
+        return None
+    try:
+        if isinstance(valor, bool):
+            raise ValueError
+        numero = Decimal(str(valor).strip().replace(",", "."))
+    except (InvalidOperation, ValueError):
+        numero = None
+    if numero is None or not numero.is_finite() or numero < 0:
+        erros[campo] = f"RICE {rotulo} inválido. Informe um número maior ou igual a 0."
+        return None
+    return min(numero, LIMITE_RICE)
+
+
 def _validar(
     papel: str | None,
     acao: str | None,
@@ -134,6 +155,8 @@ def _validar(
     ):
         if not valor:
             erros[campo] = f"Informe {rotulo}."
+        elif caractere_invalido(valor):
+            erros[campo] = MENSAGEM_CARACTERE_INVALIDO
         elif len(valor) > limite:
             erros[campo] = f"Este campo deve ter no máximo {limite} caracteres."
     if story_points is not None and (
@@ -179,15 +202,45 @@ class HistoriaService:
         backlog_id: int | None = None,
         epico_id: int | None = None,
         moscow: str | None = None,
+        rice_min=None,
+        rice_max=None,
+        com_rice: bool | None = None,
+        ordenar_por: str = "posicao",
+        ordem: str | None = None,
     ) -> list[HistoriaDados]:
-        """Histórias do projeto, da mais antiga para a mais nova, com filtros opcionais."""
+        """Histórias do projeto, com filtros e ordenação opcionais.
+
+        Padrão: da mais antiga para a mais nova. Filtros: backlog, épico, etiqueta MoSCoW,
+        faixa de RICE (`rice_min`/`rice_max`, inclusivos, sobre a nota arredondada exibida;
+        aceitam número ou texto, com vírgula ou ponto) e `com_rice` (True só as pontuadas,
+        False só as pendentes). História sem RICE nunca entra numa faixa. Ordenação:
+        `ordenar_por` "posicao" (criação) ou "rice" (maior nota primeiro; as sem RICE ficam por
+        último em qualquer sentido) e `ordem` "asc"/"desc".
+        """
+        erros: dict[str, str] = {}
         if moscow is not None:
             moscow = moscow.strip().upper()
             if moscow not in MOSCOW:
-                raise ErroDeValidacao({"moscow": "Etiqueta MoSCoW inválida. Valores aceitos: M, S, C, W."})
+                erros["moscow"] = "Etiqueta MoSCoW inválida. Valores aceitos: M, S, C, W."
+        minimo = _limite_rice(rice_min, "rice_min", "mínimo", erros)
+        maximo = _limite_rice(rice_max, "rice_max", "máximo", erros)
+        if minimo is not None and maximo is not None and minimo > maximo and "rice_max" not in erros:
+            erros["rice_max"] = "O RICE máximo deve ser maior ou igual ao mínimo."
+        if com_rice is not None and not isinstance(com_rice, bool):
+            erros["com_rice"] = "Use True (só com RICE) ou False (só sem RICE)."
+        if ordenar_por not in ORDENACOES:
+            erros["ordenar_por"] = f"Ordenação inválida. Valores aceitos: {', '.join(ORDENACOES)}."
+        ordem = ordem.strip().lower() if isinstance(ordem, str) else ordem
+        if ordem not in (None, "asc", "desc"):
+            erros["ordem"] = "Ordem inválida. Valores aceitos: asc, desc."
+        if erros:
+            raise ErroDeValidacao(erros)
         with self._sessao() as sessao:
             self._projeto(sessao, usuario_id, projeto_id)
-            historias = historia_repository.listar(sessao, projeto_id, backlog_id, epico_id, moscow)
+            historias = historia_repository.listar(
+                sessao, projeto_id, backlog_id, epico_id, moscow,
+                rice_min=minimo, rice_max=maximo, com_rice=com_rice, ordenar_por=ordenar_por, ordem=ordem,
+            )
             return self._dados(sessao, historias)
 
     def obter(self, usuario_id: int, historia_id: int) -> HistoriaDados:

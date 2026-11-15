@@ -54,7 +54,24 @@ def test_effort_zero_explica_a_regra_e_o_formulario_mostra_todos_os_erros_de_uma
     with pytest.raises(ErroDeValidacao) as erro:
         validar_rice(-5, 7, 33, 0)
     assert set(erro.value.erros) == {"rice_reach", "rice_impact", "rice_confidence", "rice_effort"}
-    assert "21" in erro.value.erros["rice_effort"] and "0," not in erro.value.erros["rice_effort"]
+    assert "21" in erro.value.erros["rice_effort"]
+
+
+@pytest.mark.parametrize("zero", [0, 0.0, Decimal("0")])
+def test_effort_zero_avisa_que_o_esforco_nao_pode_ser_zero(zero):
+    """US-19: "o sistema não calcula e avisa que o esforço não pode ser zero"."""
+    with pytest.raises(ErroDeValidacao) as erro:
+        calcular_rice(100, 2, 80, zero)
+    assert set(erro.value.erros) == {"rice_effort"}
+    assert "não pode ser zero" in erro.value.erros["rice_effort"]
+
+
+def test_reach_vai_ate_o_limite_da_coluna_e_acima_disso_e_validacao_nao_erro_de_banco():
+    assert calcular_rice(2_147_483_647, 3, 100, 1) == Decimal("6442450941.00")
+    for demais in (2_147_483_648, 10**12):
+        with pytest.raises(ErroDeValidacao) as erro:
+            calcular_rice(demais, 3, 100, 1)
+        assert set(erro.value.erros) == {"rice_reach"} and "2.147.483.647" in erro.value.erros["rice_reach"]
 
 
 def test_as_quatro_entradas_sao_obrigatorias():
@@ -123,6 +140,14 @@ def test_moscow_audita_antes_e_depois(cenario, prio):
 
 
 # ---------- RICE ----------
+
+
+def test_reach_enorme_grava_no_limite_e_recusa_acima_sem_estourar_o_banco(cenario, prio):
+    h = criar_historia(cenario)
+    assert prio.definir_rice(cenario.dono, h.id, 2_147_483_647, 1, 50, 55).rice_reach == 2_147_483_647
+    with pytest.raises(ErroDeValidacao):
+        prio.definir_rice(cenario.dono, h.id, 2_147_483_648, 1, 50, 55)
+    assert cenario.historias.obter(cenario.dono, h.id).rice_reach == 2_147_483_647
 
 
 def test_historia_nova_nao_tem_rice(cenario):

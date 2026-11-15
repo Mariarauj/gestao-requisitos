@@ -18,6 +18,7 @@ from sqlalchemy.orm import Session
 from sgr.db.session import get_session
 from sgr.repositories import auditoria_repository, usuario_repository
 from sgr.services.limitador import LimitadorTentativas
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 
 NOME_MAX = 120
 EMAIL_MAX = 160
@@ -105,13 +106,17 @@ class AuthService:
         erros: dict[str, str] = {}
         if not nome:
             erros["nome"] = "Informe o nome."
+        elif caractere_invalido(nome):
+            erros["nome"] = MENSAGEM_CARACTERE_INVALIDO
         elif len(nome) > NOME_MAX:
             erros["nome"] = f"O nome deve ter no máximo {NOME_MAX} caracteres."
         if not email:
             erros["email"] = "Informe o e-mail."
-        elif len(email) > EMAIL_MAX or not _EMAIL_RE.match(email):
+        elif caractere_invalido(email) or len(email) > EMAIL_MAX or not _EMAIL_RE.match(email):
             erros["email"] = "Informe um e-mail válido."
-        if len(senha) < SENHA_MIN:
+        if caractere_invalido(senha):
+            erros["senha"] = "A senha contém um caractere inválido."
+        elif len(senha) < SENHA_MIN:
             erros["senha"] = f"A senha deve ter pelo menos {SENHA_MIN} caracteres."
         elif len(senha.encode("utf-8")) > SENHA_MAX_BYTES:
             erros["senha"] = f"A senha deve ter no máximo {SENHA_MAX_BYTES} bytes."
@@ -145,14 +150,18 @@ class AuthService:
 
     def autenticar(self, email: str, senha: str) -> UsuarioAutenticado:
         chave = normalizar_email(email)
+        senha = senha or ""
+        # Texto que o banco não guarda nunca é credencial válida: segue o mesmo caminho de uma
+        # senha errada (inclusive o hash falso), sem consultar o banco com esse valor.
+        entrada_invalida = caractere_invalido(chave) or caractere_invalido(senha)
         restante = self._limitador.segundos_restantes(chave)
         if restante:
             raise ContaBloqueada(restante)
 
         with self._sessao() as sessao:
-            usuario = usuario_repository.buscar_por_email(sessao, chave)
+            usuario = None if entrada_invalida else usuario_repository.buscar_por_email(sessao, chave)
             hash_ = usuario.senha_hash if usuario else self._hash_falso
-            senha_ok = self._conferir(senha or "", hash_)
+            senha_ok = False if entrada_invalida else self._conferir(senha, hash_)
             if not (usuario and usuario.ativo and senha_ok):
                 self._limitador.registrar_falha(chave)
                 raise CredenciaisInvalidas()

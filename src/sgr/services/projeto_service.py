@@ -19,9 +19,10 @@ from sqlalchemy.orm import Session
 
 from sgr.db.session import get_session
 from sgr.models import Projeto
-from sgr.repositories import auditoria_repository, projeto_repository
+from sgr.repositories import auditoria_repository, projeto_repository, travas
 from sgr.repositories.projeto_repository import Contagens
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 
 NOME_MAX = 120
 DESCRICAO_MAX = 280
@@ -67,9 +68,13 @@ def _validar(nome: str | None, descricao: str | None) -> tuple[str, str | None]:
     erros: dict[str, str] = {}
     if not nome:
         erros["nome"] = "Informe o nome do projeto."
+    elif caractere_invalido(nome):
+        erros["nome"] = MENSAGEM_CARACTERE_INVALIDO
     elif len(nome) > NOME_MAX:
         erros["nome"] = f"O nome deve ter no máximo {NOME_MAX} caracteres."
-    if descricao and len(descricao) > DESCRICAO_MAX:
+    if caractere_invalido(descricao):
+        erros["descricao"] = MENSAGEM_CARACTERE_INVALIDO
+    elif descricao and len(descricao) > DESCRICAO_MAX:
         erros["descricao"] = f"A descrição deve ter no máximo {DESCRICAO_MAX} caracteres."
     if erros:
         raise ErroDeValidacao(erros)
@@ -92,6 +97,8 @@ class ProjetoService:
         apenas_meus: bool = False,
         arquivados: bool = False,
     ) -> list[ProjetoDados]:
+        if caractere_invalido(busca):  # nenhum nome guardado tem esse caractere: não há o que achar
+            return []
         with self._sessao() as sessao:
             projetos = projeto_repository.listar(
                 sessao, usuario_id, busca=busca, apenas_meus=apenas_meus, arquivados=arquivados
@@ -110,6 +117,7 @@ class ProjetoService:
     def criar(self, usuario_id: int, nome: str, descricao: str | None = None) -> ProjetoDados:
         nome, descricao = _validar(nome, descricao)
         with self._sessao() as sessao:
+            travas.travar_nomes_de_projeto(sessao, usuario_id)  # serializa checar+gravar do mesmo dono
             if projeto_repository.existe_nome(sessao, usuario_id, nome):
                 raise NomeJaUsado()
             try:
@@ -137,6 +145,7 @@ class ProjetoService:
             projeto = self._propria(sessao, usuario_id, projeto_id)
             anterior = _snapshot(projeto)
             if (nome, descricao) != (anterior["nome"], anterior["descricao"]):
+                travas.travar_nomes_de_projeto(sessao, usuario_id)
                 if projeto_repository.existe_nome(
                     sessao, usuario_id, nome, ignorar_id=projeto.id
                 ):

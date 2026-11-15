@@ -19,8 +19,9 @@ from sqlalchemy.orm import Session
 
 from sgr.db.session import get_session
 from sgr.models import Epico
-from sgr.repositories import auditoria_repository, epico_repository, projeto_repository
+from sgr.repositories import auditoria_repository, epico_repository, projeto_repository, travas
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 from sgr.services.projeto_service import ProjetoNaoEncontrado
 
 NOME_MAX = 120
@@ -81,9 +82,13 @@ def _validar(nome: str | None, descricao: str | None) -> tuple[str, str | None]:
     erros: dict[str, str] = {}
     if not nome:
         erros["nome"] = "Informe o nome do épico."
+    elif caractere_invalido(nome):
+        erros["nome"] = MENSAGEM_CARACTERE_INVALIDO
     elif len(nome) > NOME_MAX:
         erros["nome"] = f"O nome deve ter no máximo {NOME_MAX} caracteres."
-    if descricao and len(descricao) > DESCRICAO_MAX:
+    if caractere_invalido(descricao):
+        erros["descricao"] = MENSAGEM_CARACTERE_INVALIDO
+    elif descricao and len(descricao) > DESCRICAO_MAX:
         erros["descricao"] = f"A descrição deve ter no máximo {DESCRICAO_MAX} caracteres."
     if erros:
         raise ErroDeValidacao(erros)
@@ -128,6 +133,7 @@ class EpicoService:
         nome, descricao = _validar(nome, descricao)
         with self._sessao() as sessao:
             self._projeto(sessao, usuario_id, projeto_id)
+            travas.travar_nomes_de_epico(sessao, projeto_id)  # serializa checar+gravar no projeto
             if epico_repository.existe_nome(sessao, projeto_id, nome):
                 raise NomeDeEpicoJaUsado()
             try:
@@ -144,6 +150,7 @@ class EpicoService:
         nome, descricao = _validar(nome, descricao)
         with self._sessao() as sessao:
             epico = self._acessivel(sessao, usuario_id, epico_id)
+            travas.travar_nomes_de_epico(sessao, epico.projeto_id)
             if epico_repository.existe_nome(sessao, epico.projeto_id, nome, excluir_id=epico.id):
                 raise NomeDeEpicoJaUsado()
             anterior = _snapshot(epico)

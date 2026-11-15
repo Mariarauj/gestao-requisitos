@@ -19,6 +19,7 @@ from sgr.db.session import get_session
 from sgr.models import CriterioAceitacao
 from sgr.repositories import auditoria_repository, criterio_repository, historia_repository
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 from sgr.services.historia_service import CriterioDados, HistoriaNaoEncontrada
 
 
@@ -38,6 +39,9 @@ def _validar(contexto: str | None, acao: str | None, resultado: str | None) -> t
         )
         if not valor
     }
+    for campo, valor in (("contexto", contexto), ("acao", acao), ("resultado", resultado)):
+        if campo not in erros and caractere_invalido(valor):
+            erros[campo] = MENSAGEM_CARACTERE_INVALIDO
     if erros:
         raise ErroDeValidacao(erros)
     return contexto, acao, resultado

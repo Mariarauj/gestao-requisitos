@@ -1,10 +1,25 @@
-from sqlalchemy import BigInteger, cast, func, select, text, update
+from sqlalchemy import BigInteger, Numeric, cast, func, select, text, update
 from sqlalchemy.orm import Session
 
 from sgr.models import Backlog, CriterioAceitacao, Epico, EpicoHistoria, Historia, Projeto
 from sgr.repositories.projeto_repository import filtro_acesso
 
 PREFIXO_CODIGO = "SGR-"
+
+
+def rice_sql():
+    """Nota RICE calculada no banco, para filtrar e ordenar sem trazer tudo para a memória.
+
+    É a mesma conta de services.rice.calcular_rice, com o mesmo arredondamento (duas casas,
+    metade para cima; as entradas nunca são negativas). Quem altera uma altera a outra:
+    tests/test_rice_listagem.py compara as duas em todo o domínio. Sem RICE (colunas nulas),
+    o resultado é NULL; o CHECK ck_historia_rice_completo garante "as quatro ou nenhuma", e
+    rice_effort nunca é zero.
+    """
+    bruto = (cast(Historia.rice_reach, Numeric) * Historia.rice_impact * Historia.rice_confidence) / (
+        100 * Historia.rice_effort
+    )
+    return func.round(cast(bruto, Numeric), 2)
 
 
 def buscar_acessivel(session: Session, usuario_id: int, historia_id: int) -> Historia | None:
@@ -91,8 +106,20 @@ def listar(
     backlog_id: int | None = None,
     epico_id: int | None = None,
     moscow: str | None = None,
+    *,
+    rice_min=None,
+    rice_max=None,
+    com_rice: bool | None = None,
+    ordenar_por: str = "posicao",
+    ordem: str | None = None,
 ) -> list[Historia]:
-    consulta = select(Historia).where(Historia.projeto_id == projeto_id).order_by(Historia.id)
+    """Histórias do projeto. Padrão: da mais antiga para a mais nova.
+
+    `rice_min`/`rice_max` são inclusivos e comparam com a nota arredondada que o usuário vê;
+    história sem RICE nunca passa por eles. `ordenar_por="rice"` ordena da maior nota para a
+    menor (ou `ordem="asc"`), com as sem RICE sempre no fim e a ordem de criação como desempate.
+    """
+    consulta = select(Historia).where(Historia.projeto_id == projeto_id)
     if backlog_id is not None:
         consulta = consulta.where(Historia.backlog_id == backlog_id)
     if moscow is not None:
@@ -101,6 +128,20 @@ def listar(
         consulta = consulta.where(
             Historia.id.in_(select(EpicoHistoria.historia_id).where(EpicoHistoria.epico_id == epico_id))
         )
+    if com_rice is True:
+        consulta = consulta.where(Historia.rice_reach.is_not(None))
+    elif com_rice is False:
+        consulta = consulta.where(Historia.rice_reach.is_(None))
+    nota = rice_sql()
+    if rice_min is not None:
+        consulta = consulta.where(nota >= rice_min)
+    if rice_max is not None:
+        consulta = consulta.where(nota <= rice_max)
+    if ordenar_por == "rice":
+        chave = nota.asc() if ordem == "asc" else nota.desc()
+        consulta = consulta.order_by(chave.nulls_last(), Historia.id)
+    else:
+        consulta = consulta.order_by(Historia.id.desc() if ordem == "desc" else Historia.id)
     return list(session.scalars(consulta))
 
 

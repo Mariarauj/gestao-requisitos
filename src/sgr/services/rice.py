@@ -1,7 +1,9 @@
 """Domínios fechados e cálculo da pontuação RICE (requisitos 17 a 19).
 
 Este módulo não conhece banco nem interface: a fórmula existe aqui, e somente aqui, para
-não divergir entre telas.
+não divergir entre telas. Única exceção: a listagem de histórias filtra e ordena por RICE no
+banco e repete a conta em SQL (historia_repository.rice_sql); tests/test_rice_listagem.py
+compara as duas em todo o domínio e falha se divergirem.
 
     RICE = (Reach × Impact × Confidence) / Effort
 
