@@ -48,6 +48,6 @@ def test_app_real_registra_as_paginas_do_sistema(engine, test_url, monkeypatch):
     at.session_state["usuario_autenticado"] = UsuarioAutenticado(1, "Ana", "ana@x.com")
     at.run()
     assert not at.exception
-    assert set(at.session_state["_paginas_registradas"]) == {"inicio", "projetos", "backlogs"}
+    assert set(at.session_state["_paginas_registradas"]) == {"inicio", "projetos", "backlogs", "historias", "epicos"}
     db_session.get_engine.cache_clear()
     db_session._session_factory.cache_clear()
