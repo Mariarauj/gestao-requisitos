@@ -21,10 +21,11 @@ from sgr.services.backlog_service import (
     SemProductBacklog,
 )
 from sgr.services.projeto_service import ProjetoNaoEncontrado
+from sgr.ui import navegacao
 from sgr.ui.sessao import exigir_login
 
-_PROJETO = "backlogs_projeto_id"
-_ABERTO = "backlog_aberto"
+_PROJETO = navegacao.PROJETO_DOS_BACKLOGS
+_ABERTO = navegacao.BACKLOG_ABERTO
 _AVISO = "aviso_backlog"
 _ESTADOS = {"PLANEJADO": "Planejado", "EM_ANDAMENTO": "Em andamento", "ENCERRADO": "Encerrado"}
 _EXPLICACAO_BLOQUEIO = "Este projeto já tem um product backlog. Para outro, crie um novo projeto."
