@@ -1,12 +1,14 @@
-"""Projetos (requisito 4): lista, criar, ver, editar e excluir — Storyboard 1.
+"""Projetos (requisito 4): lista, criar, ver, editar e excluir — Storyboard 2 (Q-08 a Q-13).
 
 Tudo acontece numa única página: a lista é a visão inicial e, ao abrir um projeto, a mesma
 página mostra o painel dele (`projeto_aberto` em st.session_state). Criar, editar e excluir
-usam diálogos modais; o retorno de sucesso é um toast mostrado na tela seguinte.
+usam diálogos modais; o retorno de sucesso é um toast mostrado na tela seguinte, e o projeto
+recém-criado aparece destacado na lista (Q-10). O painel do projeto (Q-11) traz atalhos
+"Ir para..." para as demais telas.
 """
 import streamlit as st
 
-from sgr.services import projetos
+from sgr.services import backlogs, projetos
 from sgr.services.auth_service import ErroDeValidacao
 from sgr.services.projeto_service import (
     DESCRICAO_MAX,
@@ -16,11 +18,27 @@ from sgr.services.projeto_service import (
     ProjetoNaoEncontrado,
     SemPermissao,
 )
+from sgr.ui import navegacao
 from sgr.ui.sessao import exigir_login
 
 _ABERTO = "projeto_aberto"
 _AVISO = "aviso_projeto"
+_DESTAQUE = "projeto_destacado"
 _FILTROS = ["Todos", "Meus projetos", "Arquivados"]
+
+
+# Ilustração hachurada simples do wireframe; listras translúcidas funcionam em tema claro e escuro.
+_ILUSTRACAO_VAZIA = (
+    '<div style="height:88px;border:1px dashed rgba(128,128,128,.6);border-radius:8px;'
+    'background:repeating-linear-gradient(45deg,rgba(128,128,128,.10) 0 7px,transparent 7px 14px)"></div>'
+)
+
+_ATALHOS = [  # (chave do botão, rótulo, página de destino, abre direto o product backlog?)
+    ("atalho_product", "Ir para: Product Backlog ›", "backlogs", True),
+    ("atalho_sprints", "Ir para: Sprint Backlogs ›", "backlogs", False),
+    ("atalho_epicos", "Ir para: Épicos ›", "epicos", False),
+    ("atalho_historias", "Ir para: Histórias ›", "historias", False),
+]
 
 
 def _plural(n: int, singular: str, plural: str) -> str:
@@ -86,7 +104,8 @@ def _dialogo_formulario(usuario_id: int, projeto: ProjetoDados | None) -> None:
                 projetos.atualizar(usuario_id, projeto.id, nome, descricao)
                 _avisar("Alterações salvas.")
             else:
-                projetos.criar(usuario_id, nome, descricao)
+                novo = projetos.criar(usuario_id, nome, descricao)
+                st.session_state[_DESTAQUE] = novo.id
                 _avisar("Projeto criado.")
         except ErroDeValidacao as erro:  # os dados digitados continuam nos campos
             if "nome" in erro.erros:
@@ -161,6 +180,7 @@ def _lista(usuario_id: int) -> None:
     if not lista:
         if filtro == "Todos" and not busca.strip():
             with st.container(border=True):
+                st.markdown(_ILUSTRACAO_VAZIA, unsafe_allow_html=True)  # HTML fixo, sem dados do usuário
                 st.subheader("Você ainda não tem projetos")
                 if st.button("Criar meu primeiro projeto", type="primary", key="btn_primeiro_projeto"):
                     _dialogo_formulario(usuario_id, None)
@@ -168,8 +188,14 @@ def _lista(usuario_id: int) -> None:
             st.info("Nenhum projeto encontrado.")
         return
 
+    destaque = st.session_state.pop(_DESTAQUE, None)
+    if destaque in {p.id for p in lista}:  # contorno tracejado: o "destaque" do wireframe, sem depender de cor
+        st.html("<style>.st-key-projeto_destacado{border-style:dashed !important}</style>")
     for p in lista:
-        with st.container(border=True):
+        novo = p.id == destaque
+        with st.container(border=True, key="projeto_destacado" if novo else f"linha_projeto_{p.id}"):
+            if novo:
+                st.caption("✓ Projeto criado agora")
             nome, editar, excluir = st.columns([8, 1, 1], vertical_alignment="center")
             if nome.button(p.nome, key=f"abrir_{p.id}"):
                 st.session_state[_ABERTO] = p.id
@@ -192,9 +218,11 @@ def _detalhe(usuario_id: int, projeto_id: int) -> None:
         st.rerun()
         return
 
-    if st.button("← Projetos", key="btn_voltar_projetos"):
+    voltar, caminho = st.columns([1, 7], vertical_alignment="center")
+    if voltar.button("Projetos", type="tertiary", key="btn_voltar_projetos"):
         st.session_state.pop(_ABERTO, None)
         st.rerun()
+    caminho.markdown(f"› **{p.nome}**")
 
     topo, editar, excluir = st.columns([6, 2, 2], vertical_alignment="center")
     topo.title(p.nome)
@@ -219,6 +247,19 @@ def _detalhe(usuario_id: int, projeto_id: int) -> None:
         ],
     ):
         coluna.metric(rotulo, valor)
+    _atalhos(usuario_id, p)
+
+
+def _atalhos(usuario_id: int, p: ProjetoDados) -> None:
+    """"Ir para..." (Q-11): o painel do projeto é a porta de entrada para o resto do sistema."""
+    st.caption("Continuar em")
+    product = backlogs.listar(usuario_id, p.id).product
+    for coluna, (chave, rotulo, destino, abre_product) in zip(st.columns(len(_ATALHOS)), _ATALHOS):
+        if not navegacao.disponivel(destino):
+            coluna.button(rotulo, disabled=True, key=chave, help="Esta tela ainda não está disponível.")
+        elif coluna.button(rotulo, key=chave):
+            aberto = product.id if abre_product and product else None  # None = lista de backlogs
+            navegacao.ir_para(destino, **{navegacao.PROJETO_DOS_BACKLOGS: p.id, navegacao.BACKLOG_ABERTO: aberto})
 
 
 def pagina_projetos() -> None:

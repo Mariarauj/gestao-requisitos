@@ -1,10 +1,10 @@
-"""Fluxo de tela do CRUD de projetos (Storyboard 1 / requisito 4)."""
+"""Fluxo de tela do CRUD de projetos (Storyboard 2, Q-08 a Q-13 / requisito 4)."""
 import pytest
 from sqlalchemy import text
 from streamlit.testing.v1 import AppTest
 
 from sgr.db import session as db_session
-from sgr.services import autenticacao, projetos
+from sgr.services import autenticacao, backlogs, projetos
 
 
 def _script():
@@ -229,3 +229,173 @@ def test_dialogo_excluir_cancelar_nao_remove(ana):
     at.button(key=f"btn_cancelar_exclusao_{p.id}").click()
     at.run()
     assert len(projetos.listar(ana.id)) == 1
+
+
+# ---------- Q-10: projeto recém-criado destacado na lista ----------
+
+def _destacados(at):
+    return [c.value for c in at.caption if "Projeto criado agora" in c.value]
+
+
+def test_criar_guarda_o_projeto_para_destacar_na_lista(ana):
+    at = _tela(ana, _dialogo_formulario)
+    at.text_input(key="projeto_nome_novo").input("Piloto")
+    at.button(key="btn_salvar_projeto_novo").click()
+    at = at.run()
+    (p,) = projetos.listar(ana.id)
+    assert at.session_state["projeto_destacado"] == p.id
+
+
+def test_projeto_recem_criado_aparece_destacado_so_uma_vez(ana):
+    projetos.criar(ana.id, "Antigo")
+    novo = projetos.criar(ana.id, "Novo Projeto Piloto")
+    at = AppTest.from_function(_script, default_timeout=20)
+    at.session_state["usuario_autenticado"] = ana
+    at.session_state["projeto_destacado"] = novo.id
+    at.run()
+    assert not at.exception
+    assert _destacados(at) == ["✓ Projeto criado agora"]  # só no recém-criado, não nos outros
+    assert "projeto_destacado" not in at.session_state     # consumido
+    assert _titulos(at) == ["Antigo", "Novo Projeto Piloto"]
+    at = at.run()  # próxima execução: o destaque some
+    assert _destacados(at) == []
+
+
+def test_destaque_de_projeto_que_nao_esta_na_lista_nao_quebra(ana):
+    projetos.criar(ana.id, "Antigo")
+    at = AppTest.from_function(_script, default_timeout=20)
+    at.session_state["usuario_autenticado"] = ana
+    at.session_state["projeto_destacado"] = 424242
+    at.run()
+    assert not at.exception and _destacados(at) == []
+    assert "projeto_destacado" not in at.session_state
+
+
+# ---------- Q-08: lista vazia com ilustração ----------
+
+def test_lista_vazia_tem_ilustracao_hachurada(ana):
+    at = _tela(ana)
+    assert any("repeating-linear-gradient" in m.value for m in at.markdown)
+
+
+# ---------- Q-11: caminho e atalhos "Ir para..." ----------
+
+def _atalhos(at):
+    return {b.key: (b.label, b.disabled) for b in at.button if b.key.startswith("atalho_")}
+
+
+def test_painel_mostra_o_caminho_do_projeto(ana):
+    p = projetos.criar(ana.id, "Portal")
+    at = _tela(ana)
+    at.button(key=f"abrir_{p.id}").click()
+    at = at.run()
+    assert at.button(key="btn_voltar_projetos").label == "Projetos"
+    assert any(m.value == "› **Portal**" for m in at.markdown)
+
+
+def test_atalhos_ficam_desabilitados_quando_a_tela_de_destino_nao_esta_registrada(ana):
+    p = projetos.criar(ana.id, "Portal")
+    at = AppTest.from_function(_script, default_timeout=20)
+    at.session_state["usuario_autenticado"] = ana
+    at.session_state["projeto_aberto"] = p.id
+    at.run()
+    assert not at.exception
+    assert _atalhos(at) == {
+        "atalho_product": ("Ir para: Product Backlog ›", True),
+        "atalho_sprints": ("Ir para: Sprint Backlogs ›", True),
+        "atalho_epicos": ("Ir para: Épicos ›", True),
+        "atalho_historias": ("Ir para: Histórias ›", True),
+    }
+
+
+def _app_com_navegacao(extras=()):
+    """Navegação real do Streamlit com as páginas reais de Projetos e Backlogs."""
+    import streamlit as st
+
+    from sgr.ui import navegacao
+    from sgr.ui.pagina_backlogs import pagina_backlogs
+    from sgr.ui.pagina_projetos import pagina_projetos
+
+    def tela(nome):
+        def _tela():
+            st.write(f"TELA {nome}")
+
+        return _tela
+
+    paginas = {
+        "projetos": st.Page(pagina_projetos, title="Projetos", url_path="projetos", default=True),
+        "backlogs": st.Page(pagina_backlogs, title="Backlogs", url_path="backlogs"),
+    }
+    for nome in extras:
+        paginas[nome] = st.Page(tela(nome), title=nome, url_path=nome)
+    navegacao.registrar(paginas)
+    st.navigation(list(paginas.values())).run()
+
+
+def _painel_navegando(ana, projeto, extras=()):
+    at = AppTest.from_function(_app_com_navegacao, args=(extras,), default_timeout=30)
+    at.session_state["usuario_autenticado"] = ana
+    at.session_state["projeto_aberto"] = projeto.id
+    return at.run()
+
+
+def test_atalho_product_abre_o_product_backlog_do_projeto_certo(ana):
+    projetos.criar(ana.id, "Aaa vem antes na ordem alfabética")
+    p = projetos.criar(ana.id, "Portal")
+    backlogs.criar_product(ana.id, p.id, "PB Principal")
+    at = _painel_navegando(ana, p)
+    assert _atalhos(at)["atalho_product"] == ("Ir para: Product Backlog ›", False)
+    at.button(key="atalho_product").click()
+    at = at.run()
+    assert not at.exception
+    assert [t.value for t in at.title] == ["Backlogs", "PB Principal"]
+    assert at.selectbox(key="seletor_projeto_backlogs").value == p.id
+
+
+def test_atalho_sprint_backlogs_abre_a_lista_de_backlogs_do_projeto(ana):
+    from datetime import date
+
+    projetos.criar(ana.id, "Aaa vem antes na ordem alfabética")
+    p = projetos.criar(ana.id, "Portal")
+    backlogs.criar_product(ana.id, p.id, "PB Principal")
+    backlogs.criar_sprint(ana.id, p.id, "Sprint 1", date(2026, 10, 1), date(2026, 10, 14))
+    at = _painel_navegando(ana, p)
+    at.session_state["backlog_aberto"] = 999  # resíduo de outra navegação: o atalho deve limpar
+    at.button(key="atalho_sprints").click()
+    at = at.run()
+    assert not at.exception and [t.value for t in at.title] == ["Backlogs"]
+    assert at.selectbox(key="seletor_projeto_backlogs").value == p.id
+    assert [s.value for s in at.subheader] == ["Product backlog", "Sprint backlogs 1"]
+
+
+def test_atalho_product_sem_product_backlog_leva_a_lista_onde_ele_pode_ser_criado(ana):
+    p = projetos.criar(ana.id, "Portal")
+    at = _painel_navegando(ana, p)
+    at.button(key="atalho_product").click()
+    at = at.run()
+    assert not at.exception and [t.value for t in at.title] == ["Backlogs"]
+    assert "btn_novo_product" in [b.key for b in at.button]
+
+
+def test_atalhos_de_epicos_e_historias_habilitam_sozinhos_quando_a_tela_for_registrada(ana):
+    p = projetos.criar(ana.id, "Portal")
+    sem = _painel_navegando(ana, p)
+    assert _atalhos(sem)["atalho_epicos"][1] and _atalhos(sem)["atalho_historias"][1]
+    com = _painel_navegando(ana, p, extras=("epicos",))
+    assert _atalhos(com)["atalho_epicos"][1] is False and _atalhos(com)["atalho_historias"][1] is True
+    com.button(key="atalho_epicos").click()
+    com = com.run()
+    assert [m.value for m in com.markdown] == ["TELA epicos"]
+
+
+def test_membro_tambem_ve_e_usa_os_atalhos(ana, engine):
+    dono = autenticacao.cadastrar("Beto", "beto@x.com", "senha-segura-123", "senha-segura-123")
+    p = projetos.criar(dono.id, "Do Beto")
+    backlogs.criar_product(dono.id, p.id, "PB do Beto")
+    with engine.begin() as conn:
+        conn.execute(text("INSERT INTO projeto_membro (projeto_id, usuario_id) VALUES (:p, :u)"), {"p": p.id, "u": ana.id})
+    at = _painel_navegando(ana, p)
+    assert "btn_editar_projeto" not in [b.key for b in at.button]  # membro não edita...
+    at.button(key="atalho_product").click()                       # ...mas navega
+    at = at.run()
+    assert [t.value for t in at.title] == ["Backlogs", "PB do Beto"]
