@@ -18,11 +18,11 @@ from sqlalchemy.orm import Session
 from sgr.db.session import get_session
 from sgr.repositories import auditoria_repository, usuario_repository
 from sgr.services.limitador import LimitadorTentativas
+from sgr.services.senha import MENSAGEM_REGRA, SENHA_MIN, avaliar_senha  # noqa: F401  (SENHA_MIN é reexportado)
 from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 
 NOME_MAX = 120
 EMAIL_MAX = 160
-SENHA_MIN = 8
 SENHA_MAX_BYTES = 72  # limite do bcrypt
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -46,7 +46,7 @@ class ErroDeValidacao(Exception):
 
 class EmailJaCadastrado(ErroDeValidacao):
     def __init__(self) -> None:
-        super().__init__({"email": "Este e-mail já está cadastrado."})
+        super().__init__({"email": "Este e-mail já tem conta."})
 
 
 class CredenciaisInvalidas(Exception):
@@ -98,14 +98,24 @@ class AuthService:
 
     # ---------- cadastro ----------
 
-    def cadastrar(self, nome: str, email: str, senha: str, confirmacao: str) -> UsuarioAutenticado:
+    def cadastrar(
+        self,
+        nome: str,
+        email: str,
+        senha: str,
+        confirmacao: str,
+        politica_aceita: bool | None = None,
+    ) -> UsuarioAutenticado:
+        """Cria a conta. `politica_aceita` é o aceite da política de privacidade (Q-02): a tela
+        sempre o informa; False recusa o cadastro e True fica registrado na auditoria como base
+        legal do tratamento. None significa "não perguntado" (chamadas que não vêm de formulário)."""
         nome = (nome or "").strip()
         email = normalizar_email(email)
         senha = senha or ""
 
         erros: dict[str, str] = {}
         if not nome:
-            erros["nome"] = "Informe o nome."
+            erros["nome"] = "Informe seu nome."
         elif caractere_invalido(nome):
             erros["nome"] = MENSAGEM_CARACTERE_INVALIDO
         elif len(nome) > NOME_MAX:
@@ -116,12 +126,14 @@ class AuthService:
             erros["email"] = "Informe um e-mail válido."
         if caractere_invalido(senha):
             erros["senha"] = "A senha contém um caractere inválido."
-        elif len(senha) < SENHA_MIN:
-            erros["senha"] = f"A senha deve ter pelo menos {SENHA_MIN} caracteres."
+        elif not avaliar_senha(senha).atende:
+            erros["senha"] = MENSAGEM_REGRA
         elif len(senha.encode("utf-8")) > SENHA_MAX_BYTES:
             erros["senha"] = f"A senha deve ter no máximo {SENHA_MAX_BYTES} bytes."
         if "senha" not in erros and senha != (confirmacao or ""):
-            erros["confirmacao"] = "A confirmação não coincide com a senha."
+            erros["confirmacao"] = "As senhas não conferem."
+        if politica_aceita is False:
+            erros["politica"] = "Aceite a política de privacidade para criar a conta."
         if erros:
             raise ErroDeValidacao(erros)
 
@@ -142,7 +154,11 @@ class AuthService:
                 entidade="usuario",
                 entidade_id=usuario.id,
                 operacao="CRIAR",
-                valor_posterior={"nome": usuario.nome, "email": usuario.email},
+                valor_posterior={
+                    "nome": usuario.nome,
+                    "email": usuario.email,
+                    **({"politica_privacidade_aceita": True} if politica_aceita else {}),
+                },
             )
             return UsuarioAutenticado(usuario.id, usuario.nome, usuario.email)
 
