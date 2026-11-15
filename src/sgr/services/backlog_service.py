@@ -35,6 +35,7 @@ from sgr.repositories import (
     projeto_repository,
 )
 from sgr.services.auth_service import ErroDeValidacao
+from sgr.services.texto import MENSAGEM_CARACTERE_INVALIDO, caractere_invalido
 from sgr.services.historia_service import HistoriaNaoEncontrada
 from sgr.services.projeto_service import ProjetoNaoEncontrado
 
@@ -179,9 +180,13 @@ def _validar(
     erros: dict[str, str] = {}
     if not nome:
         erros["nome"] = "Informe o nome do backlog."
+    elif caractere_invalido(nome):
+        erros["nome"] = MENSAGEM_CARACTERE_INVALIDO
     elif len(nome) > NOME_MAX:
         erros["nome"] = f"O nome deve ter no máximo {NOME_MAX} caracteres."
-    if descricao and len(descricao) > DESCRICAO_MAX:
+    if caractere_invalido(descricao):
+        erros["descricao"] = MENSAGEM_CARACTERE_INVALIDO
+    elif descricao and len(descricao) > DESCRICAO_MAX:
         erros["descricao"] = f"O texto deve ter no máximo {DESCRICAO_MAX} caracteres."
     if sprint:
         if inicio is None:
