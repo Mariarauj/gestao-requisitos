@@ -29,7 +29,7 @@ Sistema de software que dá suporte à gestão de requisitos em projetos que usa
 | 5 | Architecture notebook | `docs/05-arquitetura` |
 | 6 | Interface (storyboards e wireframes) | `docs/06-interface-wireframes` |
 | 7 | Projeto físico do banco de dados | `docs/07-banco-de-dados` |
-| 8 | Protótipo e vídeo de teste de sistema | `docs/08-prototipo` e `src/` |
+| 8 | Protótipo e vídeo de teste de sistema | `src/` e `docs/08-prototipo` |
 | 9 | Infraestrutura de implantação | `docs/09-infraestrutura` |
 
 ## Estrutura do repositório
