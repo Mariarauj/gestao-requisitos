@@ -37,7 +37,6 @@ Sistema de software que dá suporte à gestão de requisitos em projetos que usa
 ```
 ├── docs/      artefatos, uma pasta por artefato
 ├── src/       código do protótipo
-├── KANBAN.md  processo Kanban (colunas e regras de uso)
 └── README.md
 ```
 
@@ -49,8 +48,8 @@ O projeto usa Kanban. O quadro fica no [GitHub Projects](https://github.com/Mari
 
 | Nome | Matrícula | Artefatos |
 |---|---|---|
-| Maria | | 4, 5, 7, protótipo (backend e banco), autoria, ZIP |
-| Pedro Ximenes | | 1, 2, 3, 6, 9, protótipo (interface), vídeo |
+| Maria | 232023969 | 4, 5, 7, protótipo (backend e banco), autoria, ZIP |
+| Pedro Ximenes | 200026071 | 1, 2, 3, 6, 9, protótipo (interface), vídeo |
 
 ## Tecnologias
 
